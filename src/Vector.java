@@ -22,8 +22,4 @@ public class Vector {
     public Vector multiply(double factor) {
         return new Vector(x * factor, y * factor);
     }
-
-    public void print() {
-        System.out.println("X: " + x + ", Y: " + y);
-    }
 }
