@@ -4,17 +4,22 @@ public class App {
 
 	public static void main(String[] args) throws Exception {
 		// Start Values
-		Vector startPos = new Vector(0, 5);
-		Vector startVel = new Vector(2, 1);
-		Vector startInf = new Vector(0, -9.83);
+		Vector pos = new Vector(0, 5);
+		Vector vel = new Vector(2, 1);
+		Vector inf = new Vector(0, -9.83);
 
 		double deltaTime = 1 / FPS;
 
-		Vector newPos = calculateNewPos(startPos, startVel, startInf, deltaTime);
-		Vector newVel = calculateNewVel(startPos, startVel, startInf, deltaTime);
+		for (int i = 0; i < 3; i++) {
+			pos = calculateNewPos(pos, vel, inf, deltaTime);
+			vel = calculateNewVel(pos, vel, inf, deltaTime);
 
-		newPos.print();
-		newVel.print();
+			// Print
+			System.out.println("Frame: " + i);
+			System.out.println("Pos: [x: " + pos.getX() + ", y: " + pos.getY() + "]");
+			System.out.println("Vel: [x: " + vel.getX() + ", y: " + vel.getY() + "]");
+		}
+
 	}
 
 	private static Vector calculateNewPos(Vector pos, Vector vel, Vector inf, double deltaTime) {
