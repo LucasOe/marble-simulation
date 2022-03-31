@@ -17,12 +17,20 @@ public class Marble {
 		return velocity;
 	}
 
+	public Vector getInfluences() {
+		return influences;
+	}
+
 	public void setPosition(Vector position) {
 		this.position = position;
 	}
 
 	public void setVelocity(Vector velocity) {
 		this.velocity = velocity;
+	}
+
+	public void setInfluences(Vector influences) {
+		this.influences = influences;
 	}
 
 	public Vector calculateNewPos(double deltaTime) {
