@@ -1,14 +1,22 @@
 package app;
 
 public class Marble {
+
+	private int size;
+
 	private Vector position;
 	private Vector velocity;
 	private Vector influences;
 
-	public Marble(Vector startPosition, Vector startVelocity, Vector influences) {
+	public Marble(int size, Vector startPosition, Vector startVelocity, Vector influences) {
+		this.size = size;
 		this.position = startPosition;
 		this.velocity = startVelocity;
 		this.influences = influences;
+	}
+
+	public int getSize() {
+		return size;
 	}
 
 	public Vector getPosition() {
@@ -21,6 +29,10 @@ public class Marble {
 
 	public Vector getInfluences() {
 		return influences;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 	public void setPosition(Vector position) {
