@@ -3,24 +3,22 @@ package app;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Gui {
 
-    private Canvas canvas;
+    private Pane canvas;
 
     public Gui(Stage stage) {
         // Canvas
-        canvas = new Canvas(Main.WIDTH, Main.CANVAS_HEIGHT);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        // Background Color
-        gc.setFill(Color.CORNSILK);
-        gc.fillRect(0, 0, Main.WIDTH, Main.CANVAS_HEIGHT);
+        canvas = new Pane();
+        canvas.setStyle("-fx-background-color: beige;");
+        canvas.setPrefSize(Main.WIDTH, Main.CANVAS_HEIGHT);
 
         // Controls
         Label label = new Label("Hello World");
@@ -37,21 +35,37 @@ public class Gui {
         stage.show();
     }
 
-    public void drawMarble(Marble marble) {
+    public void startAnimationTimer(Marble marble, Circle circle) {
+        Gui gui = this;
         AnimationTimer timer = new AnimationTimer() {
+            private int frame;
+
             @Override
             public void handle(long now) {
-                GraphicsContext gc = canvas.getGraphicsContext2D();
-
-                gc.setFill(Color.FORESTGREEN);
-                gc.fillOval(
-                        marble.getPosition().getX(),
-                        marble.getPosition().getY(),
-                        marble.getSize(),
-                        marble.getSize());
+                frame++;
+                Main.updateMarble(gui, marble, circle, frame);
             }
         };
 
         timer.start();
+    }
+
+    public Circle drawMarble(Marble marble) {
+        Circle circle = new Circle(marble.getSize(), Color.BLACK);
+        Vector position = convertPosition(marble);
+        circle.relocate(position.getX(), position.getY());
+        canvas.getChildren().add(circle);
+        return circle;
+    }
+
+    public void moveMarble(Circle circle, Marble marble) {
+        Vector position = convertPosition(marble);
+        circle.relocate(position.getX(), position.getY());
+    }
+
+    private Vector convertPosition(Marble marble) {
+        return new Vector(
+                marble.getPosition().getX(),
+                Main.CANVAS_HEIGHT - marble.getSize() * 2 - marble.getPosition().getY());
     }
 }
