@@ -1,16 +1,14 @@
 package app;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	private static double FPS = 60;
-	private static int WIDTH = 1280;
-	private static int HEIGHT = 720;
+	public static int WIDTH = 1280;
+	public static int HEIGHT = 720;
+	public static int CANVAS_HEIGHT = 600;
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
@@ -18,25 +16,21 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		stage.setTitle("Murmelbahn Simulation");
-
-		Label label = new Label("Hello World");
-		label.setAlignment(Pos.CENTER);
-
-		stage.setScene(new Scene(label, WIDTH, HEIGHT));
-		stage.show();
-
-		startLoop();
-	}
-
-	private void startLoop() {
 		// Start Values
-		Vector startPosition = new Vector(0, 5);
+		Vector startPosition = new Vector(10, 50);
 		Vector startVelocity = new Vector(2, 1);
 		Vector startInfluences = new Vector(0, -9.81);
 
-		Marble marble = new Marble(startPosition, startVelocity, startInfluences);
+		Marble marble = new Marble(20, startPosition, startVelocity, startInfluences);
 
+		Gui gui = new Gui(stage);
+
+		gui.drawMarble(marble);
+
+		startLoop(marble);
+	}
+
+	private void startLoop(Marble marble) {
 		for (int i = 0; i < 5; i++) {
 			double deltaTime = 1 / FPS;
 
