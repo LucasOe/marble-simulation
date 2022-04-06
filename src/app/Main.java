@@ -1,8 +1,35 @@
-public class Main {
+package app;
 
-	private static double FPS = 60; // Asssumes static fps for now
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.stage.Stage;
+
+public class Main extends Application {
+
+	private static double FPS = 60;
+	private static int WIDTH = 1280;
+	private static int HEIGHT = 720;
 
 	public static void main(String[] args) throws Exception {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage stage) throws Exception {
+		stage.setTitle("Murmelbahn Simulation");
+
+		Label label = new Label("Hello World");
+		label.setAlignment(Pos.CENTER);
+
+		stage.setScene(new Scene(label, WIDTH, HEIGHT));
+		stage.show();
+
+		startLoop();
+	}
+
+	private void startLoop() {
 		// Start Values
 		Vector startPosition = new Vector(0, 5);
 		Vector startVelocity = new Vector(2, 1);
@@ -22,6 +49,5 @@ public class Main {
 			System.out.println("Pos: [x: " + position.getX() + ", y: " + position.getY() + "]");
 			System.out.println("Vel: [x: " + velocity.getX() + ", y: " + velocity.getY() + "]");
 		}
-
 	}
 }
