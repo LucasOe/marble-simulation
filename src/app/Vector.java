@@ -1,3 +1,5 @@
+package app;
+
 public class Vector {
     double x;
     double y;
