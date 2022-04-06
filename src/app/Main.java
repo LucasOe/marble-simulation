@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public static double FPS = 60;
+	public static double FPS = 60; // Has to be replaced with the actual fps of the AnimationTimer
 	public static int WIDTH = 1280;
 	public static int HEIGHT = 720;
 	public static int CANVAS_HEIGHT = 600;
