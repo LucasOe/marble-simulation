@@ -31,6 +31,7 @@ public class Gui {
 	private TextField startVelocityY;
 	private TextField startInfluencesX;
 	private TextField startInfluencesY;
+	private Button play;
 
 	public Gui(Stage stage, Main main) {
 		this.main = main;
@@ -131,7 +132,7 @@ public class Gui {
 		startInfluences.getChildren().add(startInfluencesY);
 
 		// Play
-		Button play = new Button("Start");
+		play = new Button("Start");
 		controlsPane.setRight(play);
 		BorderPane.setAlignment(play, Pos.CENTER_RIGHT);
 		play.setOnAction(new EventHandler<ActionEvent>() {
@@ -202,6 +203,14 @@ public class Gui {
 		System.exit(0);
 	}
 
+	public void updateButton() {
+		boolean isPlaying = main.getIsPlaying();
+		if (isPlaying)
+			play.setText("Stop");
+		else
+			play.setText("Start");
+	}
+
 	public void startAnimationTimer(Marble marble) {
 		Gui gui = this;
 		AnimationTimer timer = new AnimationTimer() {
@@ -209,8 +218,10 @@ public class Gui {
 
 			@Override
 			public void handle(long now) {
-				frame++;
-				Main.updateMarble(gui, marble, frame);
+				if (main.getIsPlaying()) {
+					frame++;
+					main.updateMarble(gui, marble, frame);
+				}
 			}
 		};
 
