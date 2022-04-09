@@ -77,9 +77,9 @@ public class Gui {
 		marble.getCircle().relocate(position.getX(), position.getY());
 	}
 
+	// Map meters to pixel
 	private Vector convertPosition(Marble marble) {
-		return new Vector(
-				marble.getPosition().getX(),
-				Main.CANVAS_HEIGHT - marble.getSize() * 2 - marble.getPosition().getY());
+		Vector position = marble.getCanvasPosition();
+		return new Vector(position.getX(), position.getY());
 	}
 }
