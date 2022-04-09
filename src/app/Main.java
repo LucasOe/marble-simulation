@@ -13,7 +13,6 @@ public class Main extends Application {
 
 	private Gui gui;
 	private Marble marble;
-	private boolean isPlaying = false;
 	private boolean wasPlaying = false;
 
 	public static void main(String[] args) throws Exception {
@@ -30,7 +29,6 @@ public class Main extends Application {
 	}
 
 	public void startLoop() {
-		isPlaying = !isPlaying;
 		gui.updateButton();
 
 		// Start AnimationTimer first time only
@@ -62,9 +60,5 @@ public class Main extends Application {
 
 	public Marble getMarble() {
 		return marble;
-	}
-
-	public boolean getIsPlaying() {
-		return isPlaying;
 	}
 }

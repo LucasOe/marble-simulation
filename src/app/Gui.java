@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 public class Gui {
 
 	private Main main;
+	private boolean isPlaying;
 
 	private Pane canvas;
 	private Pane controls;
@@ -204,7 +205,7 @@ public class Gui {
 	}
 
 	public void updateButton() {
-		boolean isPlaying = main.getIsPlaying();
+		isPlaying = !isPlaying;
 		if (isPlaying)
 			play.setText("Stop");
 		else
@@ -218,7 +219,7 @@ public class Gui {
 
 			@Override
 			public void handle(long now) {
-				if (main.getIsPlaying()) {
+				if (isPlaying) {
 					frame++;
 					main.updateMarble(gui, marble, frame);
 				}
