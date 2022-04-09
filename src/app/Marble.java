@@ -1,8 +1,11 @@
 package app;
 
+import javafx.scene.shape.Circle;
+
 public class Marble {
 
 	private int size;
+	private Circle circle;
 
 	private Vector position;
 	private Vector velocity;
@@ -19,6 +22,10 @@ public class Marble {
 		return size;
 	}
 
+	public Circle getCircle() {
+		return circle;
+	}
+
 	public Vector getPosition() {
 		return position;
 	}
@@ -33,6 +40,10 @@ public class Marble {
 
 	public void setSize(int size) {
 		this.size = size;
+	}
+
+	public void setCircle(Circle circle) {
+		this.circle = circle;
 	}
 
 	public void setPosition(Vector position) {
