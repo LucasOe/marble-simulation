@@ -3,7 +3,6 @@ package app;
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -12,60 +11,66 @@ import javafx.stage.Stage;
 
 public class Gui {
 
-    private Pane canvas;
+	private Pane canvas;
+	private Pane controls;
 
-    public Gui(Stage stage) {
-        // Canvas
-        canvas = new Pane();
-        canvas.setStyle("-fx-background-color: beige;");
-        canvas.setPrefSize(Main.WIDTH, Main.CANVAS_HEIGHT);
+	public Gui(Stage stage) {
+		// Canvas
+		canvas = new Pane();
+		canvas.setPrefSize(Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT);
+		canvas.getStyleClass().add("canvas");
 
-        // Controls
-        Label label = new Label("Hello World");
-        label.setAlignment(Pos.CENTER);
+		// Controls
+		controls = new Pane();
+		controls.setPrefSize(Main.CANVAS_WIDTH, Main.CONTROLS_HEIGHT);
+		controls.getStyleClass().add("controls");
 
-        // VBox
-        VBox vbox = new VBox();
-        vbox.setAlignment(Pos.TOP_CENTER);
-        vbox.getChildren().add(canvas);
-        vbox.getChildren().addAll(label);
+		// VBox
+		VBox vbox = new VBox();
+		vbox.setAlignment(Pos.TOP_CENTER);
+		vbox.getChildren().add(canvas);
+		vbox.getChildren().add(controls);
 
-        stage.setTitle("Murmelbahn Simulation");
-        stage.setScene(new Scene(vbox, Main.WIDTH, Main.HEIGHT));
-        stage.show();
-    }
+		// Scene
+		Scene scene = new Scene(vbox, Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT + Main.CONTROLS_HEIGHT);
+		scene.getStylesheets().add("app/css/style.css");
 
-    public void startAnimationTimer(Marble marble, Circle circle) {
-        Gui gui = this;
-        AnimationTimer timer = new AnimationTimer() {
-            private int frame;
+		stage.setTitle("Murmelbahn Simulation");
+		stage.setScene(scene);
+		stage.show();
+	}
 
-            @Override
-            public void handle(long now) {
-                frame++;
-                Main.updateMarble(gui, marble, circle, frame);
-            }
-        };
+	public void startAnimationTimer(Marble marble, Circle circle) {
+		Gui gui = this;
+		AnimationTimer timer = new AnimationTimer() {
+			private int frame;
 
-        timer.start();
-    }
+			@Override
+			public void handle(long now) {
+				frame++;
+				Main.updateMarble(gui, marble, circle, frame);
+			}
+		};
 
-    public Circle drawMarble(Marble marble) {
-        Circle circle = new Circle(marble.getSize(), Color.BLACK);
-        Vector position = convertPosition(marble);
-        circle.relocate(position.getX(), position.getY());
-        canvas.getChildren().add(circle);
-        return circle;
-    }
+		timer.start();
+	}
 
-    public void moveMarble(Circle circle, Marble marble) {
-        Vector position = convertPosition(marble);
-        circle.relocate(position.getX(), position.getY());
-    }
+	public Circle drawMarble(Marble marble) {
+		Circle circle = new Circle(marble.getSize(), Color.BLACK);
+		Vector position = convertPosition(marble);
+		circle.relocate(position.getX(), position.getY());
+		canvas.getChildren().add(circle);
+		return circle;
+	}
 
-    private Vector convertPosition(Marble marble) {
-        return new Vector(
-                marble.getPosition().getX(),
-                Main.CANVAS_HEIGHT - marble.getSize() * 2 - marble.getPosition().getY());
-    }
+	public void moveMarble(Circle circle, Marble marble) {
+		Vector position = convertPosition(marble);
+		circle.relocate(position.getX(), position.getY());
+	}
+
+	private Vector convertPosition(Marble marble) {
+		return new Vector(
+				marble.getPosition().getX(),
+				Main.CANVAS_HEIGHT - marble.getSize() * 2 - marble.getPosition().getY());
+	}
 }
