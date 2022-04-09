@@ -7,9 +7,10 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	public static double FPS = 60; // Has to be replaced with the actual fps of the AnimationTimer
-	public static int WIDTH = 1280;
-	public static int HEIGHT = 720;
+
+	public static int CANVAS_WIDTH = 1280;
 	public static int CANVAS_HEIGHT = 600;
+	public static int CONTROLS_HEIGHT = 120;
 
 	private Gui gui;
 
@@ -27,6 +28,7 @@ public class Main extends Application {
 		Marble marble = new Marble(20, startPosition, startVelocity, startInfluences);
 
 		gui = new Gui(stage);
+
 		Circle circle = gui.drawMarble(marble);
 		gui.startAnimationTimer(marble, circle);
 	}
