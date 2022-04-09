@@ -3,19 +3,21 @@ package app;
 import javafx.scene.shape.Circle;
 
 public class Marble {
-
-	private int size;
+	private int size = 20;
 	private Circle circle;
 
-	private Vector position;
-	private Vector velocity;
-	private Vector influences;
+	private Vector position = new Vector(10, 10);
+	private Vector velocity = new Vector(50, 50);
+	private Vector influences = new Vector(0, -9.81);
 
-	public Marble(int size, Vector startPosition, Vector startVelocity, Vector influences) {
+	public Marble() {
+	}
+
+	public Marble(int size, Vector startPosition, Vector startVelocity, Vector startInfluences) {
 		this.size = size;
 		this.position = startPosition;
 		this.velocity = startVelocity;
-		this.influences = influences;
+		this.influences = startInfluences;
 	}
 
 	public int getSize() {
@@ -48,6 +50,10 @@ public class Marble {
 
 	public void setPosition(Vector position) {
 		this.position = position;
+
+		// Update circle position
+		Vector canvasPosition = getCanvasPosition();
+		circle.relocate(canvasPosition.getX(), canvasPosition.getY());
 	}
 
 	public void setVelocity(Vector velocity) {
