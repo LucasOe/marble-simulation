@@ -63,7 +63,7 @@ public class Gui {
 		startPosition.setAlignment(Pos.CENTER);
 		hbox.getChildren().add(startPosition);
 
-		Label startPositionLabel = new Label("Start Position");
+		Label startPositionLabel = new Label("Startposition");
 		startPosition.getChildren().add(startPositionLabel);
 
 		startPositionX = new TextField();
@@ -87,7 +87,7 @@ public class Gui {
 		startVelocity.setAlignment(Pos.CENTER);
 		hbox.getChildren().add(startVelocity);
 
-		Label startVelocityLabel = new Label("Start Velocity");
+		Label startVelocityLabel = new Label("Startbewegung");
 		startVelocity.getChildren().add(startVelocityLabel);
 
 		startVelocityX = new TextField();
@@ -111,7 +111,7 @@ public class Gui {
 		startInfluences.setAlignment(Pos.CENTER);
 		hbox.getChildren().add(startInfluences);
 
-		Label startInfluencesLabel = new Label("Start Influencesss");
+		Label startInfluencesLabel = new Label("Beschleunigungseinflüsse");
 		startInfluences.getChildren().add(startInfluencesLabel);
 
 		startInfluencesX = new TextField();
