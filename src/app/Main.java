@@ -29,7 +29,7 @@ public class Main extends Application {
 		gui = new Gui(stage);
 
 		gui.drawMarble(marble);
-		gui.startAnimationTimer(marble);
+		//gui.startAnimationTimer(marble);
 	}
 
 	public static void updateMarble(Gui gui, Marble marble, int frame) {
