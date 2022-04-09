@@ -12,6 +12,7 @@ public class Main extends Application {
 	public static int CONTROLS_HEIGHT = 120;
 
 	private Gui gui;
+	private Marble marble;
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
@@ -19,17 +20,15 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		// Start Values
-		Vector startPosition = new Vector(10, 10);
-		Vector startVelocity = new Vector(50, 50);
-		Vector startInfluences = new Vector(0, -9.81);
+		marble = new Marble();
 
-		Marble marble = new Marble(20, startPosition, startVelocity, startInfluences);
-
-		gui = new Gui(stage);
+		gui = new Gui(stage, this);
 
 		gui.drawMarble(marble);
-		//gui.startAnimationTimer(marble);
+	}
+
+	public void startLoop() {
+		gui.startAnimationTimer(marble);
 	}
 
 	public static void updateMarble(Gui gui, Marble marble, int frame) {
@@ -44,11 +43,15 @@ public class Main extends Application {
 		Vector velocity = marble.calculateNewVel(deltaTime);
 
 		// Print
-		System.out.println("Frame: " + frame);
-		System.out.println("Pos: [x: " + position.getX() + ", y: " + position.getY() + "]");
-		System.out.println("Vel: [x: " + velocity.getX() + ", y: " + velocity.getY() + "]");
+		//System.out.println("Frame: " + frame);
+		//System.out.println("Pos: [x: " + position.getX() + ", y: " + position.getY() + "]");
+		//System.out.println("Vel: [x: " + velocity.getX() + ", y: " + velocity.getY() + "]");
 
 		// Move position
 		gui.moveMarble(marble);
+	}
+
+	public Marble getMarble() {
+		return marble;
 	}
 }
