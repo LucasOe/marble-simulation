@@ -1,7 +1,6 @@
 package app;
 
 import javafx.application.Application;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Main extends Application {
