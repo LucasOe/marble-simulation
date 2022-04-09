@@ -13,6 +13,8 @@ public class Main extends Application {
 
 	private Gui gui;
 	private Marble marble;
+	private boolean isPlaying = false;
+	private boolean wasPlaying = false;
 
 	public static void main(String[] args) throws Exception {
 		launch(args);
@@ -28,10 +30,17 @@ public class Main extends Application {
 	}
 
 	public void startLoop() {
-		gui.startAnimationTimer(marble);
+		isPlaying = !isPlaying;
+		gui.updateButton();
+
+		// Start AnimationTimer first time only
+		if (!wasPlaying) {
+			gui.startAnimationTimer(marble);
+			wasPlaying = true;
+		}
 	}
 
-	public static void updateMarble(Gui gui, Marble marble, int frame) {
+	public void updateMarble(Gui gui, Marble marble, int frame) {
 		double deltaTime = 1 / FPS;
 
 		// Stop when y-Value is less than zero
@@ -43,9 +52,9 @@ public class Main extends Application {
 		Vector velocity = marble.calculateNewVel(deltaTime);
 
 		// Print
-		//System.out.println("Frame: " + frame);
-		//System.out.println("Pos: [x: " + position.getX() + ", y: " + position.getY() + "]");
-		//System.out.println("Vel: [x: " + velocity.getX() + ", y: " + velocity.getY() + "]");
+		System.out.println("Frame: " + frame);
+		System.out.println("Pos: [x: " + position.getX() + ", y: " + position.getY() + "]");
+		System.out.println("Vel: [x: " + velocity.getX() + ", y: " + velocity.getY() + "]");
 
 		// Move position
 		gui.moveMarble(marble);
@@ -53,5 +62,9 @@ public class Main extends Application {
 
 	public Marble getMarble() {
 		return marble;
+	}
+
+	public boolean getIsPlaying() {
+		return isPlaying;
 	}
 }
