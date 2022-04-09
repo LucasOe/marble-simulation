@@ -35,6 +35,10 @@ public class Main extends Application {
 	public static void updateMarble(Gui gui, Marble marble, int frame) {
 		double deltaTime = 1 / FPS;
 
+		// Stop when y-Value is less than zero
+		if (marble.getPosition().getY() < 0)
+			gui.stop();
+
 		// Calculates and return new position and velocity
 		Vector position = marble.calculateNewPos(deltaTime);
 		Vector velocity = marble.calculateNewVel(deltaTime);

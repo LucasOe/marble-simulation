@@ -1,6 +1,9 @@
 package app;
 
+import javax.sound.midi.SysexMessage;
+
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -38,6 +41,11 @@ public class Gui {
 		stage.setTitle("Murmelbahn Simulation");
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	public void stop() {
+		Platform.exit();
+		System.exit(0);
 	}
 
 	public void startAnimationTimer(Marble marble) {
