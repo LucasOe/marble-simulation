@@ -1,7 +1,5 @@
 package app;
 
-import javax.sound.midi.SysexMessage;
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
