@@ -40,7 +40,7 @@ public class Gui {
 		stage.show();
 	}
 
-	public void startAnimationTimer(Marble marble, Circle circle) {
+	public void startAnimationTimer(Marble marble) {
 		Gui gui = this;
 		AnimationTimer timer = new AnimationTimer() {
 			private int frame;
@@ -48,24 +48,27 @@ public class Gui {
 			@Override
 			public void handle(long now) {
 				frame++;
-				Main.updateMarble(gui, marble, circle, frame);
+				Main.updateMarble(gui, marble, frame);
 			}
 		};
 
 		timer.start();
 	}
 
-	public Circle drawMarble(Marble marble) {
+	public void drawMarble(Marble marble) {
 		Circle circle = new Circle(marble.getSize(), Color.BLACK);
+		marble.setCircle(circle);
+
+		// Set position
 		Vector position = convertPosition(marble);
 		circle.relocate(position.getX(), position.getY());
+
 		canvas.getChildren().add(circle);
-		return circle;
 	}
 
-	public void moveMarble(Circle circle, Marble marble) {
+	public void moveMarble(Marble marble) {
 		Vector position = convertPosition(marble);
-		circle.relocate(position.getX(), position.getY());
+		marble.getCircle().relocate(position.getX(), position.getY());
 	}
 
 	private Vector convertPosition(Marble marble) {

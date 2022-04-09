@@ -29,11 +29,11 @@ public class Main extends Application {
 
 		gui = new Gui(stage);
 
-		Circle circle = gui.drawMarble(marble);
-		gui.startAnimationTimer(marble, circle);
+		gui.drawMarble(marble);
+		gui.startAnimationTimer(marble);
 	}
 
-	public static void updateMarble(Gui gui, Marble marble, Circle circle, int frame) {
+	public static void updateMarble(Gui gui, Marble marble, int frame) {
 		double deltaTime = 1 / FPS;
 
 		// Calculates and return new position and velocity
@@ -46,6 +46,6 @@ public class Main extends Application {
 		System.out.println("Vel: [x: " + velocity.getX() + ", y: " + velocity.getY() + "]");
 
 		// Move position
-		gui.moveMarble(circle, marble);
+		gui.moveMarble(marble);
 	}
 }
