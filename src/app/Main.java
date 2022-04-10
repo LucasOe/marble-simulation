@@ -8,10 +8,15 @@ public class Main extends Application {
 	public static int CANVAS_HEIGHT = 600;
 	public static int CONTROLS_HEIGHT = 120;
 
+	static int framerate;
+
 	private Gui gui;
 	private Marble marble;
 
 	public static void main(String[] args) throws Exception {
+		Settings.checkSettings();
+		framerate = Settings.getFramerate();
+
 		launch(args);
 	}
 
@@ -24,8 +29,8 @@ public class Main extends Application {
 		gui.drawMarble(marble);
 	}
 
-	public void updateMarble(Gui gui, Marble marble, int frameRate) {
-		double deltaTime = 1.0 / frameRate;
+	public void updateMarble(Gui gui, Marble marble) {
+		double deltaTime = 1.0 / framerate;
 
 		// Stop when y-Value is less than zero
 		if (marble.getPosition().getY() < 0)
