@@ -15,7 +15,7 @@ public class Main extends Application {
 	private Marble marble;
 
 	public static void main(String[] args) throws Exception {
-		Settings.checkSettings();
+		//Settings.checkSettings();
 		framerate = Settings.getFramerate();
 
 		launch(args);

@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="VisualComputing:jar">
+    <output-path>$PROJECT_DIR$/bin/artifacts/VisualComputing</output-path>
+    <root id="archive" name="VisualComputing.jar">
+      <element id="module-output" name="VisualComputing" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx-swt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.web.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.base.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.fxml.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.media.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.swing.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.controls.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/lib/javafx.graphics.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/bin" />
+    </root>
+  </artifact>
+</component>
