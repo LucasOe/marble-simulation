@@ -20,7 +20,6 @@ import javafx.stage.Stage;
 
 public class Gui {
 
-	private Main main;
 	private boolean isPlaying;
 
 	private Pane canvas;
@@ -32,10 +31,11 @@ public class Gui {
 	private TextField startVelocityY;
 	private TextField startInfluencesX;
 	private TextField startInfluencesY;
+
 	private Button play;
+	private AnimationTimer timer;
 
 	public Gui(Stage stage, Main main) {
-		this.main = main;
 		Marble marble = main.getMarble();
 
 		// Canvas
@@ -72,7 +72,7 @@ public class Gui {
 		startPositionX.setPromptText("X");
 		startPositionX.setText(String.valueOf(marble.getPosition().getX()));
 		startPositionX.textProperty().addListener((observable, oldValue, newValue) -> {
-			onPositionChange(oldValue, newValue);
+			onPositionChange(main, oldValue, newValue);
 		});
 		startPosition.getChildren().add(startPositionX);
 
@@ -80,7 +80,7 @@ public class Gui {
 		startPositionY.setPromptText("Y");
 		startPositionY.setText(String.valueOf(marble.getPosition().getY()));
 		startPositionY.textProperty().addListener((observable, oldValue, newValue) -> {
-			onPositionChange(oldValue, newValue);
+			onPositionChange(main, oldValue, newValue);
 		});
 		startPosition.getChildren().add(startPositionY);
 
@@ -96,7 +96,7 @@ public class Gui {
 		startVelocityX.setPromptText("X");
 		startVelocityX.setText(String.valueOf(marble.getVelocity().getX()));
 		startVelocityX.textProperty().addListener((observable, oldValue, newValue) -> {
-			onVelocityChange(oldValue, newValue);
+			onVelocityChange(main, oldValue, newValue);
 		});
 		startVelocity.getChildren().add(startVelocityX);
 
@@ -104,7 +104,7 @@ public class Gui {
 		startVelocityY.setPromptText("Y");
 		startVelocityY.setText(String.valueOf(marble.getVelocity().getY()));
 		startVelocityY.textProperty().addListener((observable, oldValue, newValue) -> {
-			onVelocityChange(oldValue, newValue);
+			onVelocityChange(main, oldValue, newValue);
 		});
 		startVelocity.getChildren().add(startVelocityY);
 
@@ -120,7 +120,7 @@ public class Gui {
 		startInfluencesX.setPromptText("X");
 		startInfluencesX.setText(String.valueOf(marble.getInfluences().getX()));
 		startInfluencesX.textProperty().addListener((observable, oldValue, newValue) -> {
-			onInfluencesChange(oldValue, newValue);
+			onInfluencesChange(main, oldValue, newValue);
 		});
 		startInfluences.getChildren().add(startInfluencesX);
 
@@ -128,7 +128,7 @@ public class Gui {
 		startInfluencesY.setPromptText("Y");
 		startInfluencesY.setText(String.valueOf(marble.getInfluences().getY()));
 		startInfluencesY.textProperty().addListener((observable, oldValue, newValue) -> {
-			onInfluencesChange(oldValue, newValue);
+			onInfluencesChange(main, oldValue, newValue);
 		});
 		startInfluences.getChildren().add(startInfluencesY);
 
@@ -139,9 +139,24 @@ public class Gui {
 		play.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				main.startLoop();
+				toggleAnimationTimer();
 			}
 		});
+
+		// AnimationTimer
+		Gui gui = this;
+		timer = new AnimationTimer() {
+			private int frame;
+
+			// Gets called every frame and tries to target fps set with javafx.animation.pulse
+			@Override
+			public void handle(long now) {
+				if (isPlaying) {
+					frame++;
+					main.updateMarble(gui, marble, frame);
+				}
+			}
+		};
 
 		// VBox containing canvas and controls
 		VBox vbox = new VBox();
@@ -159,39 +174,35 @@ public class Gui {
 	}
 
 	// Set new position when startValues are changed
-	private void onPositionChange(String oldValue, String newValue) {
+	private void onPositionChange(Main main, String oldValue, String newValue) {
 		Marble marble = main.getMarble();
 		Vector position = getValues(startPositionX, startPositionY);
 		marble.setPosition(position);
 	}
 
 	// Set new position when startValues are changed
-	private void onVelocityChange(String oldValue, String newValue) {
+	private void onVelocityChange(Main main, String oldValue, String newValue) {
 		Marble marble = main.getMarble();
 		Vector velocity = getValues(startVelocityX, startVelocityY);
 		marble.setVelocity(velocity);
 	}
 
 	// Set new position when startValues are changed
-	private void onInfluencesChange(String oldValue, String newValue) {
+	private void onInfluencesChange(Main main, String oldValue, String newValue) {
 		Marble marble = main.getMarble();
 		Vector influences = getValues(startInfluencesX, startInfluencesY);
 		marble.setInfluences(influences);
 	}
 
+	// Gets x and y valaues from two Textfields
 	public Vector getValues(TextField xField, TextField yField) {
 		String xValue = xField.getText();
 		String yValue = yField.getText();
 
-		// Treat empty values as zero
-		if (xValue == "")
-			xValue = "0";
-		if (yValue == "")
-			yValue = "0";
-
 		try {
-			double x = Double.parseDouble(xValue);
-			double y = Double.parseDouble(yValue);
+			// Treat empty values as zero
+			double x = xValue != "" ? Double.parseDouble(xValue) : 0;
+			double y = yValue != "" ? Double.parseDouble(yValue) : 0;
 
 			return new Vector(x, y);
 		} catch (NumberFormatException e) {
@@ -204,29 +215,15 @@ public class Gui {
 		System.exit(0);
 	}
 
-	public void updateButton() {
+	public void toggleAnimationTimer() {
 		isPlaying = !isPlaying;
-		if (isPlaying)
+		if (isPlaying) {
 			play.setText("Stop");
-		else
+			timer.start();
+		} else {
 			play.setText("Start");
-	}
-
-	public void startAnimationTimer(Marble marble) {
-		Gui gui = this;
-		AnimationTimer timer = new AnimationTimer() {
-			private int frame;
-
-			@Override
-			public void handle(long now) {
-				if (isPlaying) {
-					frame++;
-					main.updateMarble(gui, marble, frame);
-				}
-			}
-		};
-
-		timer.start();
+			timer.stop();
+		}
 	}
 
 	public void drawMarble(Marble marble) {
@@ -242,6 +239,7 @@ public class Gui {
 
 	public void moveMarble(Marble marble) {
 		Vector position = convertPosition(marble);
+		// Relocate resets the frameTime for some reason
 		marble.getCircle().relocate(position.getX(), position.getY());
 	}
 
