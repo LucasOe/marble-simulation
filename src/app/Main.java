@@ -15,8 +15,7 @@ public class Main extends Application {
 	private Marble marble;
 
 	public static void main(String[] args) throws Exception {
-		//Settings.checkSettings();
-		framerate = Settings.getFramerate();
+		framerate = Integer.parseInt(System.getProperty("javafx.animation.pulse"));
 
 		launch(args);
 	}
