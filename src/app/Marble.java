@@ -50,10 +50,6 @@ public class Marble {
 
 	public void setPosition(Vector position) {
 		this.position = position;
-
-		// Update circle position
-		Vector canvasPosition = getCanvasPosition();
-		circle.relocate(canvasPosition.getX(), canvasPosition.getY());
 	}
 
 	public void setVelocity(Vector velocity) {
@@ -73,10 +69,5 @@ public class Marble {
 	public Vector calculateNewVel(double deltaTime) {
 		this.velocity = velocity.addVector(influences.multiply(deltaTime));
 		return this.velocity;
-	}
-
-	// Flip y-axis so that 0,0 is in the bottom-left corner
-	public Vector getCanvasPosition() {
-		return new Vector(position.getX(), Main.CANVAS_HEIGHT - size * 2 - position.getY());
 	}
 }
