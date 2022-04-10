@@ -5,7 +5,7 @@
 			"type": "java",
 			"name": "Launch Main",
 			"request": "launch",
-			"vmArgs": "--module-path \"C:/Program Files/OpenFX/javafx-sdk-18/lib\" --add-modules javafx.controls,javafx.graphics,javafx.fxml,javafx.web",
+			"vmArgs": "--module-path \"C:/Program Files/OpenFX/javafx-sdk-18/lib\" --add-modules javafx.controls,javafx.graphics,javafx.fxml,javafx.web -Djavafx.animation.pulse=60 -Djavafx.pulseLogger=false",
 			"mainClass": "app.Main"
 		}
 	]
