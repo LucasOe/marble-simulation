@@ -19,12 +19,6 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Gui {
-
-	private int frameRate;
-	private final long[] frameTimes = new long[100];
-	private int frameTimeIndex;
-	private boolean arrayFilled;
-
 	private boolean isPlaying;
 
 	private Pane canvas;
@@ -148,28 +142,6 @@ public class Gui {
 			}
 		});
 
-		// FrameRateMeter
-		Label label = new Label();
-		controlsPane.setCenter(label);
-		AnimationTimer frameRateMeter = new AnimationTimer() {
-			@Override
-			public void handle(long now) {
-				long oldFrameTime = frameTimes[frameTimeIndex];
-				frameTimes[frameTimeIndex] = now;
-				frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length;
-				if (frameTimeIndex == 0) {
-					arrayFilled = true;
-				}
-				if (arrayFilled) {
-					long elapsedNanos = now - oldFrameTime;
-					long elapsedNanosPerFrame = elapsedNanos / frameTimes.length;
-					frameRate = (int) (1000000000.0 / elapsedNanosPerFrame);
-					label.setText(String.format("FPS: " + frameRate));
-				}
-			}
-		};
-		frameRateMeter.start();
-
 		// AnimationTimer
 		Gui gui = this;
 		timer = new AnimationTimer() {
@@ -177,7 +149,7 @@ public class Gui {
 			@Override
 			public void handle(long now) {
 				if (isPlaying) {
-					main.updateMarble(gui, marble, frameRate);
+					main.updateMarble(gui, marble);
 				}
 			}
 		};
