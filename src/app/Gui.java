@@ -241,11 +241,5 @@ public class Gui {
 		// Redrawing the frame resets frameTime for some reason
 		circle.setTranslateX(+position.getX() * Main.SCALE);
 		circle.setTranslateY(-position.getY() * Main.SCALE);
-
-		try {
-			Thread.sleep(1);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }
