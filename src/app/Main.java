@@ -8,15 +8,10 @@ public class Main extends Application {
 	public static int CANVAS_HEIGHT = 600;
 	public static int CONTROLS_HEIGHT = 120;
 
-	private static int fps;
 	private Gui gui;
 	private Marble marble;
 
 	public static void main(String[] args) throws Exception {
-
-		// Throws Exception when fps is not set
-		fps = Integer.parseInt(System.getProperty("javafx.animation.pulse"));
-
 		launch(args);
 	}
 
@@ -29,8 +24,8 @@ public class Main extends Application {
 		gui.drawMarble(marble);
 	}
 
-	public void updateMarble(Gui gui, Marble marble, int frame) {
-		double deltaTime = 1.0 / fps;
+	public void updateMarble(Gui gui, Marble marble, int frameRate) {
+		double deltaTime = 1.0 / frameRate;
 
 		// Stop when y-Value is less than zero
 		if (marble.getPosition().getY() < 0)

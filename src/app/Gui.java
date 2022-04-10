@@ -20,6 +20,11 @@ import javafx.stage.Stage;
 
 public class Gui {
 
+	private int frameRate;
+	private final long[] frameTimes = new long[100];
+	private int frameTimeIndex;
+	private boolean arrayFilled;
+
 	private boolean isPlaying;
 
 	private Pane canvas;
@@ -143,17 +148,36 @@ public class Gui {
 			}
 		});
 
+		// FrameRateMeter
+		Label label = new Label();
+		controlsPane.setCenter(label);
+		AnimationTimer frameRateMeter = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				long oldFrameTime = frameTimes[frameTimeIndex];
+				frameTimes[frameTimeIndex] = now;
+				frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length;
+				if (frameTimeIndex == 0) {
+					arrayFilled = true;
+				}
+				if (arrayFilled) {
+					long elapsedNanos = now - oldFrameTime;
+					long elapsedNanosPerFrame = elapsedNanos / frameTimes.length;
+					frameRate = (int) (1000000000.0 / elapsedNanosPerFrame);
+					label.setText(String.format("FPS: " + frameRate));
+				}
+			}
+		};
+		frameRateMeter.start();
+
 		// AnimationTimer
 		Gui gui = this;
 		timer = new AnimationTimer() {
-			private int frame;
-
 			// Gets called every frame and tries to target fps set with javafx.animation.pulse
 			@Override
 			public void handle(long now) {
 				if (isPlaying) {
-					frame++;
-					main.updateMarble(gui, marble, frame);
+					main.updateMarble(gui, marble, frameRate);
 				}
 			}
 		};
@@ -178,6 +202,7 @@ public class Gui {
 		Marble marble = main.getMarble();
 		Vector position = getValues(startPositionX, startPositionY);
 		marble.setPosition(position);
+		moveMarble(marble);
 	}
 
 	// Set new position when startValues are changed
@@ -230,22 +255,25 @@ public class Gui {
 		Circle circle = new Circle(marble.getSize(), Color.BLACK);
 		marble.setCircle(circle);
 
-		// Set position
-		Vector position = convertPosition(marble);
-		circle.relocate(position.getX(), position.getY());
+		// Flip y-axis so that 0,0 is in the bottom-left corner
+		circle.relocate(0, Main.CANVAS_HEIGHT - marble.getSize() * 2);
+		// Update position
+		moveMarble(marble);
 
 		canvas.getChildren().add(circle);
 	}
 
 	public void moveMarble(Marble marble) {
-		Vector position = convertPosition(marble);
-		// Relocate resets the frameTime for some reason
-		marble.getCircle().relocate(position.getX(), position.getY());
-	}
+		Circle circle = marble.getCircle();
+		Vector position = marble.getPosition();
+		// Redrawing the frame resets frameTime for some reason
+		circle.setTranslateX(+position.getX());
+		circle.setTranslateY(-position.getY());
 
-	// Map meters to pixel
-	private static Vector convertPosition(Marble marble) {
-		Vector position = marble.getCanvasPosition();
-		return new Vector(position.getX(), position.getY());
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }
