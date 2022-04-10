@@ -224,11 +224,11 @@ public class Gui {
 	}
 
 	public void drawMarble(Marble marble) {
-		Circle circle = new Circle(marble.getSize(), Color.BLACK);
+		Circle circle = new Circle((marble.getSize() / 2) * Main.SCALE, Color.BLACK);
 		marble.setCircle(circle);
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
-		circle.relocate(0, Main.CANVAS_HEIGHT - marble.getSize() * 2);
+		circle.relocate(0, Main.CANVAS_HEIGHT - marble.getSize() * Main.SCALE);
 		// Update position
 		moveMarble(marble);
 
@@ -239,8 +239,8 @@ public class Gui {
 		Circle circle = marble.getCircle();
 		Vector position = marble.getPosition();
 		// Redrawing the frame resets frameTime for some reason
-		circle.setTranslateX(+position.getX());
-		circle.setTranslateY(-position.getY());
+		circle.setTranslateX(+position.getX() * Main.SCALE);
+		circle.setTranslateY(-position.getY() * Main.SCALE);
 
 		try {
 			Thread.sleep(1);
