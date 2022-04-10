@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TinyMachineSimulation:jar">
+    <output-path>$PROJECT_DIR$/bin/artifacts/TinyMachineSimulation</output-path>
+    <root id="archive" name="TinyMachineSimulation.jar">
+      <element id="module-output" name="TinyMachineSimulation" />
+      <element id="dir-copy" path="$PROJECT_DIR$/../../Program Files/OpenFX/javafx-sdk-18/bin" />
+    </root>
+  </artifact>
+</component>
