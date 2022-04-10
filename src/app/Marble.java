@@ -3,12 +3,13 @@ package app;
 import javafx.scene.shape.Circle;
 
 public class Marble {
-	private int size = 20;
+	private double size = 1.6;
 	private Circle circle;
 
-	private Vector position = new Vector(10, 10);
-	private Vector velocity = new Vector(50, 50);
-	private Vector influences = new Vector(0, -9.81);
+	// Default values in cm
+	private Vector position = new Vector(1.0, 1.0);
+	private Vector velocity = new Vector(100, 100);
+	private Vector influences = new Vector(0, -981);
 
 	public Marble() {
 	}
@@ -20,7 +21,7 @@ public class Marble {
 		this.influences = startInfluences;
 	}
 
-	public int getSize() {
+	public double getSize() {
 		return size;
 	}
 
@@ -40,7 +41,7 @@ public class Marble {
 		return influences;
 	}
 
-	public void setSize(int size) {
+	public void setSize(double size) {
 		this.size = size;
 	}
 

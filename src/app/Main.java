@@ -7,6 +7,7 @@ public class Main extends Application {
 	public static int CANVAS_WIDTH = 1280;
 	public static int CANVAS_HEIGHT = 600;
 	public static int CONTROLS_HEIGHT = 120;
+	public static int SCALE = 20;
 
 	static int framerate;
 
