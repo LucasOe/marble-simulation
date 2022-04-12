@@ -6,10 +6,11 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	public static int CANVAS_WIDTH = 1280;
-	public static int CANVAS_HEIGHT = 580;
-	public static int CONTROLS_HEIGHT = 150;
-	public static int SCALE = 20;
+	public static double CANVAS_WIDTH = 1280;
+	public static double CANVAS_HEIGHT = 580;
+	public static double CONTROLS_HEIGHT = 150;
+	// Width of the canvas in meters
+	public static double CANVAS_METERS = 0.5;
 
 	static int framerate;
 
@@ -35,8 +36,10 @@ public class Main extends Application {
 		double deltaTime = 1.0 / framerate;
 
 		// Stop when y-Value is less than zero
+		/*
 		if (marble.getPosition().getY() < 0)
 			gui.stop();
+		*/
 
 		// Calculates and return new position and velocity
 		marble.calculateNewPos(deltaTime);

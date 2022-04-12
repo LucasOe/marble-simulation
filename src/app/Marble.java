@@ -4,22 +4,22 @@ import javafx.scene.shape.Circle;
 
 public class Marble {
 
-	private double size = 1.6;
+	private double size = 0.016;
 	private Circle circle;
 
-	// Default values in cm
-	private Vector position = new Vector(1.0, 1.0);
-	private Vector velocity = new Vector(100, 100);
-	private Vector influences = new Vector(0, -981);
+	// Default values in m
+	private Vector position = new Vector(0.0, 0.0);
+	private Vector velocity = new Vector(1.0, 1.0);
+	private Vector acceleration = new Vector(0.0, -9.81);
 
 	public Marble() {
 	}
 
-	public Marble(int size, Vector startPosition, Vector startVelocity, Vector startInfluences) {
+	public Marble(int size, Vector position, Vector velocity, Vector acceleration) {
 		this.size = size;
-		this.position = startPosition;
-		this.velocity = startVelocity;
-		this.influences = startInfluences;
+		this.position = position;
+		this.velocity = velocity;
+		this.acceleration = acceleration;
 	}
 
 	public double getSize() {
@@ -38,8 +38,8 @@ public class Marble {
 		return velocity;
 	}
 
-	public Vector getInfluences() {
-		return influences;
+	public Vector getAcceleration() {
+		return acceleration;
 	}
 
 	public void setSize(double size) {
@@ -58,18 +58,18 @@ public class Marble {
 		this.velocity = velocity;
 	}
 
-	public void setInfluences(Vector influences) {
-		this.influences = influences;
+	public void setAcceleration(Vector acceleration) {
+		this.acceleration = acceleration;
 	}
 
 	public Vector calculateNewPos(double deltaTime) {
-		this.position = position.addVector(velocity.multiply(deltaTime)).addVector(influences.multiply(0.5)
+		this.position = position.addVector(velocity.multiply(deltaTime)).addVector(acceleration.multiply(0.5)
 				.multiply(deltaTime * deltaTime));
 		return this.position;
 	}
 
 	public Vector calculateNewVel(double deltaTime) {
-		this.velocity = velocity.addVector(influences.multiply(deltaTime));
+		this.velocity = velocity.addVector(acceleration.multiply(deltaTime));
 		return this.velocity;
 	}
 

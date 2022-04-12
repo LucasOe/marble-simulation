@@ -21,6 +21,7 @@ import javafx.stage.Stage;
 
 public class Gui {
 
+	private double scale = Main.CANVAS_WIDTH / Main.CANVAS_METERS;
 	private boolean isPlaying;
 
 	private Pane canvas;
@@ -69,9 +70,9 @@ public class Gui {
 		});
 		hbox.getChildren().add(velocityPane);
 
-		VectorPane accelerationPane = new VectorPane(marble.getInfluences(), "Acceleration");
+		VectorPane accelerationPane = new VectorPane(marble.getAcceleration(), "Acceleration");
 		accelerationPane.addListener(acceleration -> {
-			marble.setInfluences(acceleration);
+			marble.setAcceleration(acceleration);
 			moveMarble(marble);
 		});
 		hbox.getChildren().add(accelerationPane);
@@ -131,11 +132,11 @@ public class Gui {
 	}
 
 	public void drawMarble(Marble marble) {
-		Circle circle = new Circle((marble.getSize() / 2) * Main.SCALE, Color.BLACK);
+		Circle circle = new Circle((marble.getSize() / 2) * scale, Color.BLACK);
 		marble.setCircle(circle);
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
-		circle.relocate(0, Main.CANVAS_HEIGHT - marble.getSize() * Main.SCALE);
+		circle.relocate(0, Main.CANVAS_HEIGHT - marble.getSize() * scale);
 		// Update position
 		moveMarble(marble);
 
@@ -146,8 +147,8 @@ public class Gui {
 		Circle circle = marble.getCircle();
 		Vector position = marble.getPosition();
 		// Redrawing the frame resets frameTime for some reason
-		circle.setTranslateX(+position.getX() * Main.SCALE);
-		circle.setTranslateY(-position.getY() * Main.SCALE);
+		circle.setTranslateX(+position.getX() * scale);
+		circle.setTranslateY(-position.getY() * scale);
 	}
 
 }
