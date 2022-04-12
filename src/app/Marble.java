@@ -3,6 +3,7 @@ package app;
 import javafx.scene.shape.Circle;
 
 public class Marble {
+
 	private double size = 1.6;
 	private Circle circle;
 
@@ -71,4 +72,5 @@ public class Marble {
 		this.velocity = velocity.addVector(influences.multiply(deltaTime));
 		return this.velocity;
 	}
+
 }

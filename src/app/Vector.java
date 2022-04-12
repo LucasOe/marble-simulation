@@ -1,6 +1,7 @@
 package app;
 
 public class Vector {
+
     double x;
     double y;
 
@@ -24,4 +25,5 @@ public class Vector {
     public Vector multiply(double factor) {
         return new Vector(x * factor, y * factor);
     }
+
 }
