@@ -1,9 +1,11 @@
 package app;
 
+import app.gui.Gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+
 	public static int CANVAS_WIDTH = 1280;
 	public static int CANVAS_HEIGHT = 600;
 	public static int CONTROLS_HEIGHT = 120;
@@ -47,4 +49,5 @@ public class Main extends Application {
 	public Marble getMarble() {
 		return marble;
 	}
+
 }

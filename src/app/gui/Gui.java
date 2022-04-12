@@ -1,5 +1,8 @@
-package app;
+package app.gui;
 
+import app.Main;
+import app.Marble;
+import app.Vector;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,6 +22,7 @@ import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 public class Gui {
+
 	private boolean isPlaying;
 
 	private Pane canvas;
@@ -162,7 +166,7 @@ public class Gui {
 
 		// Scene
 		Scene scene = new Scene(vbox, Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT + Main.CONTROLS_HEIGHT);
-		scene.getStylesheets().add("app/css/style.css");
+		scene.getStylesheets().add("app/gui/css/style.css");
 
 		stage.setTitle("Murmelbahn Simulation");
 		stage.setScene(scene);
@@ -242,4 +246,5 @@ public class Gui {
 		circle.setTranslateX(+position.getX() * Main.SCALE);
 		circle.setTranslateY(-position.getY() * Main.SCALE);
 	}
+
 }

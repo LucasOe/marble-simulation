@@ -1,6 +1,7 @@
 package app;
 
 public class Starter {
+
 	public static void main(String[] args) throws Exception {
 		System.setProperty("javafx.animation.pulse", "60");
 		System.setProperty("javafx.animation.fullspeed", "false");
@@ -9,4 +10,5 @@ public class Starter {
 
 		Main.main(args);
 	}
+
 }
