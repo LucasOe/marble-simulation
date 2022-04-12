@@ -1,5 +1,8 @@
 package app.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import app.Vector;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -10,11 +13,16 @@ import javafx.scene.layout.ColumnConstraints;
 
 public class VectorPane extends BorderPane {
 
-	Vector vector;
+	public interface Listener {
+		void onVectorChange(Vector vector);
+	}
 
-	public VectorPane(Vector vector, String name) {
+	Vector vector;
+	private List<Listener> listeners = new ArrayList<>();
+
+	public VectorPane(Vector defaultValues, String name) {
 		super();
-		setVector(vector);
+		setVector(defaultValues);
 		initialze(name);
 	}
 
@@ -24,6 +32,14 @@ public class VectorPane extends BorderPane {
 
 	public void setVector(Vector vector) {
 		this.vector = vector;
+	}
+
+	public void addListener(Listener listener) {
+		listeners.add(listener);
+	}
+
+	private void notifyListeners(Vector vector) {
+		listeners.forEach(listener -> listener.onVectorChange(vector));
 	}
 
 	private void initialze(String name) {
@@ -47,7 +63,15 @@ public class VectorPane extends BorderPane {
 		vectorInputs.setVgap(5);
 		vectorInputs.prefWidthProperty().bind(widthProperty());
 		NumberTextField inputX = new NumberTextField(vector.getX());
+		inputX.addListener(value -> {
+			vector.setX(value);
+			notifyListeners(new Vector(vector.getX(), vector.getY()));
+		});
 		NumberTextField inputY = new NumberTextField(vector.getY());
+		inputY.addListener(value -> {
+			vector.setY(value);
+			notifyListeners(new Vector(vector.getX(), vector.getY()));
+		});
 		vectorInputs.addRow(1, new Label("X:"), inputX);
 		vectorInputs.addRow(2, new Label("Y:"), inputY);
 		setCenter(vectorInputs);
