@@ -8,3 +8,22 @@
 	-fx-border-width: 1;
 	-fx-border-color: black;
 }
+
+.pane {
+	-fx-padding: 10;
+	-fx-background-color: rgb(172, 211, 169);
+	-fx-background-radius: 5;
+	-fx-border-radius: 5;
+	-fx-border-style: solid;
+	-fx-border-width: 1;
+	-fx-border-color: black;
+}
+
+.paneName {
+	-fx-font-size: 14;
+	-fx-font-weight: bold;
+}
+
+.text-field {
+	-fx-background-color: rgb(190, 226, 187);
+}

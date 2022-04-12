@@ -57,26 +57,30 @@ public class Gui {
 		controlsPane.setPrefHeight(Main.CONTROLS_HEIGHT);
 		controls.getChildren().add(controlsPane);
 
-		// HBox containing inputs for the start parameters
+		// HBox containing inputs for the VectorPanes
 		HBox hbox = new HBox();
 		controlsPane.setLeft(hbox);
 		BorderPane.setAlignment(hbox, Pos.CENTER_LEFT);
 
+		VectorPane positionPane = new VectorPane(marble.getPosition(), "Position");
+		hbox.getChildren().add(positionPane);
+
+		/*
 		// Start Position
 		VBox startPosition = new VBox(5);
 		startPosition.setAlignment(Pos.CENTER);
 		hbox.getChildren().add(startPosition);
-
+		
 		Label startPositionLabel = new Label("Startposition");
 		startPosition.getChildren().add(startPositionLabel);
-
+		
 		startPositionX = new NumberTextField(marble.getPosition().getX());
 		startPositionX.setPromptText("X");
 		startPositionX.textProperty().addListener((observable, oldValue, newValue) -> {
 			onPositionChange(main, oldValue, newValue);
 		});
 		startPosition.getChildren().add(startPositionX);
-
+		
 		startPositionY = new NumberTextField(marble.getPosition().getY());
 		startPositionY.setPromptText("Y");
 		startPositionY.setText(String.valueOf(marble.getPosition().getY()));
@@ -84,22 +88,22 @@ public class Gui {
 			onPositionChange(main, oldValue, newValue);
 		});
 		startPosition.getChildren().add(startPositionY);
-
+		
 		// Start Velocity
 		VBox startVelocity = new VBox(5);
 		startVelocity.setAlignment(Pos.CENTER);
 		hbox.getChildren().add(startVelocity);
-
+		
 		Label startVelocityLabel = new Label("Startbewegung");
 		startVelocity.getChildren().add(startVelocityLabel);
-
+		
 		startVelocityX = new NumberTextField(marble.getVelocity().getX());
 		startVelocityX.setPromptText("X");
 		startVelocityX.textProperty().addListener((observable, oldValue, newValue) -> {
 			onVelocityChange(main, oldValue, newValue);
 		});
 		startVelocity.getChildren().add(startVelocityX);
-
+		
 		startVelocityY = new NumberTextField(marble.getVelocity().getY());
 		startVelocityY.setPromptText("Y");
 		startVelocityY.setText(String.valueOf(marble.getVelocity().getY()));
@@ -107,28 +111,29 @@ public class Gui {
 			onVelocityChange(main, oldValue, newValue);
 		});
 		startVelocity.getChildren().add(startVelocityY);
-
+		
 		// Start Influences
 		VBox startInfluences = new VBox(5);
 		startInfluences.setAlignment(Pos.CENTER);
 		hbox.getChildren().add(startInfluences);
-
+		
 		Label startInfluencesLabel = new Label("Beschleunigungseinflüsse");
 		startInfluences.getChildren().add(startInfluencesLabel);
-
+		
 		startInfluencesX = new NumberTextField(marble.getInfluences().getX());
 		startInfluencesX.setPromptText("X");
 		startInfluencesX.textProperty().addListener((observable, oldValue, newValue) -> {
 			onInfluencesChange(main, oldValue, newValue);
 		});
 		startInfluences.getChildren().add(startInfluencesX);
-
+		
 		startInfluencesY = new NumberTextField(marble.getInfluences().getY());
 		startInfluencesY.setPromptText("Y");
 		startInfluencesY.textProperty().addListener((observable, oldValue, newValue) -> {
 			onInfluencesChange(main, oldValue, newValue);
 		});
 		startInfluences.getChildren().add(startInfluencesY);
+		*/
 
 		// Play
 		play = new Button("Start");
