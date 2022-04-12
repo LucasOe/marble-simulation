@@ -7,8 +7,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	public static int CANVAS_WIDTH = 1280;
-	public static int CANVAS_HEIGHT = 540;
-	public static int CONTROLS_HEIGHT = 180;
+	public static int CANVAS_HEIGHT = 580;
+	public static int CONTROLS_HEIGHT = 150;
 	public static int SCALE = 20;
 
 	static int framerate;
