@@ -1,7 +1,5 @@
 package app.gui;
 
-import javax.sound.midi.SysexMessage;
-
 import app.Main;
 import app.Marble;
 import app.Vector;
