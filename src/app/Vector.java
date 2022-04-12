@@ -18,6 +18,14 @@ public class Vector {
         return this.y;
     }
 
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
     public Vector addVector(Vector vector) {
         return new Vector(x + vector.getX(), y + vector.getY());
     }
