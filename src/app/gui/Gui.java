@@ -12,7 +12,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -28,12 +27,12 @@ public class Gui {
 	private Pane canvas;
 	private Pane controls;
 
-	private TextField startPositionX;
-	private TextField startPositionY;
-	private TextField startVelocityX;
-	private TextField startVelocityY;
-	private TextField startInfluencesX;
-	private TextField startInfluencesY;
+	private NumberTextField startPositionX;
+	private NumberTextField startPositionY;
+	private NumberTextField startVelocityX;
+	private NumberTextField startVelocityY;
+	private NumberTextField startInfluencesX;
+	private NumberTextField startInfluencesY;
 
 	private Button play;
 	private AnimationTimer timer;
@@ -71,15 +70,14 @@ public class Gui {
 		Label startPositionLabel = new Label("Startposition");
 		startPosition.getChildren().add(startPositionLabel);
 
-		startPositionX = new TextField();
+		startPositionX = new NumberTextField(marble.getPosition().getX());
 		startPositionX.setPromptText("X");
-		startPositionX.setText(String.valueOf(marble.getPosition().getX()));
 		startPositionX.textProperty().addListener((observable, oldValue, newValue) -> {
 			onPositionChange(main, oldValue, newValue);
 		});
 		startPosition.getChildren().add(startPositionX);
 
-		startPositionY = new TextField();
+		startPositionY = new NumberTextField(marble.getPosition().getY());
 		startPositionY.setPromptText("Y");
 		startPositionY.setText(String.valueOf(marble.getPosition().getY()));
 		startPositionY.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -95,15 +93,14 @@ public class Gui {
 		Label startVelocityLabel = new Label("Startbewegung");
 		startVelocity.getChildren().add(startVelocityLabel);
 
-		startVelocityX = new TextField();
+		startVelocityX = new NumberTextField(marble.getVelocity().getX());
 		startVelocityX.setPromptText("X");
-		startVelocityX.setText(String.valueOf(marble.getVelocity().getX()));
 		startVelocityX.textProperty().addListener((observable, oldValue, newValue) -> {
 			onVelocityChange(main, oldValue, newValue);
 		});
 		startVelocity.getChildren().add(startVelocityX);
 
-		startVelocityY = new TextField();
+		startVelocityY = new NumberTextField(marble.getVelocity().getY());
 		startVelocityY.setPromptText("Y");
 		startVelocityY.setText(String.valueOf(marble.getVelocity().getY()));
 		startVelocityY.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -119,17 +116,15 @@ public class Gui {
 		Label startInfluencesLabel = new Label("Beschleunigungseinflüsse");
 		startInfluences.getChildren().add(startInfluencesLabel);
 
-		startInfluencesX = new TextField();
+		startInfluencesX = new NumberTextField(marble.getInfluences().getX());
 		startInfluencesX.setPromptText("X");
-		startInfluencesX.setText(String.valueOf(marble.getInfluences().getX()));
 		startInfluencesX.textProperty().addListener((observable, oldValue, newValue) -> {
 			onInfluencesChange(main, oldValue, newValue);
 		});
 		startInfluences.getChildren().add(startInfluencesX);
 
-		startInfluencesY = new TextField();
+		startInfluencesY = new NumberTextField(marble.getInfluences().getY());
 		startInfluencesY.setPromptText("Y");
-		startInfluencesY.setText(String.valueOf(marble.getInfluences().getY()));
 		startInfluencesY.textProperty().addListener((observable, oldValue, newValue) -> {
 			onInfluencesChange(main, oldValue, newValue);
 		});
@@ -176,7 +171,7 @@ public class Gui {
 	// Set new position when startValues are changed
 	private void onPositionChange(Main main, String oldValue, String newValue) {
 		Marble marble = main.getMarble();
-		Vector position = getValues(startPositionX, startPositionY);
+		Vector position = new Vector(startPositionX.getNumber(), startPositionY.getNumber());
 		marble.setPosition(position);
 		moveMarble(marble);
 	}
@@ -184,31 +179,15 @@ public class Gui {
 	// Set new position when startValues are changed
 	private void onVelocityChange(Main main, String oldValue, String newValue) {
 		Marble marble = main.getMarble();
-		Vector velocity = getValues(startVelocityX, startVelocityY);
+		Vector velocity = new Vector(startVelocityX.getNumber(), startVelocityY.getNumber());
 		marble.setVelocity(velocity);
 	}
 
 	// Set new position when startValues are changed
 	private void onInfluencesChange(Main main, String oldValue, String newValue) {
 		Marble marble = main.getMarble();
-		Vector influences = getValues(startInfluencesX, startInfluencesY);
+		Vector influences = new Vector(startInfluencesX.getNumber(), startInfluencesY.getNumber());
 		marble.setInfluences(influences);
-	}
-
-	// Gets x and y valaues from two Textfields
-	public Vector getValues(TextField xField, TextField yField) {
-		String xValue = xField.getText();
-		String yValue = yField.getText();
-
-		try {
-			// Treat empty values as zero
-			double x = xValue != "" ? Double.parseDouble(xValue) : 0;
-			double y = yValue != "" ? Double.parseDouble(yValue) : 0;
-
-			return new Vector(x, y);
-		} catch (NumberFormatException e) {
-			return new Vector(0, 0);
-		}
 	}
 
 	public void stop() {
