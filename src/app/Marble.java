@@ -79,8 +79,8 @@ public class Marble {
 		accelerations.add(vector);
 	}
 
-	public void removeAcceleration(int i) {
-		accelerations.remove(i);
+	public void removeAcceleration(int index) {
+		accelerations.remove(index);
 	}
 
 	public void removeAcceleration(Vector vector) {
