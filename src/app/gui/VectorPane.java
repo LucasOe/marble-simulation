@@ -13,6 +13,9 @@ import javafx.scene.layout.ColumnConstraints;
 
 public class VectorPane extends BorderPane {
 
+	// Index is used to reference the acceleration in list
+	int index;
+
 	NumberTextField inputX;
 	NumberTextField inputY;
 
@@ -33,8 +36,16 @@ public class VectorPane extends BorderPane {
 		return vector;
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
 	public void setVector(Vector vector) {
 		this.vector = vector;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
 	}
 
 	public void addListener(Listener listener) {
