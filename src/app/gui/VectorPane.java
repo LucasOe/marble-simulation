@@ -86,4 +86,8 @@ public class VectorPane extends BorderPane {
 		inputY.setNumber(vector.getY());
 	}
 
+	public void setColor(String hexColor) {
+		setStyle("-fx-background-color: " + hexColor);
+	}
+
 }
