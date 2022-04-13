@@ -30,7 +30,7 @@ public class Gui {
 	private Pane controls;
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
-	private VectorListPane accelerationPane;
+	private VectorPane accelerationPane;
 
 	private Button play;
 	private AnimationTimer timer;
@@ -80,7 +80,8 @@ public class Gui {
 		List<Vector> accelerations = marble.getAccelerations();
 		for (int index = 0; index < accelerations.size(); index++) {
 			Vector acceleration = accelerations.get(index);
-			accelerationPane = new VectorListPane(acceleration, index, "Acceleration #" + index);
+			accelerationPane = new VectorPane(acceleration, "Acceleration #" + (index + 1));
+			accelerationPane.setIndex(index);
 			accelerationPane.setColor("#B5EAD7");
 			accelerationPane.addListener(accelerationVector -> {
 				marble.setAcceleration(accelerationPane.getIndex(), accelerationVector);
