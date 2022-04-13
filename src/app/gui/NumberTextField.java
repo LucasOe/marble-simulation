@@ -33,7 +33,7 @@ public class NumberTextField extends TextField {
 
 	public void setNumber(double value) {
 		number = value;
-		DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+		DecimalFormat df = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.ENGLISH));
 		setText(df.format(value));
 	}
 
