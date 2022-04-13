@@ -46,7 +46,7 @@ public class VectorPane extends BorderPane {
 	}
 
 	private void initialze(String name) {
-		setPrefWidth(120);
+		setPrefWidth(130);
 		getStyleClass().add("pane");
 
 		// Name
@@ -57,7 +57,7 @@ public class VectorPane extends BorderPane {
 
 		// Inputs
 		GridPane vectorInputs = new GridPane();
-		ColumnConstraints textCol = new ColumnConstraints(20);
+		ColumnConstraints textCol = new ColumnConstraints(25);
 		ColumnConstraints inputCol = new ColumnConstraints(80);
 		vectorInputs.getColumnConstraints().addAll(textCol, inputCol);
 		textCol.setHgrow(Priority.ALWAYS);
