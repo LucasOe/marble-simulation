@@ -1,9 +1,10 @@
-package app.gui;
+package app.gui.panes;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.Vector;
+import app.gui.NumberTextField;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -13,15 +14,12 @@ import javafx.scene.layout.ColumnConstraints;
 
 public class VectorPane extends BorderPane {
 
-	// Index is used to reference the acceleration in list
-	int index;
-
-	NumberTextField inputX;
-	NumberTextField inputY;
-
 	public interface Listener {
 		void onVectorChange(Vector vector);
 	}
+
+	NumberTextField inputX;
+	NumberTextField inputY;
 
 	Vector vector;
 	private List<Listener> listeners = new ArrayList<>();
@@ -36,16 +34,8 @@ public class VectorPane extends BorderPane {
 		return vector;
 	}
 
-	public int getIndex() {
-		return index;
-	}
-
 	public void setVector(Vector vector) {
 		this.vector = vector;
-	}
-
-	public void setIndex(int index) {
-		this.index = index;
 	}
 
 	public void addListener(Listener listener) {
