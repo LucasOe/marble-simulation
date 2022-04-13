@@ -7,7 +7,9 @@ import app.Main;
 import app.Marble;
 import app.Vector;
 import app.gui.panes.AccelerationPane;
+import app.gui.panes.AccelerationPane.AccelerationPaneListener;
 import app.gui.panes.VectorPane;
+import app.gui.panes.VectorPane.VectorPaneListener;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -135,9 +137,15 @@ public class Gui {
 	private void addPositionPane(Pane root, Marble marble) {
 		positionPane = new VectorPane(marble.getPosition(), "Position");
 		positionPane.setColor("#E2F0CB");
-		positionPane.addListener(position -> {
-			marble.setPosition(position);
-			moveMarble(marble);
+		positionPane.addListener(new VectorPaneListener() {
+
+			@Override
+			public void onVectorChange(Vector vector) {
+				marble.setPosition(vector);
+
+				moveMarble(marble);
+			}
+
 		});
 
 		root.getChildren().add(positionPane);
@@ -146,9 +154,15 @@ public class Gui {
 	private void addVelocityPane(Pane root, Marble marble) {
 		velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
 		velocityPane.setColor("#FFDAC1");
-		velocityPane.addListener(velocity -> {
-			marble.setVelocity(velocity);
-			moveMarble(marble);
+		velocityPane.addListener(new VectorPaneListener() {
+
+			@Override
+			public void onVectorChange(Vector vector) {
+				marble.setVelocity(vector);
+
+				moveMarble(marble);
+			}
+
 		});
 
 		root.getChildren().add(velocityPane);
@@ -158,18 +172,26 @@ public class Gui {
 		List<Vector> accelerations = marble.getAccelerations();
 		for (int index = 0; index < accelerations.size(); index++) {
 			Vector acceleration = accelerations.get(index);
-			String name = "Acceleration #" + (index + 1);
-			AccelerationPane accelerationPane = new AccelerationPane(acceleration, name, index);
+			AccelerationPane accelerationPane = new AccelerationPane(acceleration, "Acceleration", index);
 			accelerationPane.setColor("#B5EAD7");
-			accelerationPane.addListener(accelerationVector -> {
-				marble.setAcceleration(accelerationPane.getIndex(), accelerationVector);
-				moveMarble(marble);
+			accelerationPane.addListener(new AccelerationPaneListener() {
+
+				@Override
+				public void onVectorChange(Vector vector) {
+					marble.setAcceleration(accelerationPane.getIndex(), vector);
+
+					moveMarble(marble);
+				}
+
+				@Override
+				public void onButtonClick(int index) {
+					marble.removeAcceleration(index);
+
+					removeAccelerationPanes(root);
+					addAccelerationPanes(root, marble);
+				}
+
 			});
-			/*
-			accelerationPane.addListener(index -> {
-				System.out.println(index);
-			});
-			*/
 			accelerationPanes.add(accelerationPane);
 
 			root.getChildren().add(accelerationPane);

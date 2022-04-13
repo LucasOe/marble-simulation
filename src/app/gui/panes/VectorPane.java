@@ -14,7 +14,7 @@ import javafx.scene.layout.ColumnConstraints;
 
 public class VectorPane extends BorderPane {
 
-	public interface Listener {
+	public interface VectorPaneListener {
 		void onVectorChange(Vector vector);
 	}
 
@@ -22,7 +22,7 @@ public class VectorPane extends BorderPane {
 	NumberTextField inputY;
 
 	Vector vector;
-	private List<Listener> listeners = new ArrayList<>();
+	private List<VectorPaneListener> listeners = new ArrayList<>();
 
 	public VectorPane(Vector defaultValues, String name) {
 		super();
@@ -38,8 +38,8 @@ public class VectorPane extends BorderPane {
 		this.vector = vector;
 	}
 
-	public void addListener(Listener listener) {
-		listeners.add(listener);
+	public void addListener(VectorPaneListener vectorPaneListener) {
+		listeners.add(vectorPaneListener);
 	}
 
 	private void notifyListeners(Vector vector) {

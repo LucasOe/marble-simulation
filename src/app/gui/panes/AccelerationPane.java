@@ -12,17 +12,18 @@ import javafx.scene.layout.BorderPane;
 
 public class AccelerationPane extends VectorPane {
 
-	public interface Listener {
+	public interface AccelerationPaneListener {
 		void onVectorChange(Vector vector);
 
 		void onButtonClick(int index);
 	}
 
 	int index;
-	private List<Listener> listeners = new ArrayList<>();
+	private List<AccelerationPaneListener> listeners = new ArrayList<>();
 
 	public AccelerationPane(Vector defaultValues, String name, int index) {
 		super(defaultValues, name);
+		this.index = index;
 		initialze();
 	}
 
@@ -34,7 +35,7 @@ public class AccelerationPane extends VectorPane {
 		this.index = index;
 	}
 
-	public void addListener(Listener listener) {
+	public void addListener(AccelerationPaneListener listener) {
 		listeners.add(listener);
 	}
 
