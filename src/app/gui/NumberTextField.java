@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 
 public class NumberTextField extends TextField {
 
+	private char[] allowedChars = new char[] { '.', '-' };
+
 	public interface Listener {
 		void onNumberChange(double value);
 	}
@@ -60,12 +62,23 @@ public class NumberTextField extends TextField {
 
 	private void parseInput(String oldValue, String newValue) {
 		try {
-			// Treat empty values as zero
-			number = (!newValue.isEmpty()) ? Double.parseDouble(newValue) : 0;
+			// Allow input of empty values and allowedChars
+			if (newValue.isEmpty() || (newValue.length() == 1 && isAllowedChar(newValue.charAt(0))))
+				return;
+			number = Double.parseDouble(newValue);
 			notifyListeners(number);
 		} catch (NumberFormatException e) {
 			setText(oldValue);
 		}
+	}
+
+	// Return true if char is in allowedChars array
+	private boolean isAllowedChar(char c) {
+		for (char d : allowedChars) {
+			if (c == d)
+				return true;
+		}
+		return false;
 	}
 
 }
