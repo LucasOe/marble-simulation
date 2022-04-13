@@ -1,5 +1,7 @@
 package app.gui;
 
+import java.util.List;
+
 import app.Main;
 import app.Marble;
 import app.Vector;
@@ -28,7 +30,7 @@ public class Gui {
 	private Pane controls;
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
-	private VectorPane accelerationPane;
+	private VectorListPane accelerationPane;
 
 	private Button play;
 	private AnimationTimer timer;
@@ -75,13 +77,17 @@ public class Gui {
 		});
 		hbox.getChildren().add(velocityPane);
 
-		accelerationPane = new VectorPane(marble.getAcceleration(), "Acceleration");
-		accelerationPane.setColor("#B5EAD7");
-		accelerationPane.addListener(acceleration -> {
-			marble.setAcceleration(acceleration);
-			moveMarble(marble);
-		});
-		hbox.getChildren().add(accelerationPane);
+		List<Vector> accelerations = marble.getAccelerations();
+		for (int index = 0; index < accelerations.size(); index++) {
+			Vector acceleration = accelerations.get(index);
+			accelerationPane = new VectorListPane(acceleration, index, "Acceleration #" + index);
+			accelerationPane.setColor("#B5EAD7");
+			accelerationPane.addListener(accelerationVector -> {
+				marble.setAcceleration(accelerationPane.getIndex(), accelerationVector);
+				moveMarble(marble);
+			});
+			hbox.getChildren().add(accelerationPane);
+		}
 
 		// Play
 		play = new Button("Start");
