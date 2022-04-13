@@ -26,6 +26,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		marble = new Marble();
+		marble.addAcceleration(new Vector(0.0, -9.81));
+		marble.addAcceleration(new Vector(5.0, 0.0));
 
 		gui = new Gui(stage, this);
 
