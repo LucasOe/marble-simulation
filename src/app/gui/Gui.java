@@ -1,10 +1,13 @@
 package app.gui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.Main;
 import app.Marble;
 import app.Vector;
+import app.gui.panes.AccelerationPane;
+import app.gui.panes.VectorPane;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -30,7 +33,7 @@ public class Gui {
 	private Pane controls;
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
-	private VectorPane accelerationPane;
+	private List<AccelerationPane> accelerationPanes = new ArrayList<>();
 
 	private Button play;
 	private AnimationTimer timer;
@@ -61,34 +64,24 @@ public class Gui {
 		controlsPane.setLeft(hbox);
 		BorderPane.setAlignment(hbox, Pos.CENTER_LEFT);
 
-		positionPane = new VectorPane(marble.getPosition(), "Position");
-		positionPane.setColor("#E2F0CB");
-		positionPane.addListener(position -> {
-			marble.setPosition(position);
-			moveMarble(marble);
-		});
-		hbox.getChildren().add(positionPane);
+		// VectorPanes
+		addPositionPane(hbox, marble);
+		addVelocityPane(hbox, marble);
+		addAccelerationPanes(hbox, marble);
 
-		velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
-		velocityPane.setColor("#FFDAC1");
-		velocityPane.addListener(velocity -> {
-			marble.setVelocity(velocity);
-			moveMarble(marble);
+		// Add Acceleration Button
+		Button addButton = new Button("+");
+		controlsPane.setCenter(addButton);
+		BorderPane.setAlignment(addButton, Pos.CENTER_LEFT);
+		BorderPane.setMargin(addButton, new Insets(10, 10, 10, 10));
+		addButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				marble.addAcceleration(new Vector(0, 0));
+				removeAccelerationPanes(hbox);
+				addAccelerationPanes(hbox, marble);
+			}
 		});
-		hbox.getChildren().add(velocityPane);
-
-		List<Vector> accelerations = marble.getAccelerations();
-		for (int index = 0; index < accelerations.size(); index++) {
-			Vector acceleration = accelerations.get(index);
-			accelerationPane = new VectorPane(acceleration, "Acceleration #" + (index + 1));
-			accelerationPane.setIndex(index);
-			accelerationPane.setColor("#B5EAD7");
-			accelerationPane.addListener(accelerationVector -> {
-				marble.setAcceleration(accelerationPane.getIndex(), accelerationVector);
-				moveMarble(marble);
-			});
-			hbox.getChildren().add(accelerationPane);
-		}
 
 		// Play
 		play = new Button("Start");
@@ -135,8 +128,58 @@ public class Gui {
 		return velocityPane;
 	}
 
-	public VectorPane getAccelerationPane() {
-		return accelerationPane;
+	public List<AccelerationPane> getAccelerationPanes() {
+		return accelerationPanes;
+	}
+
+	private void addPositionPane(Pane root, Marble marble) {
+		positionPane = new VectorPane(marble.getPosition(), "Position");
+		positionPane.setColor("#E2F0CB");
+		positionPane.addListener(position -> {
+			marble.setPosition(position);
+			moveMarble(marble);
+		});
+
+		root.getChildren().add(positionPane);
+	}
+
+	private void addVelocityPane(Pane root, Marble marble) {
+		velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
+		velocityPane.setColor("#FFDAC1");
+		velocityPane.addListener(velocity -> {
+			marble.setVelocity(velocity);
+			moveMarble(marble);
+		});
+
+		root.getChildren().add(velocityPane);
+	}
+
+	private void addAccelerationPanes(Pane root, Marble marble) {
+		List<Vector> accelerations = marble.getAccelerations();
+		for (int index = 0; index < accelerations.size(); index++) {
+			Vector acceleration = accelerations.get(index);
+			String name = "Acceleration #" + (index + 1);
+			AccelerationPane accelerationPane = new AccelerationPane(acceleration, name, index);
+			accelerationPane.setColor("#B5EAD7");
+			accelerationPane.addListener(accelerationVector -> {
+				marble.setAcceleration(accelerationPane.getIndex(), accelerationVector);
+				moveMarble(marble);
+			});
+			/*
+			accelerationPane.addListener(index -> {
+				System.out.println(index);
+			});
+			*/
+			accelerationPanes.add(accelerationPane);
+
+			root.getChildren().add(accelerationPane);
+		}
+	}
+
+	private void removeAccelerationPanes(Pane root) {
+		for (VectorPane vectorPane : accelerationPanes) {
+			root.getChildren().remove(vectorPane);
+		}
 	}
 
 	public void stop() {
