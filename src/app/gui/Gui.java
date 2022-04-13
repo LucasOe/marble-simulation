@@ -225,7 +225,7 @@ public class Gui {
 		marble.setCircle(circle);
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
-		circle.relocate(0, Main.CANVAS_HEIGHT - marble.getSize() * scale);
+		circle.relocate(0 - marble.getSize() / 2 * scale, Main.CANVAS_HEIGHT - marble.getSize() / 2 * scale);
 		// Update position
 		moveMarble(marble);
 

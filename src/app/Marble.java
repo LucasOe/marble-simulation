@@ -11,7 +11,7 @@ public class Marble {
 	private Circle circle;
 
 	// Default values in m
-	private Vector position = new Vector(0.0, 0.0);
+	private Vector position = new Vector(0.016, 0.016);
 	private Vector velocity = new Vector(1.0, 1.0);
 	private List<Vector> accelerations = new ArrayList<>();
 
