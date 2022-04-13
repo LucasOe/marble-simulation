@@ -11,7 +11,7 @@
 
 .pane {
 	-fx-padding: 10;
-	-fx-background-color: rgb(172, 211, 169);
+	-fx-background-color: rgb(185, 185, 185);
 	-fx-background-radius: 5;
 	-fx-border-radius: 5;
 	-fx-border-style: solid;
@@ -25,5 +25,5 @@
 }
 
 .text-field {
-	-fx-background-color: rgb(190, 226, 187);
+	-fx-background-color: rgba(255, 255, 255, 0.5);
 }

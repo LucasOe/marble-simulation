@@ -60,6 +60,7 @@ public class Gui {
 		BorderPane.setAlignment(hbox, Pos.CENTER_LEFT);
 
 		positionPane = new VectorPane(marble.getPosition(), "Position");
+		positionPane.setColor("#E2F0CB");
 		positionPane.addListener(position -> {
 			marble.setPosition(position);
 			moveMarble(marble);
@@ -67,6 +68,7 @@ public class Gui {
 		hbox.getChildren().add(positionPane);
 
 		velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
+		velocityPane.setColor("#FFDAC1");
 		velocityPane.addListener(velocity -> {
 			marble.setVelocity(velocity);
 			moveMarble(marble);
@@ -74,6 +76,7 @@ public class Gui {
 		hbox.getChildren().add(velocityPane);
 
 		accelerationPane = new VectorPane(marble.getAcceleration(), "Acceleration");
+		accelerationPane.setColor("#B5EAD7");
 		accelerationPane.addListener(acceleration -> {
 			marble.setAcceleration(acceleration);
 			moveMarble(marble);
