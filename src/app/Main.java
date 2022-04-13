@@ -32,7 +32,7 @@ public class Main extends Application {
 		gui.drawMarble(marble);
 	}
 
-	public void updateMarble(Gui gui, Marble marble) {
+	public void updateMarble(Marble marble) {
 		double deltaTime = 1.0 / framerate;
 
 		// Stop when y-Value is less than zero
@@ -42,11 +42,16 @@ public class Main extends Application {
 		*/
 
 		// Calculates and return new position and velocity
-		marble.calculateNewPos(deltaTime);
-		marble.calculateNewVel(deltaTime);
+		Vector position = marble.calculateNewPos(deltaTime);
+		Vector velocity = marble.calculateNewVel(deltaTime);
+
+		// Display new values
+		gui.getPositionPane().setText(position);
+		gui.getVelocityPane().setText(velocity);
 
 		// Move position
 		gui.moveMarble(marble);
+
 	}
 
 	public Marble getMarble() {
