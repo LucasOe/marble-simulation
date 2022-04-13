@@ -26,6 +26,9 @@ public class Gui {
 
 	private Pane canvas;
 	private Pane controls;
+	private VectorPane positionPane;
+	private VectorPane velocityPane;
+	private VectorPane accelerationPane;
 
 	private Button play;
 	private AnimationTimer timer;
@@ -56,21 +59,21 @@ public class Gui {
 		controlsPane.setLeft(hbox);
 		BorderPane.setAlignment(hbox, Pos.CENTER_LEFT);
 
-		VectorPane positionPane = new VectorPane(marble.getPosition(), "Position");
+		positionPane = new VectorPane(marble.getPosition(), "Position");
 		positionPane.addListener(position -> {
 			marble.setPosition(position);
 			moveMarble(marble);
 		});
 		hbox.getChildren().add(positionPane);
 
-		VectorPane velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
+		velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
 		velocityPane.addListener(velocity -> {
 			marble.setVelocity(velocity);
 			moveMarble(marble);
 		});
 		hbox.getChildren().add(velocityPane);
 
-		VectorPane accelerationPane = new VectorPane(marble.getAcceleration(), "Acceleration");
+		accelerationPane = new VectorPane(marble.getAcceleration(), "Acceleration");
 		accelerationPane.addListener(acceleration -> {
 			marble.setAcceleration(acceleration);
 			moveMarble(marble);
@@ -89,13 +92,12 @@ public class Gui {
 		});
 
 		// AnimationTimer
-		Gui gui = this;
 		timer = new AnimationTimer() {
 			// Gets called every frame and tries to target fps set with javafx.animation.pulse
 			@Override
 			public void handle(long now) {
 				if (isPlaying) {
-					main.updateMarble(gui, marble);
+					main.updateMarble(marble);
 				}
 			}
 		};
@@ -113,6 +115,18 @@ public class Gui {
 		stage.setTitle("Murmelbahn Simulation");
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	public VectorPane getPositionPane() {
+		return positionPane;
+	}
+
+	public VectorPane getVelocityPane() {
+		return velocityPane;
+	}
+
+	public VectorPane getAccelerationPane() {
+		return accelerationPane;
 	}
 
 	public void stop() {
@@ -146,7 +160,7 @@ public class Gui {
 	public void moveMarble(Marble marble) {
 		Circle circle = marble.getCircle();
 		Vector position = marble.getPosition();
-		// Redrawing the frame resets frameTime for some reason
+
 		circle.setTranslateX(+position.getX() * scale);
 		circle.setTranslateY(-position.getY() * scale);
 	}

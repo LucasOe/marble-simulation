@@ -13,6 +13,9 @@ import javafx.scene.layout.ColumnConstraints;
 
 public class VectorPane extends BorderPane {
 
+	NumberTextField inputX;
+	NumberTextField inputY;
+
 	public interface Listener {
 		void onVectorChange(Vector vector);
 	}
@@ -62,12 +65,12 @@ public class VectorPane extends BorderPane {
 		vectorInputs.getStyleClass().add("grid");
 		vectorInputs.setVgap(5);
 		vectorInputs.prefWidthProperty().bind(widthProperty());
-		NumberTextField inputX = new NumberTextField(vector.getX());
+		inputX = new NumberTextField(vector.getX());
 		inputX.addListener(value -> {
 			vector.setX(value);
 			notifyListeners(new Vector(vector.getX(), vector.getY()));
 		});
-		NumberTextField inputY = new NumberTextField(vector.getY());
+		inputY = new NumberTextField(vector.getY());
 		inputY.addListener(value -> {
 			vector.setY(value);
 			notifyListeners(new Vector(vector.getX(), vector.getY()));
@@ -76,6 +79,11 @@ public class VectorPane extends BorderPane {
 		vectorInputs.addRow(2, new Label("Y:"), inputY);
 		setCenter(vectorInputs);
 		BorderPane.setAlignment(vectorInputs, Pos.CENTER);
+	}
+
+	public void setText(Vector vector) {
+		inputX.setNumber(vector.getX());
+		inputY.setNumber(vector.getY());
 	}
 
 }

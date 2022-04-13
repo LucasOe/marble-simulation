@@ -1,7 +1,10 @@
 package app.gui;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -30,7 +33,8 @@ public class NumberTextField extends TextField {
 
 	public void setNumber(double value) {
 		number = value;
-		setText(String.valueOf(value));
+		DecimalFormat df = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
+		setText(df.format(value));
 	}
 
 	public void addListener(Listener listener) {
