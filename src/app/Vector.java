@@ -34,4 +34,13 @@ public class Vector {
         return new Vector(x * factor, y * factor);
     }
 
+    public Vector normalize() {
+        double length = Math.sqrt(x * x + y * y);
+        return new Vector(x / length, y / length);
+    }
+
+    public Vector flip() {
+        return new Vector(-x, -y);
+    }
+
 }

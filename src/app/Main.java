@@ -25,13 +25,22 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		gui = new Gui(stage);
+
+		// Create Marble
 		marble = new Marble();
 		marble.addAcceleration(new Vector(0.0, -9.81));
 		marble.addAcceleration(new Vector(5.0, 0.0));
 
-		gui = new Gui(stage, this);
+		gui.drawMarble(marble, this);
+		gui.initializeInfoPanes(marble);
 
-		gui.drawMarble(marble);
+		// Create Rectangle
+		Rectangle rectangle = new Rectangle(
+				new Vector(0.1, 0.02),
+				new Vector(0.2, 0.01),
+				0.05);
+		gui.addRectangle(rectangle);
 	}
 
 	public void updateMarble(Marble marble) {
