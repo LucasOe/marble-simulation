@@ -5,6 +5,7 @@ import java.util.List;
 
 import app.Main;
 import app.Marble;
+import app.Rectangle;
 import app.Vector;
 import app.gui.panes.AccelerationPane;
 import app.gui.panes.AccelerationPane.AccelerationPaneListener;
@@ -24,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Polygon;
 import javafx.stage.Stage;
 
 public class Gui {
@@ -33,6 +35,8 @@ public class Gui {
 
 	private Pane canvas;
 	private Pane controls;
+	private BorderPane controlsPane;
+	private HBox infoPaneBox;
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
 	private List<AccelerationPane> accelerationPanes = new ArrayList<>();
@@ -40,9 +44,7 @@ public class Gui {
 	private Button play;
 	private AnimationTimer timer;
 
-	public Gui(Stage stage, Main main) {
-		Marble marble = main.getMarble();
-
+	public Gui(Stage stage) {
 		// Canvas
 		canvas = new Pane();
 		canvas.setPrefSize(Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT);
@@ -54,36 +56,17 @@ public class Gui {
 		controls.getStyleClass().add("controls");
 
 		// ControlsPane
-		BorderPane controlsPane = new BorderPane();
+		controlsPane = new BorderPane();
 		controlsPane.setPadding(new Insets(10, 10, 10, 10));
 		controlsPane.setPrefWidth(Main.CANVAS_WIDTH);
 		controlsPane.setPrefHeight(Main.CONTROLS_HEIGHT);
 		controls.getChildren().add(controlsPane);
 
 		// HBox containing the VectorPanes
-		HBox hbox = new HBox();
-		hbox.setSpacing(10);
-		controlsPane.setLeft(hbox);
-		BorderPane.setAlignment(hbox, Pos.CENTER_LEFT);
-
-		// VectorPanes
-		addPositionPane(hbox, marble);
-		addVelocityPane(hbox, marble);
-		addAccelerationPanes(hbox, marble);
-
-		// Add Acceleration Button
-		Button addButton = new Button("+");
-		controlsPane.setCenter(addButton);
-		BorderPane.setAlignment(addButton, Pos.CENTER_LEFT);
-		BorderPane.setMargin(addButton, new Insets(10, 10, 10, 10));
-		addButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				marble.addAcceleration(new Vector(0, 0));
-				removeAccelerationPanes(hbox);
-				addAccelerationPanes(hbox, marble);
-			}
-		});
+		infoPaneBox = new HBox();
+		infoPaneBox.setSpacing(10);
+		controlsPane.setLeft(infoPaneBox);
+		BorderPane.setAlignment(infoPaneBox, Pos.CENTER_LEFT);
 
 		// Play
 		play = new Button("Start");
@@ -95,17 +78,6 @@ public class Gui {
 				toggleAnimationTimer();
 			}
 		});
-
-		// AnimationTimer
-		timer = new AnimationTimer() {
-			// Gets called every frame and tries to target fps set with javafx.animation.pulse
-			@Override
-			public void handle(long now) {
-				if (isPlaying) {
-					main.updateMarble(marble);
-				}
-			}
-		};
 
 		// VBox containing canvas and controls
 		VBox vbox = new VBox();
@@ -132,6 +104,28 @@ public class Gui {
 
 	public List<AccelerationPane> getAccelerationPanes() {
 		return accelerationPanes;
+	}
+
+	public void initializeInfoPanes(Marble marble) {
+		// VectorPanes
+		addPositionPane(infoPaneBox, marble);
+		addVelocityPane(infoPaneBox, marble);
+		addAccelerationPanes(infoPaneBox, marble);
+
+		// Add Acceleration Button
+		Button addButton = new Button("+");
+		controlsPane.setCenter(addButton);
+		BorderPane.setAlignment(addButton, Pos.CENTER_LEFT);
+		BorderPane.setMargin(addButton, new Insets(10, 10, 10, 10));
+		addButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				marble.addAcceleration(new Vector(0, 0));
+				removeAccelerationPanes(infoPaneBox);
+				addAccelerationPanes(infoPaneBox, marble);
+			}
+		});
+
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
@@ -220,7 +214,7 @@ public class Gui {
 		}
 	}
 
-	public void drawMarble(Marble marble) {
+	public void drawMarble(Marble marble, Main main) {
 		Circle circle = new Circle((marble.getSize() / 2) * scale, Color.BLACK);
 		marble.setCircle(circle);
 
@@ -228,6 +222,17 @@ public class Gui {
 		circle.relocate(0 - marble.getSize() / 2 * scale, Main.CANVAS_HEIGHT - marble.getSize() / 2 * scale);
 		// Update position
 		moveMarble(marble);
+
+		// AnimationTimer
+		timer = new AnimationTimer() {
+			// Gets called every frame and tries to target fps set with javafx.animation.pulse
+			@Override
+			public void handle(long now) {
+				if (isPlaying) {
+					main.updateMarble(marble);
+				}
+			}
+		};
 
 		canvas.getChildren().add(circle);
 	}
@@ -238,6 +243,19 @@ public class Gui {
 
 		circle.setTranslateX(+position.getX() * scale);
 		circle.setTranslateY(-position.getY() * scale);
+	}
+
+	public void addRectangle(Rectangle rectangle) {
+		List<Vector> points = rectangle.getPoints();
+
+		Polygon polygon = new Polygon();
+		polygon.getPoints().addAll(new Double[] {
+				points.get(0).getX() * scale, Main.CANVAS_HEIGHT - points.get(0).getY() * scale,
+				points.get(1).getX() * scale, Main.CANVAS_HEIGHT - points.get(1).getY() * scale,
+				points.get(2).getX() * scale, Main.CANVAS_HEIGHT - points.get(2).getY() * scale,
+				points.get(3).getX() * scale, Main.CANVAS_HEIGHT - points.get(3).getY() * scale });
+
+		canvas.getChildren().add(polygon);
 	}
 
 }
