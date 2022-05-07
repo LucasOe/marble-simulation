@@ -1,5 +1,9 @@
 package app;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 public class Vector {
 
     double x;
@@ -34,13 +38,25 @@ public class Vector {
         return new Vector(x * factor, y * factor);
     }
 
+    public Vector rotateVector() {
+        return new Vector(y, -x);
+    }
+
     public Vector normalize() {
-        double length = Math.sqrt(x * x + y * y);
-        return new Vector(x / length, y / length);
+        return new Vector(x / getLength(), y / getLength());
     }
 
     public Vector flip() {
         return new Vector(-x, -y);
+    }
+
+    public double getLength() {
+        return Math.sqrt(x * x + y * y);
+    }
+
+    public String toString() {
+        DecimalFormat df = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.ENGLISH));
+        return "(x: " + df.format(x) + ", y: " + df.format(y) + ")";
     }
 
 }
