@@ -43,14 +43,14 @@ public class Vector {
     }
 
     public Vector normalize() {
-        return new Vector(x / getLength(), y / getLength());
+        return new Vector(x / getVectorLength(), y / getVectorLength());
     }
 
     public Vector flip() {
         return new Vector(-x, -y);
     }
 
-    public double getLength() {
+    public double getVectorLength() {
         return Math.sqrt(x * x + y * y);
     }
 

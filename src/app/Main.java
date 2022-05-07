@@ -12,6 +12,7 @@ public class Main extends Application {
 	public static double CANVAS_HEIGHT = 580;
 	public static double CONTROLS_HEIGHT = 150;
 	// Width of the canvas in meters
+	// TODO: Jumps are pretty big with 60 FPS. Maybe change canvas size?
 	public static double CANVAS_METERS = 0.5;
 
 	static int framerate;
@@ -57,8 +58,19 @@ public class Main extends Application {
 		// Iterate over every rectangle in the scene
 		List<Rectangle> rectangles = gui.getRectangles();
 		for (Rectangle rectangle : rectangles) {
-			Vector normalV = rectangle.getLength().normalize(); // Normalized Length Vector
-			Vector normalH = normalV.rotateVector().flip(); // Normalized Length Vector rotated 90° counterclockwise
+			Vector position = marble.getPosition();
+			List<Vector> points = rectangle.getPoints();
+
+			Vector normalH = rectangle.getLength().normalize(); // Normalized Length Vector (horizontal)
+			Vector normalV = normalH.rotateVector().flip(); // Normalized Length Vector rotated 90° counterclockwise (vertical)
+
+			if (calculateHalfspace(position, normalH, points.get(0).getVectorLength()) > 0 // position is right of p0
+					&& calculateHalfspace(position, normalH, points.get(2).getVectorLength()) <= 0 // position is left of p2
+					// TODO: Result is for some reason less than zero and I have no idea why
+					&& calculateHalfspace(position, normalV, points.get(0).getVectorLength()) <= 0 // position is top of p0
+					&& calculateHalfspace(position, normalV, points.get(2).getVectorLength()) <= 0) { //position is bottom of p2
+				System.out.println("Collision");
+			}
 		}
 
 		// Calculates and return new position and velocity
@@ -75,6 +87,11 @@ public class Main extends Application {
 
 	public Marble getMarble() {
 		return marble;
+	}
+
+	// If value is bigger than zero, the point is one the side to which the normal points, otherwise the point is on the other side
+	private double calculateHalfspace(Vector p, Vector n, double d) {
+		return p.getX() * n.getX() + p.getY() * n.getY() - d;
 	}
 
 }
