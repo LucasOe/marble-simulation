@@ -32,6 +32,7 @@ public class Gui {
 
 	private double scale = Main.CANVAS_WIDTH / Main.CANVAS_METERS;
 	private boolean isPlaying;
+	private List<Rectangle> rectangles = new ArrayList<>();
 
 	private Pane canvas;
 	private Pane controls;
@@ -245,7 +246,12 @@ public class Gui {
 		circle.setTranslateY(-position.getY() * scale);
 	}
 
+	public List<Rectangle> getRectangles() {
+		return rectangles;
+	}
+
 	public void addRectangle(Rectangle rectangle) {
+		rectangles.add(rectangle);
 		List<Vector> points = rectangle.getPoints();
 
 		Polygon polygon = new Polygon();

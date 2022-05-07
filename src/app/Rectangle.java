@@ -42,7 +42,7 @@ public class Rectangle {
 	public List<Vector> getPoints() {
 		List<Vector> points = new ArrayList<>();
 
-		Vector rotatedLengthNormalized = rotateVector(length).normalize().flip();
+		Vector rotatedLengthNormalized = length.rotateVector().normalize().flip();
 		Vector heightVector = rotatedLengthNormalized.multiply(height);
 
 		points.add(position);
@@ -53,7 +53,4 @@ public class Rectangle {
 		return points;
 	}
 
-	private Vector rotateVector(Vector vector) {
-		return new Vector(vector.getY(), -vector.getX());
-	}
 }

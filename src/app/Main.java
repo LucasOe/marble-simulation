@@ -1,5 +1,7 @@
 package app;
 
+import java.util.List;
+
 import app.gui.Gui;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -52,6 +54,13 @@ public class Main extends Application {
 			gui.stop();
 		*/
 
+		// Iterate over every rectangle in the scene
+		List<Rectangle> rectangles = gui.getRectangles();
+		for (Rectangle rectangle : rectangles) {
+			Vector normalV = rectangle.getLength().normalize(); // Normalized Length Vector
+			Vector normalH = normalV.rotateVector().flip(); // Normalized Length Vector rotated 90° counterclockwise
+		}
+
 		// Calculates and return new position and velocity
 		Vector position = marble.calculateNewPos(deltaTime);
 		Vector velocity = marble.calculateNewVel(deltaTime);
@@ -62,7 +71,6 @@ public class Main extends Application {
 
 		// Move position
 		gui.moveMarble(marble);
-
 	}
 
 	public Marble getMarble() {
