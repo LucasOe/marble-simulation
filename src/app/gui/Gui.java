@@ -252,14 +252,14 @@ public class Gui {
 
 	public void addRectangle(Rectangle rectangle) {
 		rectangles.add(rectangle);
-		List<Vector> points = rectangle.getPoints();
+		Vector[] points = rectangle.getPoints();
 
 		Polygon polygon = new Polygon();
 		polygon.getPoints().addAll(new Double[] {
-				points.get(0).getX() * scale, Main.CANVAS_HEIGHT - points.get(0).getY() * scale,
-				points.get(1).getX() * scale, Main.CANVAS_HEIGHT - points.get(1).getY() * scale,
-				points.get(2).getX() * scale, Main.CANVAS_HEIGHT - points.get(2).getY() * scale,
-				points.get(3).getX() * scale, Main.CANVAS_HEIGHT - points.get(3).getY() * scale });
+				points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
+				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
+				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
+				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
 
 		canvas.getChildren().add(polygon);
 	}

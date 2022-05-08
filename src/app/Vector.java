@@ -54,6 +54,10 @@ public class Vector {
         return Math.sqrt(x * x + y * y);
     }
 
+    public double dotProduct(Vector vector) {
+        return x * vector.getX() + y * vector.getY();
+    }
+
     public String toString() {
         DecimalFormat df = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.ENGLISH));
         return "(x: " + df.format(x) + ", y: " + df.format(y) + ")";
