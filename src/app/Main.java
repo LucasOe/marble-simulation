@@ -59,6 +59,7 @@ public class Main extends Application {
 		List<Rectangle> rectangles = gui.getRectangles();
 		for (Rectangle rectangle : rectangles) {
 			Vector position = marble.getPosition();
+			Vector velocity = marble.getVelocity();
 
 			Vector[] points = rectangle.getPoints();
 			Vector[] normals = rectangle.getNormals();
@@ -72,7 +73,25 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 // Bottom of P2-P3
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 // Right of P3-P0
 			) {
-				System.out.println("Collision");
+				System.out.println("Collision:");
+				// TODO: Orthogonal projection from position to line and determine if collision point is within bounds
+
+				// Moving towards P0-P1
+				if (velocity.dotProduct(normals[0]) < 0) {
+					System.out.println("P0-P1");
+				}
+				// Moving towards P1-P2
+				if (velocity.dotProduct(normals[1]) < 0) {
+					System.out.println("P1-P2");
+				}
+				// Moving towards P2-P3
+				if (velocity.dotProduct(normals[2]) < 0) {
+					System.out.println("P2-P3");
+				}
+				// Moving towards P3-P0
+				if (velocity.dotProduct(normals[3]) < 0) {
+					System.out.println("P3-P0");
+				}
 			}
 		}
 
