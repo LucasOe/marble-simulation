@@ -13,7 +13,7 @@ public class Main extends Application {
 	public static double CONTROLS_HEIGHT = 150;
 	// Width of the canvas in meters
 	// TODO: Jumps are pretty big with 60 FPS. Maybe change canvas size?
-	public static double CANVAS_METERS = 0.5;
+	public static double CANVAS_METERS = 2.0;
 
 	static int framerate;
 
@@ -40,8 +40,8 @@ public class Main extends Application {
 
 		// Create Rectangle
 		Rectangle rectangle = new Rectangle(
-				new Vector(0.1, 0.02),
-				new Vector(0.2, 0.01),
+				new Vector(0.7, 0.1),
+				new Vector(0.5, 0.2),
 				0.05);
 		gui.addRectangle(rectangle);
 	}
@@ -67,12 +67,12 @@ public class Main extends Application {
 			/*
 				Detect if Marble position is between all four points
 				Normals have to point away from origin; only uing normals pointing to the right and up, assuming length Vector points to the right.
-				TODO: Use marble radius as the max allowed distance
+				Using marble radius as the max allowed distance
 			*/
-			if (/*   */calculateDistance(position, normals[2], points[0]) >= 0 // Top of P0-P1
-					&& calculateDistance(position, normals[1], points[1]) <= 0 // Left of P1-P2
-					&& calculateDistance(position, normals[2], points[2]) <= 0 // Bottom of P2-P3
-					&& calculateDistance(position, normals[1], points[3]) >= 0 // Right of P3-P0
+			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() / 2 // Top of P0-P1
+					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() / 2 // Left of P1-P2
+					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 // Bottom of P2-P3
+					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 // Right of P3-P0
 			) {
 				System.out.println("Collision");
 			}
@@ -92,12 +92,9 @@ public class Main extends Application {
 
 	// Calculate the distance to the line
 	// If value is bigger than zero, the point is one the side to which the normal points, otherwise the point is on the other side
-	private double calculateDistance(Vector p, Vector n, Vector a) {
-		// Shortest possible distance between line and origin
-		// d = |n * dotP(a, n)|
-		double d = n.multiply(a.dotProduct(n)).getVectorLength();
-		// return dotP(p, n) - d
-		return p.dotProduct(n) - d;
+	private double calculateDistance(Vector x, Vector n, Vector p) {
+		double d = n.dotProduct(p); // d = dotP(n, p)
+		return x.dotProduct(n) - d; // return dotP(x, n) - d
 	}
 
 }

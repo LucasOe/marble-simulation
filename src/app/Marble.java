@@ -7,12 +7,12 @@ import javafx.scene.shape.Circle;
 
 public class Marble {
 
-	private double size = 0.016;
+	private double size = 0.05;
 	private Circle circle;
 
 	// Default values in m
-	private Vector position = new Vector(0.016, 0.016);
-	private Vector velocity = new Vector(1.0, 1.0);
+	private Vector position = new Vector(0.1, 0.1);
+	private Vector velocity = new Vector(2.0, 2.0);
 	private List<Vector> accelerations = new ArrayList<>();
 
 	public Marble() {
