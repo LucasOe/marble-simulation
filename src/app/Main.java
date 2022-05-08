@@ -12,7 +12,6 @@ public class Main extends Application {
 	public static double CANVAS_HEIGHT = 580;
 	public static double CONTROLS_HEIGHT = 150;
 	// Width of the canvas in meters
-	// TODO: Jumps are pretty big with 60 FPS. Maybe change canvas size?
 	public static double CANVAS_METERS = 2.0;
 
 	static int framerate;
