@@ -65,7 +65,6 @@ public class Main extends Application {
 
 			/*
 				Detect if Marble position is between all four points
-				Normals have to point away from origin; only uing normals pointing to the right and up, assuming length Vector points to the right.
 				Using marble radius as the max allowed distance
 			*/
 			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() / 2 // Top of P0-P1
@@ -89,8 +88,10 @@ public class Main extends Application {
 		gui.moveMarble(marble);
 	}
 
-	// Calculate the distance to the line
-	// If value is bigger than zero, the point is one the side to which the normal points, otherwise the point is on the other side
+	/*
+		Calculate the distance to the line
+		If value is bigger than zero, the point is one the side to which the normal points
+	*/
 	private double calculateDistance(Vector x, Vector n, Vector p) {
 		double d = n.dotProduct(p); // d = dotP(n, p)
 		return x.dotProduct(n) - d; // return dotP(x, n) - d
