@@ -1,8 +1,5 @@
 package app;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Rectangle {
 
 	Vector position;
@@ -39,18 +36,32 @@ public class Rectangle {
 		this.height = height;
 	}
 
-	public List<Vector> getPoints() {
-		List<Vector> points = new ArrayList<>();
-
+	public Vector[] getPoints() {
+		// Turn height into a Vector
 		Vector rotatedLengthNormalized = length.rotateVector().normalize().flip();
 		Vector heightVector = rotatedLengthNormalized.multiply(height);
 
-		points.add(position);
-		points.add(position.addVector(length));
-		points.add(position.addVector(length).addVector(heightVector));
-		points.add(position.addVector(heightVector));
+		// Assuming length Vector points to the right:
+		Vector[] points = {
+				position, // bottom left
+				position.addVector(length), // bottom right
+				position.addVector(length).addVector(heightVector), // top right
+				position.addVector(heightVector) // top left
+		};
 
 		return points;
+	}
+
+	public Vector[] getNormals() {
+		// Assuming length Vector points to the right:
+		Vector[] normals = {
+				length.rotateVector().normalize(), // down
+				length.normalize(), // right
+				length.rotateVector().flip().normalize(), // up
+				length.flip().normalize() // left
+		};
+
+		return normals;
 	}
 
 }

@@ -46,6 +46,7 @@ public class Main extends Application {
 		gui.addRectangle(rectangle);
 	}
 
+	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void updateMarble(Marble marble) {
 		double deltaTime = 1.0 / framerate;
 
@@ -59,16 +60,20 @@ public class Main extends Application {
 		List<Rectangle> rectangles = gui.getRectangles();
 		for (Rectangle rectangle : rectangles) {
 			Vector position = marble.getPosition();
-			List<Vector> points = rectangle.getPoints();
 
-			Vector normalH = rectangle.getLength().normalize(); // Normalized Length Vector (horizontal)
-			Vector normalV = normalH.rotateVector().flip(); // Normalized Length Vector rotated 90° counterclockwise (vertical)
+			Vector[] points = rectangle.getPoints();
+			Vector[] normals = rectangle.getNormals();
 
-			if (calculateHalfspace(position, normalH, points.get(0).getVectorLength()) > 0 // position is right of p0
-					&& calculateHalfspace(position, normalH, points.get(2).getVectorLength()) <= 0 // position is left of p2
-					// TODO: Result is for some reason less than zero and I have no idea why
-					&& calculateHalfspace(position, normalV, points.get(0).getVectorLength()) <= 0 // position is top of p0
-					&& calculateHalfspace(position, normalV, points.get(2).getVectorLength()) <= 0) { //position is bottom of p2
+			/*
+				Detect if Marble position is between all four points
+				Normals have to point away from origin; only uing normals pointing to the right and up, assuming length Vector points to the right.
+				TODO: Use marble radius as the max allowed distance
+			*/
+			if (/*   */calculateDistance(position, normals[2], points[0]) >= 0 // Top of P0-P1
+					&& calculateDistance(position, normals[1], points[1]) <= 0 // Left of P1-P2
+					&& calculateDistance(position, normals[2], points[2]) <= 0 // Bottom of P2-P3
+					&& calculateDistance(position, normals[1], points[3]) >= 0 // Right of P3-P0
+			) {
 				System.out.println("Collision");
 			}
 		}
@@ -85,13 +90,14 @@ public class Main extends Application {
 		gui.moveMarble(marble);
 	}
 
-	public Marble getMarble() {
-		return marble;
-	}
-
+	// Calculate the distance to the line
 	// If value is bigger than zero, the point is one the side to which the normal points, otherwise the point is on the other side
-	private double calculateHalfspace(Vector p, Vector n, double d) {
-		return p.getX() * n.getX() + p.getY() * n.getY() - d;
+	private double calculateDistance(Vector p, Vector n, Vector a) {
+		// Shortest possible distance between line and origin
+		// d = |n * dotP(a, n)|
+		double d = n.multiply(a.dotProduct(n)).getVectorLength();
+		// return dotP(p, n) - d
+		return p.dotProduct(n) - d;
 	}
 
 }
