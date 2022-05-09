@@ -75,54 +75,13 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 // Bottom of P2-P3
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 // Right of P3-P0
 			) {
-				if (velocity.dotProduct(normals[0]) < 0) { // Moving towards P0-P1
-					// Projection of position onto P0-P1
-					Vector projectionPoint = points[0].addVector(
-							projectVector(position.subtractVector(points[0]), normals[1]));
-					// Projection Point is on the rectangle
-					if (/*   */calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
-							&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
-					) {
-						System.out.println("P0-P1");
-						return;
-					}
-				}
-				if (velocity.dotProduct(normals[1]) < 0) { // Moving towards P1-P2
-					// Projection of position onto P1-P2
-					Vector projectionPoint = points[1].addVector(
-							projectVector(position.subtractVector(points[1]), normals[2]));
-					// Projection Point is on the rectangle
-					if (/*   */calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
-							&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
-					) {
-						System.out.println("P1-P2");
-						return;
-					}
-				}
-				if (velocity.dotProduct(normals[2]) < 0) { // Moving towards P2-P3
-					// Projection of position onto P2-P3
-					Vector projectionPoint = points[2].addVector(
-							projectVector(position.subtractVector(points[2]), normals[3]));
-					// Projection Point is on the rectangle
-					if (/*   */calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
-							&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
-					) {
-						System.out.println("P2-P3");
-						return;
-					}
-				}
-				if (velocity.dotProduct(normals[3]) < 0) { // Moving towards P3-P0
-					// Projection of position onto P3-P0
-					Vector projectionPoint = points[3].addVector(
-							projectVector(position.subtractVector(points[3]), normals[0]));
-					// Projection Point is on the rectangle
-					if (/*   */calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
-							&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
-					) {
-						System.out.println("P3-P0");
-						return;
-					}
-				}
+				Vector marbleNormal = getMarbleNormal(marble, points, normals);
+
+				// Break velocity Vector into perpendicular and parallel Vectors
+				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
+				Vector velocityPar = velocity.subtractVector(velocityPer);
+
+				return;
 			}
 		}
 
@@ -138,10 +97,64 @@ public class Main extends Application {
 		gui.moveMarble(marble);
 	}
 
-	/*
-		Calculate the distance to the line
-		If value is bigger than zero, the point is one the side to which the normal points
-	*/
+	// Return the normal facing the direction the marble is hitting
+	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals) {
+		Vector position = marble.getPosition();
+		Vector velocity = marble.getVelocity();
+
+		if (velocity.dotProduct(normals[0]) < 0) { // Moving towards P0-P1
+			// Projection of position onto P0-P1
+			Vector projectionPoint = points[0].addVector(
+					projectVector(position.subtractVector(points[0]), normals[1]));
+			// Projection Point is on the rectangle
+			if (/*   */calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
+					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
+			) {
+				System.out.println("P0-P1");
+				return normals[2];
+			}
+		}
+		if (velocity.dotProduct(normals[1]) < 0) { // Moving towards P1-P2
+			// Projection of position onto P1-P2
+			Vector projectionPoint = points[1].addVector(
+					projectVector(position.subtractVector(points[1]), normals[2]));
+			// Projection Point is on the rectangle
+			if (/*   */calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
+					&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
+			) {
+				System.out.println("P1-P2");
+				return normals[3];
+			}
+		}
+		if (velocity.dotProduct(normals[2]) < 0) { // Moving towards P2-P3
+			// Projection of position onto P2-P3
+			Vector projectionPoint = points[2].addVector(
+					projectVector(position.subtractVector(points[2]), normals[3]));
+			// Projection Point is on the rectangle
+			if (/*   */calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
+					&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
+			) {
+				System.out.println("P2-P3");
+				return normals[0];
+			}
+		}
+		if (velocity.dotProduct(normals[3]) < 0) { // Moving towards P3-P0
+			// Projection of position onto P3-P0
+			Vector projectionPoint = points[3].addVector(
+					projectVector(position.subtractVector(points[3]), normals[0]));
+			// Projection Point is on the rectangle
+			if (/*   */calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
+					&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
+			) {
+				System.out.println("P3-P0");
+				return normals[1];
+			}
+		}
+
+		return null;
+	}
+
+	// Calculate non-absolute distance to the line
 	private double calculateDistance(Vector x, Vector n, Vector p) {
 		double d = n.dotProduct(p); // d = dotP(n, p)
 		return x.dotProduct(n) - d; // return dotP(x, n) - d
@@ -149,7 +162,13 @@ public class Main extends Application {
 
 	// Project Vector p along Vector n
 	private Vector projectVector(Vector p, Vector n) {
-		return n.multiply(p.dotProduct(n) / (n.getVectorLength() * n.getVectorLength())); // n * (dotP(p, n) / |n|^2)
+		// n * (dotP(p, n) / |n|^2)
+		return n.multiply(p.dotProduct(n) / (n.getVectorLength() * n.getVectorLength()));
 	}
 
+	// Get perpendicular Vector of v in direction of n
+	private Vector orthogonalDecomposition(Vector v, Vector n) {
+		// v - (dotP(n, v) / dotP(n, v)) * n
+		return v.subtractVector(n.multiply((n.dotProduct(v)) / (n.dotProduct(n))));
+	}
 }
