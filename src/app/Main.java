@@ -13,6 +13,8 @@ public class Main extends Application {
 	public static double CONTROLS_HEIGHT = 150;
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
+	// Slowdown factor should be one for realtime
+	public static double SLOWDOWN = 0.25;
 
 	static int framerate;
 
@@ -47,7 +49,7 @@ public class Main extends Application {
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void updateMarble(Marble marble) {
-		double deltaTime = 1.0 / framerate;
+		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 
 		// Stop when y-Value is less than zero
 		/*
