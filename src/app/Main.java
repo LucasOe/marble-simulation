@@ -112,7 +112,6 @@ public class Main extends Application {
 			if (/*   */calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
 					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
 			) {
-				System.out.println("P0-P1");
 				return normals[2];
 			}
 		}
@@ -124,7 +123,6 @@ public class Main extends Application {
 			if (/*   */calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
 					&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
 			) {
-				System.out.println("P1-P2");
 				return normals[3];
 			}
 		}
@@ -136,7 +134,6 @@ public class Main extends Application {
 			if (/*   */calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
 					&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
 			) {
-				System.out.println("P2-P3");
 				return normals[0];
 			}
 		}
@@ -148,7 +145,6 @@ public class Main extends Application {
 			if (/*   */calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
 					&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
 			) {
-				System.out.println("P3-P0");
 				return normals[1];
 			}
 		}
