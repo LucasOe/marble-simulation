@@ -75,24 +75,49 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 // Bottom of P2-P3
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 // Right of P3-P0
 			) {
-				System.out.println("Collision:");
-				// TODO: Orthogonal projection from position to line and determine if collision point is within bounds
-
 				// Moving towards P0-P1
 				if (velocity.dotProduct(normals[0]) < 0) {
-					System.out.println("P0-P1");
+					// Projection of position onto P0-P1
+					Vector projectionPoint = points[0]
+							.addVector(projectVector(position.subtractVector(points[0]), normals[1]));
+					Vector marbleNormal = projectionPoint.subtractVector(position); // Normal pointing towards line
+					if (calculateDistance(projectionPoint, normals[3], points[3]) <= 0) { // Right of P3-P0
+						System.out.println(marbleNormal.toString());
+						return;
+					}
 				}
 				// Moving towards P1-P2
 				if (velocity.dotProduct(normals[1]) < 0) {
-					System.out.println("P1-P2");
+					// Projection of position onto P1-P2
+					Vector projectionPoint = points[1]
+							.addVector(projectVector(position.subtractVector(points[1]), normals[2]));
+					Vector marbleNormal = projectionPoint.subtractVector(position); // Normal pointing towards line
+					if (calculateDistance(projectionPoint, normals[0], points[0]) <= 0) { // Top of P0-P1
+						System.out.println(marbleNormal.toString());
+						return;
+					}
 				}
 				// Moving towards P2-P3
 				if (velocity.dotProduct(normals[2]) < 0) {
-					System.out.println("P2-P3");
+					// Projection of position onto P2-P3
+					Vector projectionPoint = points[2]
+							.addVector(projectVector(position.subtractVector(points[2]), normals[3]));
+					Vector marbleNormal = projectionPoint.subtractVector(position); // Normal pointing towards line
+					if (calculateDistance(projectionPoint, normals[1], points[1]) <= 0) { // Left of P1-P2
+						System.out.println(marbleNormal.toString());
+						return;
+					}
 				}
 				// Moving towards P3-P0
 				if (velocity.dotProduct(normals[3]) < 0) {
-					System.out.println("P3-P0");
+					// Projection of position onto P3-P0
+					Vector projectionPoint = points[3]
+							.addVector(projectVector(position.subtractVector(points[3]), normals[0]));
+					Vector marbleNormal = projectionPoint.subtractVector(position); // Normal pointing towards line
+					if (calculateDistance(projectionPoint, normals[2], points[2]) <= 0) { // Bottom of P2-P3
+						System.out.println(marbleNormal.toString());
+						return;
+					}
 				}
 			}
 		}
@@ -116,6 +141,11 @@ public class Main extends Application {
 	private double calculateDistance(Vector x, Vector n, Vector p) {
 		double d = n.dotProduct(p); // d = dotP(n, p)
 		return x.dotProduct(n) - d; // return dotP(x, n) - d
+	}
+
+	// Project Vector p on Vector n
+	private Vector projectVector(Vector p, Vector n) {
+		return n.multiply(p.dotProduct(n) / (n.getVectorLength() * n.getVectorLength())); // n * (dotP(p, n) / |n|^2)
 	}
 
 }
