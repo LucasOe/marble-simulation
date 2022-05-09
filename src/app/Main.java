@@ -76,7 +76,6 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 // Right of P3-P0
 			) {
 				Vector marbleNormal = getMarbleNormal(marble, points, normals);
-				System.out.println(marbleNormal.toString());
 
 				// Break velocity Vector into perpendicular and parallel Vectors
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
