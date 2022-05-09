@@ -108,7 +108,6 @@ public class Main extends Application {
 							&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
 					) {
 						System.out.println("P2-P3");
-						System.out.println(projectionPoint.toString());
 						return;
 					}
 				}
@@ -148,7 +147,7 @@ public class Main extends Application {
 		return x.dotProduct(n) - d; // return dotP(x, n) - d
 	}
 
-	// Project Vector p on Vector n
+	// Project Vector p along Vector n
 	private Vector projectVector(Vector p, Vector n) {
 		return n.multiply(p.dotProduct(n) / (n.getVectorLength() * n.getVectorLength())); // n * (dotP(p, n) / |n|^2)
 	}
