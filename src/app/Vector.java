@@ -34,6 +34,10 @@ public class Vector {
         return new Vector(x + vector.getX(), y + vector.getY());
     }
 
+    public Vector subtractVector(Vector vector) {
+        return new Vector(x - vector.getX(), y - vector.getY());
+    }
+
     public Vector multiply(double factor) {
         return new Vector(x * factor, y * factor);
     }
