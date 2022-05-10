@@ -34,17 +34,30 @@ public class Main extends Application {
 		// Create Marble
 		marble = new Marble();
 		marble.addAcceleration(new Vector(0.0, -9.81));
-		marble.addAcceleration(new Vector(5.0, 0.0));
 
 		gui.drawMarble(marble, this);
 		gui.initializeInfoPanes(marble);
 
 		// Create Rectangle
-		Rectangle rectangle = new Rectangle(
+		gui.addRectangle(new Rectangle(
 				new Vector(0.7, 0.1),
 				new Vector(0.5, 0.2),
-				0.05);
-		gui.addRectangle(rectangle);
+				0.05));
+
+		gui.addRectangle(new Rectangle(
+				new Vector(0.0, 0.0),
+				new Vector(2.0, 0.0),
+				0.01));
+
+		gui.addRectangle(new Rectangle(
+				new Vector(0.01, 0.0),
+				new Vector(0.0, 1.0),
+				0.01));
+
+		gui.addRectangle(new Rectangle(
+				new Vector(2.0, 0.0),
+				new Vector(0.0, 1.0),
+				0.01));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
@@ -69,6 +82,7 @@ public class Main extends Application {
 			/*
 				Detect if Marble position is between all four points
 				Using marble radius as the max allowed distance
+				TODO: When deltaTime is too big the marble can move through collision
 			*/
 			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() / 2 // Top of P0-P1
 					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() / 2 // Left of P1-P2
@@ -82,7 +96,8 @@ public class Main extends Application {
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
 				// TODO: Calculate energy loss
-				Vector newVelocity = velocityPer.addVector(velocityPar.flip());
+				// TODO: Marble can sometimes not move out of collision in a single frame and collides with the backface
+				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
 			}
 		}
@@ -149,6 +164,7 @@ public class Main extends Application {
 			}
 		}
 
+		// TODO: retun normal pointing to the edge if none of the above are true
 		return null;
 	}
 
