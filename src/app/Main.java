@@ -63,7 +63,7 @@ public class Main extends Application {
 	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void updateMarble(Marble marble) {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
-		double threshold = 0.005; // Threshold distance for collision detection
+		double tolerance = 0.005; // Threshold distance for collision detection
 
 		// Stop when y-Value is less than zero
 		/*
@@ -84,10 +84,10 @@ public class Main extends Application {
 				Detect if Marble position is between all four points
 				Using marble radius as the max allowed distance
 			*/
-			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() / 2 + threshold // Top of P0-P1
-					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() / 2 + threshold // Left of P1-P2
-					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 + threshold // Bottom of P2-P3
-					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 + threshold // Right of P3-P0
+			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() / 2 + tolerance // Top of P0-P1
+					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() / 2 + tolerance // Left of P1-P2
+					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 + tolerance // Bottom of P2-P3
+					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 + tolerance // Right of P3-P0
 			) {
 				Vector marbleNormal = getMarbleNormal(marble, points, normals);
 
