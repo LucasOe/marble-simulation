@@ -90,13 +90,14 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 + tolerance // Right of P3-P0
 			) {
 				Vector marbleNormal = getMarbleNormal(marble, points, normals);
+				if (marbleNormal == null)
+					break;
 
 				// Break velocity Vector into perpendicular and parallel Vectors
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
 				// TODO: Calculate energy loss
-				// TODO: Marble can sometimes not move out of collision in a single frame and collides with the backface
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
 			}
@@ -124,8 +125,9 @@ public class Main extends Application {
 			Vector projectionPoint = points[0].addVector(
 					projectVector(position.subtractVector(points[0]), normals[1]));
 			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
-					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
+			if (/*   */calculateDistance(position, normals[0], points[0]) >= 0 // Position: Bottom of P0-P1
+					&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Projection Point: Right of P3-P0
+					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Projection Point: Left of P1-P2
 			) {
 				return normals[2];
 			}
@@ -135,7 +137,8 @@ public class Main extends Application {
 			Vector projectionPoint = points[1].addVector(
 					projectVector(position.subtractVector(points[1]), normals[2]));
 			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
+			if (/*   */calculateDistance(position, normals[1], points[1]) >= 0 // Position: Right of P1-P2
+					&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
 					&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
 			) {
 				return normals[3];
@@ -146,7 +149,8 @@ public class Main extends Application {
 			Vector projectionPoint = points[2].addVector(
 					projectVector(position.subtractVector(points[2]), normals[3]));
 			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
+			if (/*   */calculateDistance(position, normals[2], points[2]) >= 0 // Position: Top of P2-P3
+					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Left of P1-P2
 					&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Right of P3-P0
 			) {
 				return normals[0];
@@ -157,7 +161,8 @@ public class Main extends Application {
 			Vector projectionPoint = points[3].addVector(
 					projectVector(position.subtractVector(points[3]), normals[0]));
 			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
+			if (/*   */calculateDistance(position, normals[3], points[3]) >= 0 // Position: Left of P3-P0
+					&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Bottom of P2-P3
 					&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Top of P0-P1
 			) {
 				return normals[1];
