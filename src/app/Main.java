@@ -14,7 +14,7 @@ public class Main extends Application {
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
 	// Slowdown factor should be one for realtime
-	public static double SLOWDOWN = 0.25;
+	public static double SLOWDOWN = 0.5;
 
 	static int framerate;
 
@@ -63,7 +63,7 @@ public class Main extends Application {
 	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void updateMarble(Marble marble) {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
-		double tolerance = 0.005; // Threshold distance for collision detection
+		double tolerance = 0.003; // Threshold distance for collision detection
 
 		// Stop when y-Value is less than zero
 		/*
@@ -170,6 +170,8 @@ public class Main extends Application {
 		}
 
 		// TODO: retun normal pointing to the edge if none of the above are true
+		// TODO: Sometimes the marble doesn't move out of collision in a single frame
+		System.out.println("Null");
 		return null;
 	}
 
