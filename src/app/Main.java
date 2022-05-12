@@ -33,8 +33,9 @@ public class Main extends Application {
 
 		// Create Marble
 		marble = new Marble();
-		marble.setAcceleration("gravity", new Vector(0.0, -9.81));
-		marble.setAcceleration("friction", new Vector(0.0, 0.0));
+		marble.setAcceleration("Gravity", new Vector(0.0, -9.81));
+		marble.setAcceleration("Wind", new Vector(0.0, 0.0));
+		marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 
 		gui.drawMarble(marble, this);
 		gui.initializeInfoPanes(marble);
@@ -102,7 +103,7 @@ public class Main extends Application {
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
-				// FIXME: When marble has no momentum on the x-axis it falls through collision
+				// FIXME: When marble has no momentum on the x-axis it moves down through collision
 
 				// Set perpendicular velocity to zero to avoid jitter
 				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
@@ -115,10 +116,10 @@ public class Main extends Application {
 
 				if (isRolling) {
 					// TODO: Calculate friction
-					marble.setAcceleration("friction", velocity.flip().multiply(0.4));
+					marble.setAcceleration("Friction", velocity.flip().multiply(0.4));
 				} else {
 					// Set acceleration to 0,0 when marble is not rolling
-					marble.removeAcceleration("friction");
+					marble.removeAcceleration("Friction");
 				}
 			}
 		}
