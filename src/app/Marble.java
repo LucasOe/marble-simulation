@@ -69,10 +69,6 @@ public class Marble {
 		accelerations.put(key, vector);
 	}
 
-	public void removeAcceleration(String key) {
-		accelerations.remove(key);
-	}
-
 	public Vector calculateNewPos(double deltaTime) {
 		Vector acceleration = sumAccelerations(accelerations);
 

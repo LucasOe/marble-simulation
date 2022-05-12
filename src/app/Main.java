@@ -116,10 +116,10 @@ public class Main extends Application {
 
 				if (isRolling) {
 					// TODO: Calculate friction
-					marble.setAcceleration("Friction", velocity.flip().multiply(0.4));
+					marble.setAcceleration("Friction", velocityPer.flip().multiply(0.4));
 				} else {
 					// Set acceleration to 0,0 when marble is not rolling
-					marble.removeAcceleration("Friction");
+					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 				}
 			}
 		}
