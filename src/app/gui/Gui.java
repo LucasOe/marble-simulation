@@ -199,11 +199,11 @@ public class Gui {
 	}
 
 	public void drawMarble(Marble marble, Main main) {
-		Circle circle = new Circle((marble.getSize() / 2) * scale, Color.BLACK);
+		Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
 		marble.setCircle(circle);
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
-		circle.relocate(0 - marble.getSize() / 2 * scale, Main.CANVAS_HEIGHT - marble.getSize() / 2 * scale);
+		circle.relocate(0 - marble.getSize() * scale, Main.CANVAS_HEIGHT - marble.getSize() * scale);
 		// Update position
 		moveMarble(marble);
 

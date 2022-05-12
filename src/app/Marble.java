@@ -5,7 +5,7 @@ import javafx.scene.shape.Circle;
 
 public class Marble {
 
-	private double size = 0.05;
+	private double size = 0.025;
 	private Circle circle;
 
 	// Default values in m
