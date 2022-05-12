@@ -151,7 +151,7 @@ public class Main extends Application {
 		}
 		// Colliding with P1-P2
 		if (velocity.dotProduct(normals[1]) < 0 // Moving towards P1-P2
-				&& calculateDistance(position, normals[1], points[1]) >= 0 // Position: Right of P1-P2
+				&& calculateDistance(position, normals[1], points[1]) >= 0 // Right of P1-P2
 				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
 				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
 		) {
