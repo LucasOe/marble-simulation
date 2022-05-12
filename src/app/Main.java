@@ -67,6 +67,7 @@ public class Main extends Application {
 	public void updateMarble(Marble marble) {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		double tolerance = 0.003; // Threshold distance for collision detection
+		double rollingThreshold = 0.1; // Threshold of perpendicular velocity
 
 		// Stop when y-Value is less than zero
 		/*
@@ -99,6 +100,10 @@ public class Main extends Application {
 				// Break velocity Vector into perpendicular and parallel Vectors
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
+
+				// Set perpendicular velocity to zero when below threshold 
+				if (velocityPar.getVectorLength() <= rollingThreshold)
+					velocityPar = new Vector(0, 0);
 
 				// TODO: Calculate energy loss
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));

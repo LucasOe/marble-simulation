@@ -126,7 +126,6 @@ public class Gui {
 				addAccelerationPanes(infoPaneBox, marble);
 			}
 		});
-
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
