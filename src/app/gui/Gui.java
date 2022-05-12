@@ -9,10 +9,7 @@ import app.Main;
 import app.Marble;
 import app.Rectangle;
 import app.Vector;
-import app.gui.panes.AccelerationPane;
-import app.gui.panes.AccelerationPane.AccelerationPaneListener;
-import app.gui.panes.VectorPane;
-import app.gui.panes.VectorPane.VectorPaneListener;
+import app.gui.VectorPane.VectorPaneListener;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -42,7 +39,7 @@ public class Gui {
 	private HBox infoPaneBox;
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
-	private HashMap<String, AccelerationPane> accelerationPanes = new HashMap<>();
+	private HashMap<String, VectorPane> accelerationPanes = new HashMap<>();
 
 	private Button play;
 	private AnimationTimer timer;
@@ -105,7 +102,7 @@ public class Gui {
 		return velocityPane;
 	}
 
-	public HashMap<String, AccelerationPane> getAccelerationPanes() {
+	public HashMap<String, VectorPane> getAccelerationPanes() {
 		return accelerationPanes;
 	}
 
@@ -114,23 +111,6 @@ public class Gui {
 		addPositionPane(infoPaneBox, marble);
 		addVelocityPane(infoPaneBox, marble);
 		addAccelerationPanes(infoPaneBox, marble);
-
-		// Add Acceleration Button
-		/*
-		Button addButton = new Button("+");
-		controlsPane.setCenter(addButton);
-		BorderPane.setAlignment(addButton, Pos.CENTER_LEFT);
-		BorderPane.setMargin(addButton, new Insets(10, 10, 10, 10));
-		addButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				String key = String.valueOf(accelerationPanes.size());
-				marble.setAcceleration(key, new Vector(0, 0));
-				removeAccelerationPanes(infoPaneBox);
-				addAccelerationPanes(infoPaneBox, marble);
-			}
-		});
-		*/
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
@@ -173,23 +153,15 @@ public class Gui {
 			String key = entry.getKey();
 			Vector acceleration = entry.getValue();
 
-			AccelerationPane accelerationPane = new AccelerationPane(acceleration, key);
+			VectorPane accelerationPane = new VectorPane(acceleration, key);
 			accelerationPane.setColor("#B5EAD7");
-			accelerationPane.addListener(new AccelerationPaneListener() {
+			accelerationPane.addListener(new VectorPaneListener() {
 
 				@Override
 				public void onVectorChange(Vector vector) {
 					marble.setAcceleration(accelerationPane.getKey(), vector);
 
 					moveMarble(marble);
-				}
-
-				@Override
-				public void onButtonClick(String key) {
-					marble.removeAcceleration(key);
-
-					removeAccelerationPanes(root);
-					addAccelerationPanes(root, marble);
 				}
 
 			});
@@ -207,13 +179,6 @@ public class Gui {
 
 			if (accelerationPanes.containsKey(key))
 				accelerationPanes.get(key).setText(acceleration);
-		}
-	}
-
-	private void removeAccelerationPanes(Pane root) {
-		for (Map.Entry<String, AccelerationPane> entry : accelerationPanes.entrySet()) {
-			AccelerationPane accelerationPane = entry.getValue();
-			root.getChildren().remove(accelerationPane);
 		}
 	}
 

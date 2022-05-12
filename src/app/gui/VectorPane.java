@@ -1,10 +1,9 @@
-package app.gui.panes;
+package app.gui;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.Vector;
-import app.gui.NumberTextField;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -22,20 +21,30 @@ public class VectorPane extends BorderPane {
 	NumberTextField inputY;
 
 	Vector vector;
+	String key;
 	private List<VectorPaneListener> listeners = new ArrayList<>();
 
-	public VectorPane(Vector defaultValues, String name) {
+	public VectorPane(Vector defaultValues, String key) {
 		super();
 		setVector(defaultValues);
-		initialze(name);
+		setKey(key);
+		initialze(key);
 	}
 
 	public Vector getVector() {
 		return vector;
 	}
 
+	public String getKey() {
+		return key;
+	}
+
 	public void setVector(Vector vector) {
 		this.vector = vector;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public void addListener(VectorPaneListener vectorPaneListener) {
