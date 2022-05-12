@@ -15,32 +15,32 @@ public class AccelerationPane extends VectorPane {
 	public interface AccelerationPaneListener {
 		void onVectorChange(Vector vector);
 
-		void onButtonClick(int index);
+		void onButtonClick(String key);
 	}
 
-	int index;
+	String key;
 	private List<AccelerationPaneListener> listeners = new ArrayList<>();
 
-	public AccelerationPane(Vector defaultValues, String name, int index) {
-		super(defaultValues, name);
-		this.index = index;
+	public AccelerationPane(Vector defaultValues, String key) {
+		super(defaultValues, key);
+		this.key = key;
 		initialze();
 	}
 
-	public int getIndex() {
-		return index;
+	public String getKey() {
+		return key;
 	}
 
-	public void setIndex(int index) {
-		this.index = index;
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public void addListener(AccelerationPaneListener listener) {
 		listeners.add(listener);
 	}
 
-	private void notifyListeners(int index) {
-		listeners.forEach(listener -> listener.onButtonClick(index));
+	private void notifyListeners(String key) {
+		listeners.forEach(listener -> listener.onButtonClick(key));
 	}
 
 	private void initialze() {
@@ -50,10 +50,10 @@ public class AccelerationPane extends VectorPane {
 		removeButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				notifyListeners(index);
+				notifyListeners(key);
 			}
 		});
-		setBottom(removeButton);
+		//setBottom(removeButton);
 	}
 
 }

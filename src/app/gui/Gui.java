@@ -1,7 +1,9 @@
 package app.gui;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import app.Main;
 import app.Marble;
@@ -40,7 +42,7 @@ public class Gui {
 	private HBox infoPaneBox;
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
-	private List<AccelerationPane> accelerationPanes = new ArrayList<>();
+	private HashMap<String, AccelerationPane> accelerationPanes = new HashMap<>();
 
 	private Button play;
 	private AnimationTimer timer;
@@ -103,7 +105,7 @@ public class Gui {
 		return velocityPane;
 	}
 
-	public List<AccelerationPane> getAccelerationPanes() {
+	public HashMap<String, AccelerationPane> getAccelerationPanes() {
 		return accelerationPanes;
 	}
 
@@ -114,6 +116,7 @@ public class Gui {
 		addAccelerationPanes(infoPaneBox, marble);
 
 		// Add Acceleration Button
+		/*
 		Button addButton = new Button("+");
 		controlsPane.setCenter(addButton);
 		BorderPane.setAlignment(addButton, Pos.CENTER_LEFT);
@@ -121,11 +124,13 @@ public class Gui {
 		addButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				marble.addAcceleration(new Vector(0, 0));
+				String key = String.valueOf(accelerationPanes.size());
+				marble.setAcceleration(key, new Vector(0, 0));
 				removeAccelerationPanes(infoPaneBox);
 				addAccelerationPanes(infoPaneBox, marble);
 			}
 		});
+		*/
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
@@ -163,38 +168,52 @@ public class Gui {
 	}
 
 	private void addAccelerationPanes(Pane root, Marble marble) {
-		List<Vector> accelerations = marble.getAccelerations();
-		for (int index = 0; index < accelerations.size(); index++) {
-			Vector acceleration = accelerations.get(index);
-			AccelerationPane accelerationPane = new AccelerationPane(acceleration, "Acceleration", index);
+		HashMap<String, Vector> accelerations = marble.getAccelerations();
+		for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
+			String key = entry.getKey();
+			Vector acceleration = entry.getValue();
+
+			AccelerationPane accelerationPane = new AccelerationPane(acceleration, key);
 			accelerationPane.setColor("#B5EAD7");
 			accelerationPane.addListener(new AccelerationPaneListener() {
 
 				@Override
 				public void onVectorChange(Vector vector) {
-					marble.setAcceleration(accelerationPane.getIndex(), vector);
+					marble.setAcceleration(accelerationPane.getKey(), vector);
 
 					moveMarble(marble);
 				}
 
 				@Override
-				public void onButtonClick(int index) {
-					marble.removeAcceleration(index);
+				public void onButtonClick(String key) {
+					marble.removeAcceleration(key);
 
 					removeAccelerationPanes(root);
 					addAccelerationPanes(root, marble);
 				}
 
 			});
-			accelerationPanes.add(accelerationPane);
+			accelerationPanes.put(key, accelerationPane);
 
 			root.getChildren().add(accelerationPane);
 		}
 	}
 
+	public void updateAccelerationPanes(Marble marble) {
+		HashMap<String, Vector> accelerations = marble.getAccelerations();
+		for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
+			String key = entry.getKey();
+			Vector acceleration = entry.getValue();
+
+			if (accelerationPanes.containsKey(key))
+				accelerationPanes.get(key).setText(acceleration);
+		}
+	}
+
 	private void removeAccelerationPanes(Pane root) {
-		for (VectorPane vectorPane : accelerationPanes) {
-			root.getChildren().remove(vectorPane);
+		for (Map.Entry<String, AccelerationPane> entry : accelerationPanes.entrySet()) {
+			AccelerationPane accelerationPane = entry.getValue();
+			root.getChildren().remove(accelerationPane);
 		}
 	}
 
