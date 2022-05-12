@@ -14,7 +14,7 @@ public class Main extends Application {
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
 	// Slowdown factor should be one for realtime
-	public static double SLOWDOWN = 0.5;
+	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
 
@@ -50,26 +50,26 @@ public class Main extends Application {
 		gui.addRectangle(new Rectangle(
 				new Vector(0.0, 0.0),
 				new Vector(2.0, 0.0),
-				0.01));
+				0.02));
 
 		// Left Wall
 		gui.addRectangle(new Rectangle(
-				new Vector(0.01, 0.0),
-				new Vector(0.0, 1.0),
-				0.01));
+				new Vector(0.00, 0.0),
+				new Vector(0.02, 0.0),
+				2.0));
 
 		// Right Wall
 		gui.addRectangle(new Rectangle(
-				new Vector(2.0, 0.0),
-				new Vector(0.0, 1.0),
-				0.01));
+				new Vector(1.98, 0.0),
+				new Vector(0.02, 0.0),
+				2.0));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void updateMarble(Marble marble) {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		double tolerance = 0.003; // Threshold distance for collision detection
-		double rollingThreshold = 0.1; // Threshold of perpendicular velocity
+		double rollingThreshold = 0.5; // Threshold of perpendicular velocity
 
 		// Stop when y-Value is less than zero
 		/*
@@ -114,7 +114,7 @@ public class Main extends Application {
 
 				if (isRolling) {
 					// TODO: Calculate friction
-					marble.setAcceleration("Friction", velocityPer.flip().multiply(0.4));
+					//marble.setAcceleration("Friction", velocityPer.flip().multiply(0.4));
 				} else {
 					// Set acceleration to 0,0 when marble is not rolling
 					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
@@ -165,6 +165,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
 		) {
 			moveMarble(projectionPoints[0], normals[0], tolerance);
+			//System.out.println("P0-P1");
 			return normals[2];
 		}
 		// Colliding with P1-P2
@@ -174,6 +175,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
 		) {
 			moveMarble(projectionPoints[1], normals[1], tolerance);
+			//System.out.println("P1-P2");
 			return normals[3];
 		}
 		// Colliding with P2-P3
@@ -183,6 +185,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
 		) {
 			moveMarble(projectionPoints[2], normals[2], tolerance);
+			//System.out.println("P2-P3");
 			return normals[0];
 		}
 		// Colliding with P3-P0
@@ -192,6 +195,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
 		) {
 			moveMarble(projectionPoints[3], normals[3], tolerance);
+			//System.out.println("P3-P0");
 			return normals[1];
 		}
 
@@ -201,28 +205,33 @@ public class Main extends Application {
 		if (/*   */calculateDistance(projectionPoints[3], normals[0], points[0]) > 0 // Bottom of P0-P1
 				&& calculateDistance(projectionPoints[0], normals[3], points[3]) > 0 // Left of P3-P0
 		) {
+			//System.out.println("P0");
 			return projectionPoints[0];
 		}
 		// Colliding with P1
 		if (/*   */calculateDistance(projectionPoints[1], normals[0], points[0]) > 0 // Bottom of P0-P1
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) > 0 // Right of P1-P2
 		) {
+			//System.out.println("P1");
 			return projectionPoints[1];
 		}
 		// Colliding with P2
 		if (/*   */calculateDistance(projectionPoints[1], normals[2], points[2]) > 0 // Top of P2-P3
 				&& calculateDistance(projectionPoints[2], normals[1], points[1]) > 0 // Right of P1-P2
 		) {
+			//System.out.println("P2");
 			return projectionPoints[2];
 		}
 		// Colliding with P3
 		if (/*   */calculateDistance(projectionPoints[3], normals[2], points[2]) > 0 // Top of P2-P3
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) > 0 // Left of P3-P0
 		) {
+			//System.out.println("P3");
 			return projectionPoints[3];
 		}
 
 		// Sometimes the marble doesn't move out of collision in a single frame
+		//System.out.println("Null");
 		return null;
 	}
 
