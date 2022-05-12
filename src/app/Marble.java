@@ -1,8 +1,6 @@
 package app;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.HashMap;
 import javafx.scene.shape.Circle;
 
 public class Marble {
@@ -13,7 +11,7 @@ public class Marble {
 	// Default values in m
 	private Vector position = new Vector(0.1, 0.1);
 	private Vector velocity = new Vector(2.0, 2.0);
-	private List<Vector> accelerations = new ArrayList<>();
+	private HashMap<String, Vector> accelerations = new HashMap<String, Vector>();
 
 	public Marble() {
 	}
@@ -24,7 +22,7 @@ public class Marble {
 		this.velocity = velocity;
 	}
 
-	public Marble(int size, Vector position, Vector velocity, List<Vector> accelerations) {
+	public Marble(int size, Vector position, Vector velocity, HashMap<String, Vector> accelerations) {
 		this.size = size;
 		this.position = position;
 		this.velocity = velocity;
@@ -47,7 +45,7 @@ public class Marble {
 		return velocity;
 	}
 
-	public List<Vector> getAccelerations() {
+	public HashMap<String, Vector> getAccelerations() {
 		return accelerations;
 	}
 
@@ -67,24 +65,12 @@ public class Marble {
 		this.velocity = velocity;
 	}
 
-	public void setAccelerations(List<Vector> accelerations) {
-		this.accelerations = accelerations;
+	public void setAcceleration(String key, Vector vector) {
+		accelerations.put(key, vector);
 	}
 
-	public void setAcceleration(int index, Vector vector) {
-		accelerations.set(index, vector);
-	}
-
-	public void addAcceleration(Vector vector) {
-		accelerations.add(vector);
-	}
-
-	public void removeAcceleration(int index) {
-		accelerations.remove(index);
-	}
-
-	public void removeAcceleration(Vector vector) {
-		accelerations.remove(vector);
+	public void removeAcceleration(String key) {
+		accelerations.remove(key);
 	}
 
 	public Vector calculateNewPos(double deltaTime) {
@@ -106,9 +92,9 @@ public class Marble {
 		return this.velocity;
 	}
 
-	private Vector sumAccelerations(List<Vector> accelerations) {
+	private Vector sumAccelerations(HashMap<String, Vector> accelerations) {
 		Vector sum = new Vector(0, 0);
-		for (Vector vector : accelerations) {
+		for (Vector vector : accelerations.values()) {
 			sum = sum.addVector(vector);
 		}
 		return sum;

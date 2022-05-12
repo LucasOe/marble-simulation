@@ -33,7 +33,8 @@ public class Main extends Application {
 
 		// Create Marble
 		marble = new Marble();
-		marble.addAcceleration(new Vector(0.0, -9.81));
+		marble.setAcceleration("gravity", new Vector(0.0, -9.81));
+		marble.setAcceleration("friction", new Vector(0.0, 0.0));
 
 		gui.drawMarble(marble, this);
 		gui.initializeInfoPanes(marble);
@@ -101,13 +102,24 @@ public class Main extends Application {
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
-				// Set perpendicular velocity to zero when below threshold 
-				if (velocityPar.getVectorLength() <= rollingThreshold)
+				// FIXME: When marble has no momentum on the x-axis it falls through collision
+
+				// Set perpendicular velocity to zero to avoid jitter
+				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
+				if (isRolling)
 					velocityPar = new Vector(0, 0);
 
 				// TODO: Calculate energy loss
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
+
+				if (isRolling) {
+					// TODO: Calculate friction
+					marble.setAcceleration("friction", velocity.flip().multiply(0.4));
+				} else {
+					// Set acceleration to 0,0 when marble is not rolling
+					marble.removeAcceleration("friction");
+				}
 			}
 		}
 
@@ -118,6 +130,7 @@ public class Main extends Application {
 		// Display new values
 		gui.getPositionPane().setText(position);
 		gui.getVelocityPane().setText(velocity);
+		gui.updateAccelerationPanes(marble);
 
 		// Move position
 		gui.moveMarble(marble);
