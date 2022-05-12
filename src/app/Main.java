@@ -90,10 +90,10 @@ public class Main extends Application {
 				Detect if Marble position is between all four points
 				Using marble radius as the max allowed distance
 			*/
-			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() / 2 + tolerance // Top of P0-P1
-					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() / 2 + tolerance // Left of P1-P2
-					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 + tolerance // Bottom of P2-P3
-					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 + tolerance // Right of P3-P0
+			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() + tolerance // Top of P0-P1
+					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() + tolerance // Left of P1-P2
+					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() + tolerance // Bottom of P2-P3
+					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() + tolerance // Right of P3-P0
 			) {
 				Vector marbleNormal = getMarbleNormal(marble, points, normals, tolerance);
 				if (marbleNormal == null)
@@ -102,8 +102,6 @@ public class Main extends Application {
 				// Break velocity Vector into perpendicular and parallel Vectors
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
-
-				// FIXME: When marble has no momentum on the x-axis it moves down through collision
 
 				// Set perpendicular velocity to zero to avoid jitter
 				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
@@ -166,6 +164,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 // Right of P3-P0
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
 		) {
+			moveMarble(projectionPoints[0], normals[0], tolerance);
 			return normals[2];
 		}
 		// Colliding with P1-P2
@@ -174,6 +173,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
 				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
 		) {
+			moveMarble(projectionPoints[1], normals[1], tolerance);
 			return normals[3];
 		}
 		// Colliding with P2-P3
@@ -182,6 +182,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 // Left of P1-P2
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
 		) {
+			moveMarble(projectionPoints[2], normals[2], tolerance);
 			return normals[0];
 		}
 		// Colliding with P3-P0
@@ -190,6 +191,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 // Bottom of P2-P3
 				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
 		) {
+			moveMarble(projectionPoints[3], normals[3], tolerance);
 			return normals[1];
 		}
 
@@ -240,5 +242,10 @@ public class Main extends Application {
 	private Vector orthogonalDecomposition(Vector v, Vector n) {
 		// v - (dotP(n, v) / dotP(n, v)) * n
 		return v.subtractVector(n.multiply((n.dotProduct(v)) / (n.dotProduct(n))));
+	}
+
+	// Moves the marble out of collision so it doesn't collide again in the next frame
+	private void moveMarble(Vector projectionPoint, Vector normal, double tolerance) {
+		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize() + tolerance)));
 	}
 }
