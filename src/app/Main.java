@@ -40,20 +40,23 @@ public class Main extends Application {
 
 		// Create Rectangle
 		gui.addRectangle(new Rectangle(
-				new Vector(0.7, 0.1),
-				new Vector(0.5, 0.2),
+				new Vector(0.831, 0.135),
+				new Vector(0.5, 0.0),
 				0.05));
 
+		// Floor
 		gui.addRectangle(new Rectangle(
 				new Vector(0.0, 0.0),
 				new Vector(2.0, 0.0),
 				0.01));
 
+		// Left Wall
 		gui.addRectangle(new Rectangle(
 				new Vector(0.01, 0.0),
 				new Vector(0.0, 1.0),
 				0.01));
 
+		// Right Wall
 		gui.addRectangle(new Rectangle(
 				new Vector(2.0, 0.0),
 				new Vector(0.0, 1.0),
@@ -89,7 +92,7 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() / 2 + tolerance // Bottom of P2-P3
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() / 2 + tolerance // Right of P3-P0
 			) {
-				Vector marbleNormal = getMarbleNormal(marble, points, normals);
+				Vector marbleNormal = getMarbleNormal(marble, points, normals, tolerance);
 				if (marbleNormal == null)
 					break;
 
@@ -116,62 +119,89 @@ public class Main extends Application {
 	}
 
 	// Return the normal facing the direction the marble is hitting
-	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals) {
+	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals, double tolerance) {
 		Vector position = marble.getPosition();
 		Vector velocity = marble.getVelocity();
 
-		if (velocity.dotProduct(normals[0]) < 0) { // Moving towards P0-P1
-			// Projection of position onto P0-P1
-			Vector projectionPoint = points[0].addVector(
-					projectVector(position.subtractVector(points[0]), normals[1]));
-			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(position, normals[0], points[0]) >= 0 // Position: Bottom of P0-P1
-					&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Projection Point: Right of P3-P0
-					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Projection Point: Left of P1-P2
-			) {
-				return normals[2];
-			}
+		// Vectors from corner points to marble position
+		Vector[] pointPositionVectors = {
+				position.subtractVector(points[0]),
+				position.subtractVector(points[1]),
+				position.subtractVector(points[2]),
+				position.subtractVector(points[3]),
+		};
+
+		// Marble position projected onto lines
+		Vector[] projectionPoints = {
+				points[0].addVector(projectVector(pointPositionVectors[0], normals[1])), // P0-P1
+				points[1].addVector(projectVector(pointPositionVectors[1], normals[2])), // P1-P2
+				points[2].addVector(projectVector(pointPositionVectors[2], normals[3])), // P2-P3
+				points[3].addVector(projectVector(pointPositionVectors[3], normals[0])), // P3-P4
+		};
+
+		// Return normal pointing towards the line
+
+		// Colliding with P0-P1
+		if (velocity.dotProduct(normals[0]) < 0 // Moving towards P0-P1
+				&& calculateDistance(position, normals[0], points[0]) >= 0 // Bottom of P0-P1
+				&& calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 // Right of P3-P0
+				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
+		) {
+			return normals[2];
 		}
-		if (velocity.dotProduct(normals[1]) < 0) { // Moving towards P1-P2
-			// Projection of position onto P1-P2
-			Vector projectionPoint = points[1].addVector(
-					projectVector(position.subtractVector(points[1]), normals[2]));
-			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(position, normals[1], points[1]) >= 0 // Position: Right of P1-P2
-					&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Projection Point: Top of P0-P1
-					&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Projection Point: Bottom of P2-P3
-			) {
-				return normals[3];
-			}
+		// Colliding with P1-P2
+		if (velocity.dotProduct(normals[1]) < 0 // Moving towards P1-P2
+				&& calculateDistance(position, normals[1], points[1]) >= 0 // Position: Right of P1-P2
+				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
+				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
+		) {
+			return normals[3];
 		}
-		if (velocity.dotProduct(normals[2]) < 0) { // Moving towards P2-P3
-			// Projection of position onto P2-P3
-			Vector projectionPoint = points[2].addVector(
-					projectVector(position.subtractVector(points[2]), normals[3]));
-			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(position, normals[2], points[2]) >= 0 // Position: Top of P2-P3
-					&& calculateDistance(projectionPoint, normals[1], points[1]) <= 0 // Projection Point: Left of P1-P2
-					&& calculateDistance(projectionPoint, normals[3], points[3]) <= 0 // Projection Point: Right of P3-P0
-			) {
-				return normals[0];
-			}
+		// Colliding with P2-P3
+		if (velocity.dotProduct(normals[2]) < 0 // Moving towards P2-P3
+				&& calculateDistance(position, normals[2], points[2]) >= 0 // Top of P2-P3
+				&& calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 // Left of P1-P2
+				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
+		) {
+			return normals[0];
 		}
-		if (velocity.dotProduct(normals[3]) < 0) { // Moving towards P3-P0
-			// Projection of position onto P3-P0
-			Vector projectionPoint = points[3].addVector(
-					projectVector(position.subtractVector(points[3]), normals[0]));
-			// Projection Point is on the rectangle
-			if (/*   */calculateDistance(position, normals[3], points[3]) >= 0 // Position: Left of P3-P0
-					&& calculateDistance(projectionPoint, normals[2], points[2]) <= 0 // Projection Point: Bottom of P2-P3
-					&& calculateDistance(projectionPoint, normals[0], points[0]) <= 0 // Projection Point: Top of P0-P1
-			) {
-				return normals[1];
-			}
+		// Colliding with P3-P0
+		if (velocity.dotProduct(normals[3]) < 0 // Moving towards P3-P0
+				&& calculateDistance(position, normals[3], points[3]) >= 0 // Left of P3-P0
+				&& calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 // Bottom of P2-P3
+				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
+		) {
+			return normals[1];
 		}
 
-		// TODO: retun normal pointing to the edge if none of the above are true
-		// TODO: Sometimes the marble doesn't move out of collision in a single frame
-		System.out.println("Null");
+		// Retun normal pointing to the corner
+
+		// Colliding with P0
+		if (/*   */calculateDistance(projectionPoints[3], normals[0], points[0]) > 0 // Bottom of P0-P1
+				&& calculateDistance(projectionPoints[0], normals[3], points[3]) > 0 // Left of P3-P0
+		) {
+			return projectionPoints[0];
+		}
+		// Colliding with P1
+		if (/*   */calculateDistance(projectionPoints[1], normals[0], points[0]) > 0 // Bottom of P0-P1
+				&& calculateDistance(projectionPoints[0], normals[1], points[1]) > 0 // Right of P1-P2
+		) {
+			return projectionPoints[1];
+		}
+		// Colliding with P2
+		if (/*   */calculateDistance(projectionPoints[1], normals[2], points[2]) > 0 // Top of P2-P3
+				&& calculateDistance(projectionPoints[2], normals[1], points[1]) > 0 // Right of P1-P2
+		) {
+			return projectionPoints[2];
+		}
+		// Colliding with P3
+		if (/*   */calculateDistance(projectionPoints[3], normals[2], points[2]) > 0 // Top of P2-P3
+				&& calculateDistance(projectionPoints[2], normals[3], points[3]) > 0 // Left of P3-P0
+		) {
+			return projectionPoints[3];
+		}
+
+		// Sometimes the marble doesn't move out of collision in a single frame
 		return null;
 	}
 
