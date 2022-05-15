@@ -9,8 +9,8 @@ public class Marble {
 	private Circle circle;
 
 	// Default values in m
-	private Vector position = new Vector(0.1, 0.1);
-	private Vector velocity = new Vector(2.0, 2.0);
+	private Vector position = new Vector(0.1, 0.8);
+	private Vector velocity = new Vector(0.0, 0.0);
 	private HashMap<String, Vector> accelerations = new HashMap<String, Vector>();
 
 	public Marble() {
