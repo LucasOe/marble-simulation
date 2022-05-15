@@ -89,9 +89,11 @@ public class Gui {
 		Scene scene = new Scene(vbox, Main.CANVAS_WIDTH, Main.CANVAS_HEIGHT + Main.CONTROLS_HEIGHT);
 		scene.getStylesheets().add("app/gui/css/style.css");
 
-		stage.setTitle("Murmelbahn Simulation");
+		stage.setTitle("Tiny Machine Simulation");
+		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
+
 	}
 
 	public VectorPane getPositionPane() {
