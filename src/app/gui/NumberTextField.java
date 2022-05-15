@@ -18,6 +18,7 @@ public class NumberTextField extends TextField {
 		void onNumberChange(double value);
 	}
 
+	private boolean isFocused;
 	private double number;
 	private List<Listener> listeners = new ArrayList<>();
 
@@ -50,7 +51,8 @@ public class NumberTextField extends TextField {
 		textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				parseInput(oldValue, newValue);
+				if (isFocused)
+					parseInput(oldValue, newValue);
 			}
 		});
 
@@ -58,7 +60,9 @@ public class NumberTextField extends TextField {
 		focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				if (!newValue)
+				isFocused = newValue;
+
+				if (!isFocused)
 					setNumber(number);
 			}
 		});

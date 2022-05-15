@@ -14,7 +14,7 @@ public class Main extends Application {
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
 	// Slowdown factor should be one for realtime
-	// Doesn't work correctly. Simulation plays different when slowed down. Floating Point Precision?
+	// Simulation plays slighty different when slowed down becaue of Floating Point Precision
 	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
