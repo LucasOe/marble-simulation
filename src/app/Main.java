@@ -14,6 +14,7 @@ public class Main extends Application {
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
 	// Slowdown factor should be one for realtime
+	// Doesn't work correctly. Simulation plays different when slowed down. Floating Point Precision?
 	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
@@ -71,11 +72,10 @@ public class Main extends Application {
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollingThreshold = 0.5; // Threshold of perpendicular velocity
 
-		// Stop when y-Value is less than zero
-		/*
-		if (marble.getPosition().getY() < 0)
+		// Stop when marble isn't moving
+		if (marble.getVelocity().getVectorLength() <= marble.getAcceleration().multiply(deltaTime).getVectorLength()
+				+ 0.01)
 			gui.stop();
-		*/
 
 		// Iterate over every rectangle in the scene
 		List<Rectangle> rectangles = gui.getRectangles();
@@ -108,13 +108,13 @@ public class Main extends Application {
 				if (isRolling)
 					velocityPar = new Vector(0, 0);
 
-				// TODO: Calculate energy loss
+				// Calculate energy loss
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
 
 				if (isRolling) {
-					// TODO: Calculate friction
-					//marble.setAcceleration("Friction", velocityPer.flip().multiply(0.4));
+					// Calculate friction
+					marble.setAcceleration("Friction", velocityPer.flip().multiply(0.3));
 				} else {
 					// Set acceleration to 0,0 when marble is not rolling
 					marble.setAcceleration("Friction", new Vector(0.0, 0.0));

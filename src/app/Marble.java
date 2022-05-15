@@ -49,6 +49,10 @@ public class Marble {
 		return accelerations;
 	}
 
+	public Vector getAcceleration() {
+		return sumAccelerations(accelerations);
+	}
+
 	public void setSize(double size) {
 		this.size = size;
 	}
