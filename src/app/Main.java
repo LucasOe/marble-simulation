@@ -41,15 +41,15 @@ public class Main extends Application {
 		gui.drawMarble(marble, this);
 		gui.initializeInfoPanes(marble);
 
-		// Create Rectangle
-		gui.addRectangle(new Rectangle(
-				new Vector(0.831, 0.135),
-				new Vector(0.5, 0.0),
-				0.05));
-
 		// Floor
 		gui.addRectangle(new Rectangle(
 				new Vector(0.0, 0.0),
+				new Vector(2.0, 0.0),
+				0.02));
+
+		// Ceiling
+		gui.addRectangle(new Rectangle(
+				new Vector(0.0, 0.886),
 				new Vector(2.0, 0.0),
 				0.02));
 
@@ -64,6 +64,12 @@ public class Main extends Application {
 				new Vector(1.98, 0.0),
 				new Vector(0.02, 0.0),
 				2.0));
+
+		// Rectangle
+		gui.addRectangle(new Rectangle(
+				new Vector(0.5, 0.135),
+				new Vector(0.7, 0.1),
+				0.04));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
@@ -73,9 +79,8 @@ public class Main extends Application {
 		double rollingThreshold = 0.5; // Threshold of perpendicular velocity
 
 		// Stop when marble isn't moving
-		if (marble.getVelocity().getVectorLength() <= marble.getAcceleration().multiply(deltaTime).getVectorLength()
-				+ 0.01)
-			gui.stop();
+		//if (marble.getVelocity().getVectorLength() <= marble.getAcceleration().multiply(deltaTime).getVectorLength() + 0.01)
+		//		gui.stop();
 
 		// Iterate over every rectangle in the scene
 		List<Rectangle> rectangles = gui.getRectangles();
@@ -103,7 +108,8 @@ public class Main extends Application {
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
-				// Set perpendicular velocity to zero to avoid jitter
+				// Set perpendicular velocity to zero when below threshold to avoid jitter
+				// FIXME: When velocity is below threshold marble will stop when colliding with a wall
 				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
 				if (isRolling)
 					velocityPar = new Vector(0, 0);
@@ -112,13 +118,11 @@ public class Main extends Application {
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
 
-				if (isRolling) {
-					// Calculate friction
+				// Calculate friction
+				if (isRolling)
 					marble.setAcceleration("Friction", velocityPer.flip().multiply(0.3));
-				} else {
-					// Set acceleration to 0,0 when marble is not rolling
+				else
 					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
-				}
 			}
 		}
 
