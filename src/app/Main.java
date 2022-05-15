@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	public static double CANVAS_WIDTH = 1280;
-	public static double CANVAS_HEIGHT = 580;
+	public static double CANVAS_HEIGHT = 640;
 	public static double CONTROLS_HEIGHT = 150;
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
@@ -43,32 +43,38 @@ public class Main extends Application {
 
 		// Floor
 		gui.addRectangle(new Rectangle(
-				new Vector(0.0, 0.0),
-				new Vector(2.0, 0.0),
+				new Vector(0.00, 0.00),
+				new Vector(2.00, 0.00),
 				0.02));
 
 		// Ceiling
 		gui.addRectangle(new Rectangle(
-				new Vector(0.0, 0.886),
-				new Vector(2.0, 0.0),
+				new Vector(0.00, 0.98),
+				new Vector(2.00, 0.00),
 				0.02));
 
 		// Left Wall
 		gui.addRectangle(new Rectangle(
-				new Vector(0.00, 0.0),
-				new Vector(0.02, 0.0),
+				new Vector(0.00, 0.00),
+				new Vector(0.02, 0.00),
 				2.0));
 
 		// Right Wall
 		gui.addRectangle(new Rectangle(
-				new Vector(1.98, 0.0),
-				new Vector(0.02, 0.0),
+				new Vector(1.98, 0.00),
+				new Vector(0.02, 0.00),
 				2.0));
 
-		// Rectangle
+		// Rectangle 1
 		gui.addRectangle(new Rectangle(
-				new Vector(0.5, 0.135),
-				new Vector(0.7, 0.1),
+				new Vector(0.05, 0.73),
+				new Vector(0.60, -0.10),
+				0.04));
+
+		// Rectangle 2
+		gui.addRectangle(new Rectangle(
+				new Vector(0.80, 0.30),
+				new Vector(0.50, 0.30),
 				0.04));
 	}
 
