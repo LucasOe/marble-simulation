@@ -30,6 +30,11 @@ public class Vector {
         this.y = y;
     }
 
+    public void setVector(double length, double radians) {
+        this.x = Math.cos(radians) * length;
+        this.y = Math.sin(radians) * length;
+    }
+
     public Vector addVector(Vector vector) {
         return new Vector(x + vector.getX(), y + vector.getY());
     }
@@ -65,6 +70,10 @@ public class Vector {
     public String toString() {
         DecimalFormat df = new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.ENGLISH));
         return "(x: " + df.format(x) + ", y: " + df.format(y) + ")";
+    }
+
+    public double getVectorRadians() {
+        return Math.atan2(y, x);
     }
 
 }

@@ -51,7 +51,7 @@ public class VectorPane extends BorderPane {
 		listeners.add(vectorPaneListener);
 	}
 
-	private void notifyListeners(Vector vector) {
+	protected void notifyListeners(Vector vector) {
 		listeners.forEach(listener -> listener.onVectorChange(vector));
 	}
 

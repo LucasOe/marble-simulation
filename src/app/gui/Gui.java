@@ -133,7 +133,7 @@ public class Gui {
 	}
 
 	private void addVelocityPane(Pane root, Marble marble) {
-		velocityPane = new VectorPane(marble.getVelocity(), "Velocity");
+		velocityPane = new VectorAnglePane(marble.getVelocity(), "Velocity");
 		velocityPane.setColor("#FFDAC1");
 		velocityPane.addListener(new VectorPaneListener() {
 
