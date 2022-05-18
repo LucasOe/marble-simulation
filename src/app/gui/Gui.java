@@ -25,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class Gui {
@@ -40,6 +41,7 @@ public class Gui {
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
 	private HashMap<String, VectorPane> accelerationPanes = new HashMap<>();
+	private Shape selectedShape;
 
 	private Button play;
 	private AnimationTimer timer;
@@ -202,6 +204,14 @@ public class Gui {
 
 	public void drawMarble(Marble marble, Main main) {
 		Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
+		circle.getStyleClass().addAll("marble", "shape");
+
+		circle.setOnMouseClicked(mouseEvent -> {
+			setSelectedShape(circle);
+			clearPane(infoPaneBox);
+			initializeInfoPanes(marble);
+		});
+
 		marble.setCircle(circle);
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
@@ -231,6 +241,18 @@ public class Gui {
 		circle.setTranslateY(-position.getY() * scale);
 	}
 
+	public void moveRectangle(Rectangle rectangle) {
+		Polygon polygon = rectangle.getPolygon();
+		Vector[] points = rectangle.getPoints();
+
+		polygon.getPoints().clear();
+		polygon.getPoints().addAll(new Double[] {
+				points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
+				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
+				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
+				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
+	}
+
 	public List<Rectangle> getRectangles() {
 		return rectangles;
 	}
@@ -245,8 +267,68 @@ public class Gui {
 				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
 				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
 				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
+		polygon.getStyleClass().addAll("rectangle", "shape");
+
+		polygon.setOnMouseClicked(mouseEvent -> {
+			setSelectedShape(polygon);
+			clearPane(infoPaneBox);
+			initializeRectangleInfoPanes(rectangle);
+		});
+
+		rectangle.setPolygon(polygon);
 
 		canvas.getChildren().add(polygon);
+	}
+
+	private void clearPane(Pane root) {
+		root.getChildren().clear();
+	}
+
+	private void setSelectedShape(Shape shape) {
+		if (selectedShape != null)
+			selectedShape.getStyleClass().remove("selected");
+		selectedShape = shape;
+		selectedShape.getStyleClass().add("selected");
+	}
+
+	public void initializeRectangleInfoPanes(Rectangle rectangle) {
+		// VectorPanes
+		addRectanglePositionPane(infoPaneBox, rectangle);
+		addRectangleLengthPane(infoPaneBox, rectangle);
+	}
+
+	private void addRectanglePositionPane(Pane root, Rectangle rectangle) {
+		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), "Position");
+		rectanglePositionPane.setColor("#E2F0CB");
+		rectanglePositionPane.addListener(new VectorPaneListener() {
+
+			@Override
+			public void onVectorChange(Vector vector) {
+				rectangle.setPosition(vector);
+
+				moveRectangle(rectangle);
+			}
+
+		});
+
+		root.getChildren().add(rectanglePositionPane);
+	}
+
+	private void addRectangleLengthPane(Pane root, Rectangle rectangle) {
+		VectorPane rectangleLengthPane = new VectorAnglePane(rectangle.getLength(), "Length");
+		rectangleLengthPane.setColor("#FFDAC1");
+		rectangleLengthPane.addListener(new VectorPaneListener() {
+
+			@Override
+			public void onVectorChange(Vector vector) {
+				rectangle.setLength(vector);
+
+				moveRectangle(rectangle);
+			}
+
+		});
+
+		root.getChildren().add(rectangleLengthPane);
 	}
 
 }

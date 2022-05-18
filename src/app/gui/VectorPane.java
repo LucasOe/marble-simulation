@@ -75,18 +75,21 @@ public class VectorPane extends BorderPane {
 		vectorInputs.getStyleClass().add("grid");
 		vectorInputs.setVgap(5);
 		vectorInputs.prefWidthProperty().bind(widthProperty());
+
 		inputX = new NumberTextField(vector.getX());
 		inputX.addListener(value -> {
 			vector.setX(value);
 			notifyListeners(new Vector(vector.getX(), vector.getY()));
 		});
+		vectorInputs.addRow(1, new Label("X:"), inputX);
+
 		inputY = new NumberTextField(vector.getY());
 		inputY.addListener(value -> {
 			vector.setY(value);
 			notifyListeners(new Vector(vector.getX(), vector.getY()));
 		});
-		vectorInputs.addRow(1, new Label("X:"), inputX);
 		vectorInputs.addRow(2, new Label("Y:"), inputY);
+
 		setCenter(vectorInputs);
 		BorderPane.setAlignment(vectorInputs, Pos.CENTER);
 	}

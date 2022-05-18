@@ -1,10 +1,14 @@
 package app;
 
+import javafx.scene.shape.Polygon;
+
 public class Rectangle {
 
-	Vector position;
-	Vector length;
-	double height;
+	private Vector position;
+	private Vector length;
+	private double height;
+
+	private Polygon polygon;
 
 	public Rectangle(Vector position, Vector length, double height) {
 		this.position = position;
@@ -24,6 +28,10 @@ public class Rectangle {
 		return height;
 	}
 
+	public Polygon getPolygon() {
+		return polygon;
+	}
+
 	public void setPosition(Vector position) {
 		this.position = position;
 	}
@@ -34,6 +42,10 @@ public class Rectangle {
 
 	public void setHeight(double height) {
 		this.height = height;
+	}
+
+	public void setPolygon(Polygon polygon) {
+		this.polygon = polygon;
 	}
 
 	public Vector[] getPoints() {

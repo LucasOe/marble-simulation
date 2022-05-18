@@ -18,10 +18,10 @@ public class VectorAnglePane extends VectorPane {
 
 	public VectorAnglePane(Vector defaultValues, String key) {
 		super(defaultValues, key);
-		initialze(key);
+		this.length = vector.getVectorLength();
+		this.radians = vector.getVectorRadians();
 
-		length = vector.getVectorLength();
-		radians = vector.getVectorRadians();
+		initialze(key);
 	}
 
 	private void initialze(String name) {
@@ -44,6 +44,7 @@ public class VectorAnglePane extends VectorPane {
 		vectorInputs.getStyleClass().add("grid");
 		vectorInputs.setVgap(5);
 		vectorInputs.prefWidthProperty().bind(widthProperty());
+
 		inputL = new NumberTextField(length);
 		inputL.addListener(value -> {
 			this.length = value;
@@ -51,6 +52,8 @@ public class VectorAnglePane extends VectorPane {
 
 			notifyListeners(vector);
 		});
+		vectorInputs.addRow(1, new Label("L:"), inputL);
+
 		inputA = new NumberTextField(Math.toDegrees(radians));
 		inputA.addListener(value -> {
 			this.radians = Math.toRadians(value);
@@ -58,8 +61,8 @@ public class VectorAnglePane extends VectorPane {
 
 			notifyListeners(vector);
 		});
-		vectorInputs.addRow(1, new Label("L:"), inputL);
 		vectorInputs.addRow(2, new Label("α:"), inputA);
+
 		setCenter(vectorInputs);
 		BorderPane.setAlignment(vectorInputs, Pos.CENTER);
 	}
