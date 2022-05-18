@@ -31,3 +31,19 @@
 .button {
 	-fx-background-color: rgba(255, 255, 255, 0.5);
 }
+
+.marble {
+	-fx-fill: rgb(0, 0, 0);
+}
+
+.rectangle {
+	-fx-fill: rgb(44, 44, 44);
+}
+
+.shape:hover {
+	-fx-fill: rgb(68, 68, 180);
+}
+
+.selected {
+	-fx-fill: rgb(49, 49, 112);
+}
