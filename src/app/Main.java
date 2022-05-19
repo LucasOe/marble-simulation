@@ -130,7 +130,7 @@ public class Main extends Application {
 					double alpha = Math.atan2(marbleNormal.getY(), marbleNormal.getX()) + Math.toRadians(90);
 
 					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
-					Vector velocityDirection = velocityPer.normalize();
+					Vector velocityDirection = velocity.normalize();
 
 					// Break gravity Vector into perpendicular and parallel Vectors
 					double gravityPer = gravity * Math.sin(Math.abs(alpha)); // F_GH = g * sin(a)
@@ -168,7 +168,7 @@ public class Main extends Application {
 		Vector position = marble.getPosition();
 		Vector velocity = marble.getVelocity();
 		// Sometimes 0.0000 isn't smaller than 0 for some reason
-		double floatingPointTolerace = 0.01;
+		double floatingPointTolerace = 0.0001;
 
 		// Vectors from corner points to marble position
 		Vector[] pointPositionVectors = {
