@@ -167,7 +167,8 @@ public class Main extends Application {
 	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals, double tolerance) {
 		Vector position = marble.getPosition();
 		Vector velocity = marble.getVelocity();
-		double floatingPointTolerace = 0.01; // FIXME
+		// Sometimes 0.0000 isn't smaller than 0 for some reason
+		double floatingPointTolerace = 0.01;
 
 		// Vectors from corner points to marble position
 		Vector[] pointPositionVectors = {
@@ -284,13 +285,6 @@ public class Main extends Application {
 	private Vector orthogonalDecomposition(Vector v, Vector n) {
 		// v - (dotP(n, v) / dotP(n, v)) * n
 		return v.subtractVector(n.multiply((n.dotProduct(v)) / (n.dotProduct(n))));
-	}
-
-	// Calculate angle in radians between two Vectors
-	private double vectorRadians(Vector v1, Vector v2) {
-		// cos(a) = dotP(g, n) / g * n
-		double cosAlpha = v1.dotProduct(v2) / v1.getVectorLength() * v2.getVectorLength();
-		return Math.acos(cosAlpha);
 	}
 
 	// Moves the marble out of collision so it doesn't collide again in the next frame
