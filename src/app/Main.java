@@ -35,7 +35,8 @@ public class Main extends Application {
 		// Create Marble
 		marble = new Marble();
 		marble.setAcceleration("Gravity", new Vector(0.0, -9.81));
-		marble.setAcceleration("Wind", new Vector(0.0, 0.0));
+		marble.setAcceleration("Normalforce", new Vector(0.0, 0.0));
+		marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
 		marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 
 		gui.drawMarble(marble, this);
@@ -83,10 +84,7 @@ public class Main extends Application {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollingThreshold = 0.5; // Threshold of perpendicular velocity
-
-		// Stop when marble isn't moving
-		//if (marble.getVelocity().getVectorLength() <= marble.getAcceleration().multiply(deltaTime).getVectorLength() + 0.01)
-		//		gui.stop();
+		double rollingResistance = 0.02; // Friction coefficient
 
 		// Iterate over every rectangle in the scene
 		List<Rectangle> rectangles = gui.getRectangles();
@@ -115,20 +113,34 @@ public class Main extends Application {
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
 				// Set perpendicular velocity to zero when below threshold to avoid jitter
-				// FIXME: When velocity is below threshold marble will stop when colliding with a wall
-				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
-				if (isRolling)
+				if (velocityPar.getVectorLength() <= rollingThreshold)
 					velocityPar = new Vector(0, 0);
 
 				// Calculate energy loss
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
 
-				// Calculate friction
-				if (isRolling)
-					marble.setAcceleration("Friction", velocityPer.flip().multiply(0.3));
-				else
+				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
+
+				if (isRolling) {
+					Vector gravity = marble.getAcceleration("Gravity");
+					Vector frictionDirction = velocityPer.flip().normalize();
+
+					// Break gravity Vector into perpendicular and parallel Vectors
+					Vector gravityPer = orthogonalDecomposition(gravity, marbleNormal); // F_GH = g * sin(a)
+					Vector gravityPar = gravity.subtractVector(gravityPer); // F_N = g * cos(a)
+					Vector friction = frictionDirction.multiply(rollingResistance * normalForce(gravity, marbleNormal)); // F_R = µ * F_N
+
+					// Apply Forces
+					//marble.setAcceleration("Downforce", gravityPer);
+					//marble.setAcceleration("Normalforce", gravityPar.flip());
+					marble.setAcceleration("Friction", friction);
+				} else {
+					// Reset forces when marble is not rolling
+					//marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
+					//marble.setAcceleration("Normalforce", new Vector(0.0, 0.0));
 					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
+				}
 			}
 		}
 
@@ -263,8 +275,17 @@ public class Main extends Application {
 		return v.subtractVector(n.multiply((n.dotProduct(v)) / (n.dotProduct(n))));
 	}
 
+	// Calculate normalforce
+	private double normalForce(Vector gravity, Vector normal) {
+		// cos(a) = dotP(g, n) / g * n
+		double cosAlpha = gravity.dotProduct(normal) / gravity.getVectorLength() * normal.getVectorLength();
+		// F_N = g * cos(a)
+		return gravity.getVectorLength() * cosAlpha;
+	}
+
 	// Moves the marble out of collision so it doesn't collide again in the next frame
 	private void moveMarble(Vector projectionPoint, Vector normal, double tolerance) {
 		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize() + tolerance)));
 	}
+
 }
