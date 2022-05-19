@@ -127,47 +127,25 @@ public class Main extends Application {
 				if (marble.getRolling()) {
 					// Gravitational constant
 					double gravity = Math.abs(marble.getAcceleration("Gravity").getY());
-					double alpha = vectorRadians(new Vector(0, -1), marbleNormal);
-					Vector slopeDirection = velocityPer.normalize(); // FIXME
+					double alpha = Math.atan2(marbleNormal.getY(), marbleNormal.getX()) + Math.toRadians(90);
+					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
 
 					// Break gravity Vector into perpendicular and parallel Vectors
-					double gravityPer = gravity * Math.sin(alpha); // F_GH = g * sin(a)
-					double gravityPar = gravity * Math.cos(alpha); // F_N = g * cos(a)
+					double gravityPer = gravity * Math.sin(Math.abs(alpha)); // F_GH = g * sin(a)
+					double gravityPar = gravity * Math.cos(Math.abs(alpha)); // F_N = g * cos(a)
 					double friction = frictionCoefficient * gravityPar; // F_R = µ * F_N
 
-					Vector combinedForces = slopeDirection.multiply(gravityPer - friction); // Combined Forces
-
 					// Apply Forces
-					marble.setAcceleration("Friction", combinedForces);
-				} else {
-					// Reset forces when marble is not rolling
-					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
+					marble.setAcceleration("Downforce", slopeDirection.multiply(gravityPer));
+					marble.setAcceleration("Friction", slopeDirection.flip().multiply(friction));
 				}
-
-				/*
-				if (marble.getRolling()) {
-					Vector gravity = marble.getAcceleration("Gravity");
-					double radians = Math.atan2(marbleNormal.getY(), marbleNormal.getX());
-					double angle = Math.toDegrees(radians) + 90.0;
-				
-					// Break gravity Vector into perpendicular and parallel Vectors
-					// F_GH = g * sin(a)
-					Vector gravityPer = orthogonalDecomposition(gravity, marbleNormal);
-					// F_N = g * cos(a)
-					Vector gravityPar = gravity.subtractVector(gravityPer);
-					// F_R = µ * F_N
-					Vector friction = slopeDirection.multiply(frictionCoefficient * gravityPar.getVectorLength());
-				
-					// Apply Forces
-					marble.setAcceleration("Downforce", gravityPer);
-					marble.setAcceleration("Friction", friction);
-				} else {
-					// Reset forces when marble is not rolling
-					marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
-					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
-				}
-				*/
 			}
+		}
+
+		if (!marble.getRolling()) {
+			// Reset forces when marble is not rolling
+			marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
+			marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 		}
 
 		// Calculates and return new position and velocity
