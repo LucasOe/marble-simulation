@@ -35,7 +35,6 @@ public class Main extends Application {
 		// Create Marble
 		marble = new Marble();
 		marble.setAcceleration("Gravity", new Vector(0.0, -9.81));
-		marble.setAcceleration("Normalforce", new Vector(0.0, 0.0));
 		marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
 		marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 
@@ -84,7 +83,9 @@ public class Main extends Application {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollingThreshold = 0.5; // Threshold of perpendicular velocity
-		double rollingResistance = 0.02; // Friction coefficient
+		double frictionCoefficient = 0.02; // Friction coefficient
+
+		marble.setRolling(false);
 
 		// Iterate over every rectangle in the scene
 		List<Rectangle> rectangles = gui.getRectangles();
@@ -120,27 +121,52 @@ public class Main extends Application {
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
 				marble.setVelocity(newVelocity);
 
-				boolean isRolling = velocityPar.getVectorLength() <= rollingThreshold;
+				if (velocityPar.getVectorLength() <= rollingThreshold)
+					marble.setRolling(true);
 
-				if (isRolling) {
-					Vector gravity = marble.getAcceleration("Gravity");
-					Vector frictionDirction = velocityPer.flip().normalize();
+				if (marble.getRolling()) {
+					// Gravitational constant
+					double gravity = Math.abs(marble.getAcceleration("Gravity").getY());
+					double alpha = vectorRadians(new Vector(0, -1), marbleNormal);
+					Vector slopeDirection = velocityPer.normalize(); // FIXME
 
 					// Break gravity Vector into perpendicular and parallel Vectors
-					Vector gravityPer = orthogonalDecomposition(gravity, marbleNormal); // F_GH = g * sin(a)
-					Vector gravityPar = gravity.subtractVector(gravityPer); // F_N = g * cos(a)
-					Vector friction = frictionDirction.multiply(rollingResistance * normalForce(gravity, marbleNormal)); // F_R = µ * F_N
+					double gravityPer = gravity * Math.sin(alpha); // F_GH = g * sin(a)
+					double gravityPar = gravity * Math.cos(alpha); // F_N = g * cos(a)
+					double friction = frictionCoefficient * gravityPar; // F_R = µ * F_N
+
+					Vector combinedForces = slopeDirection.multiply(gravityPer - friction); // Combined Forces
 
 					// Apply Forces
-					//marble.setAcceleration("Downforce", gravityPer);
-					//marble.setAcceleration("Normalforce", gravityPar.flip());
+					marble.setAcceleration("Friction", combinedForces);
+				} else {
+					// Reset forces when marble is not rolling
+					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
+				}
+
+				/*
+				if (marble.getRolling()) {
+					Vector gravity = marble.getAcceleration("Gravity");
+					double radians = Math.atan2(marbleNormal.getY(), marbleNormal.getX());
+					double angle = Math.toDegrees(radians) + 90.0;
+				
+					// Break gravity Vector into perpendicular and parallel Vectors
+					// F_GH = g * sin(a)
+					Vector gravityPer = orthogonalDecomposition(gravity, marbleNormal);
+					// F_N = g * cos(a)
+					Vector gravityPar = gravity.subtractVector(gravityPer);
+					// F_R = µ * F_N
+					Vector friction = slopeDirection.multiply(frictionCoefficient * gravityPar.getVectorLength());
+				
+					// Apply Forces
+					marble.setAcceleration("Downforce", gravityPer);
 					marble.setAcceleration("Friction", friction);
 				} else {
 					// Reset forces when marble is not rolling
-					//marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
-					//marble.setAcceleration("Normalforce", new Vector(0.0, 0.0));
+					marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
 					marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 				}
+				*/
 			}
 		}
 
@@ -161,6 +187,7 @@ public class Main extends Application {
 	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals, double tolerance) {
 		Vector position = marble.getPosition();
 		Vector velocity = marble.getVelocity();
+		double floatingPointTolerace = 0.01; // FIXME
 
 		// Vectors from corner points to marble position
 		Vector[] pointPositionVectors = {
@@ -181,7 +208,7 @@ public class Main extends Application {
 		// Return normal pointing towards the line
 
 		// Colliding with P0-P1
-		if (velocity.dotProduct(normals[0]) < 0 // Moving towards P0-P1
+		if (velocity.dotProduct(normals[0]) <= 0 + floatingPointTolerace // Moving towards P0-P1
 				&& calculateDistance(position, normals[0], points[0]) >= 0 // Bottom of P0-P1
 				&& calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 // Right of P3-P0
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
@@ -191,7 +218,7 @@ public class Main extends Application {
 			return normals[2];
 		}
 		// Colliding with P1-P2
-		if (velocity.dotProduct(normals[1]) < 0 // Moving towards P1-P2
+		if (velocity.dotProduct(normals[1]) <= 0 + floatingPointTolerace // Moving towards P1-P2
 				&& calculateDistance(position, normals[1], points[1]) >= 0 // Right of P1-P2
 				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
 				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
@@ -201,7 +228,7 @@ public class Main extends Application {
 			return normals[3];
 		}
 		// Colliding with P2-P3
-		if (velocity.dotProduct(normals[2]) < 0 // Moving towards P2-P3
+		if (velocity.dotProduct(normals[2]) <= 0 + floatingPointTolerace // Moving towards P2-P3
 				&& calculateDistance(position, normals[2], points[2]) >= 0 // Top of P2-P3
 				&& calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 // Left of P1-P2
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
@@ -211,7 +238,7 @@ public class Main extends Application {
 			return normals[0];
 		}
 		// Colliding with P3-P0
-		if (velocity.dotProduct(normals[3]) < 0 // Moving towards P3-P0
+		if (velocity.dotProduct(normals[3]) <= 0 + floatingPointTolerace // Moving towards P3-P0
 				&& calculateDistance(position, normals[3], points[3]) >= 0 // Left of P3-P0
 				&& calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 // Bottom of P2-P3
 				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
@@ -224,32 +251,36 @@ public class Main extends Application {
 		// Retun normal pointing to the corner
 
 		// Colliding with P0
-		if (/*   */calculateDistance(projectionPoints[3], normals[0], points[0]) > 0 // Bottom of P0-P1
+		if (/*   */velocity.dotProduct(normals[3].addVector(normals[0])) <= 0 // Moving towards P0
+				&& calculateDistance(projectionPoints[3], normals[0], points[0]) > 0 // Bottom of P0-P1
 				&& calculateDistance(projectionPoints[0], normals[3], points[3]) > 0 // Left of P3-P0
 		) {
 			//System.out.println("P0");
-			return projectionPoints[0];
+			return position.subtractVector(points[0]).normalize();
 		}
 		// Colliding with P1
-		if (/*   */calculateDistance(projectionPoints[1], normals[0], points[0]) > 0 // Bottom of P0-P1
+		if (/*   */velocity.dotProduct(normals[0].addVector(normals[1])) <= 0 // Moving towards P1
+				&& calculateDistance(projectionPoints[1], normals[0], points[0]) > 0 // Bottom of P0-P1
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) > 0 // Right of P1-P2
 		) {
 			//System.out.println("P1");
-			return projectionPoints[1];
+			return position.subtractVector(points[1]).normalize();
 		}
 		// Colliding with P2
-		if (/*   */calculateDistance(projectionPoints[1], normals[2], points[2]) > 0 // Top of P2-P3
+		if (/*   */velocity.dotProduct(normals[1].addVector(normals[2])) <= 0 // Moving towards P2
+				&& calculateDistance(projectionPoints[1], normals[2], points[2]) > 0 // Top of P2-P3
 				&& calculateDistance(projectionPoints[2], normals[1], points[1]) > 0 // Right of P1-P2
 		) {
 			//System.out.println("P2");
-			return projectionPoints[2];
+			return position.subtractVector(points[2]).normalize();
 		}
 		// Colliding with P3
-		if (/*   */calculateDistance(projectionPoints[3], normals[2], points[2]) > 0 // Top of P2-P3
+		if (/*   */velocity.dotProduct(normals[2].addVector(normals[3])) <= 0 // Moving towards P3
+				&& calculateDistance(projectionPoints[3], normals[2], points[2]) > 0 // Top of P2-P3
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) > 0 // Left of P3-P0
 		) {
 			//System.out.println("P3");
-			return projectionPoints[3];
+			return position.subtractVector(points[3]).normalize();
 		}
 
 		// Sometimes the marble doesn't move out of collision in a single frame
@@ -275,17 +306,16 @@ public class Main extends Application {
 		return v.subtractVector(n.multiply((n.dotProduct(v)) / (n.dotProduct(n))));
 	}
 
-	// Calculate normalforce
-	private double normalForce(Vector gravity, Vector normal) {
+	// Calculate angle in radians between two Vectors
+	private double vectorRadians(Vector v1, Vector v2) {
 		// cos(a) = dotP(g, n) / g * n
-		double cosAlpha = gravity.dotProduct(normal) / gravity.getVectorLength() * normal.getVectorLength();
-		// F_N = g * cos(a)
-		return gravity.getVectorLength() * cosAlpha;
+		double cosAlpha = v1.dotProduct(v2) / v1.getVectorLength() * v2.getVectorLength();
+		return Math.acos(cosAlpha);
 	}
 
 	// Moves the marble out of collision so it doesn't collide again in the next frame
 	private void moveMarble(Vector projectionPoint, Vector normal, double tolerance) {
-		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize() + tolerance)));
+		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize())));
 	}
 
 }

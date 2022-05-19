@@ -1,12 +1,15 @@
 package app;
 
 import java.util.HashMap;
+import java.util.Map;
+
 import javafx.scene.shape.Circle;
 
 public class Marble {
 
 	private double size = 0.025;
 	private Circle circle;
+	private boolean isRolling = false;
 
 	// Default values in m
 	private Vector position = new Vector(0.1, 0.8);
@@ -53,6 +56,10 @@ public class Marble {
 		return accelerations.get(key);
 	}
 
+	public boolean getRolling() {
+		return isRolling;
+	}
+
 	public void setSize(double size) {
 		this.size = size;
 	}
@@ -71,6 +78,10 @@ public class Marble {
 
 	public void setAcceleration(String key, Vector vector) {
 		accelerations.put(key, vector);
+	}
+
+	public void setRolling(boolean isRolling) {
+		this.isRolling = isRolling;
 	}
 
 	public Vector calculateNewPos(double deltaTime) {
@@ -94,8 +105,15 @@ public class Marble {
 
 	private Vector sumAccelerations(HashMap<String, Vector> accelerations) {
 		Vector sum = new Vector(0, 0);
-		for (Vector vector : accelerations.values()) {
-			sum = sum.addVector(vector);
+		for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
+			String key = entry.getKey();
+			Vector acceleration = entry.getValue();
+
+			if (isRolling && key.equals("Gravity")) {
+				break;
+			}
+
+			sum = sum.addVector(acceleration);
 		}
 		return sum;
 	}
