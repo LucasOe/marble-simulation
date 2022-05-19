@@ -139,10 +139,6 @@ public class Main extends Application {
 					double gravityPar = gravity * Math.cos(Math.abs(alpha)); // F_N = g * cos(a)
 					double friction = frictionCoefficient * gravityPar; // F_R = µ * F_N
 
-					// Don't apply friction if marble isn't moving
-					if (velocity.getVectorLength() <= 0.001)
-						friction = 0;
-
 					// Apply Forces
 					marble.setAcceleration("Downforce", slopeDirection.multiply(gravityPer));
 					marble.setAcceleration("Friction", velocityDirection.flip().multiply(friction));
