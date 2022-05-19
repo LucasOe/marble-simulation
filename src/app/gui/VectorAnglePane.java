@@ -52,7 +52,7 @@ public class VectorAnglePane extends VectorPane {
 
 			notifyListeners(vector);
 		});
-		vectorInputs.addRow(1, new Label("L:"), inputL);
+		vectorInputs.addRow(1, new Label("l:"), inputL);
 
 		inputA = new NumberTextField(Math.toDegrees(radians));
 		inputA.addListener(value -> {
