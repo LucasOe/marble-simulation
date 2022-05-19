@@ -128,7 +128,9 @@ public class Main extends Application {
 					// Gravitational constant
 					double gravity = Math.abs(marble.getAcceleration("Gravity").getY());
 					double alpha = Math.atan2(marbleNormal.getY(), marbleNormal.getX()) + Math.toRadians(90);
+
 					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
+					Vector velocityDirection = velocityPer.normalize();
 
 					// Break gravity Vector into perpendicular and parallel Vectors
 					double gravityPer = gravity * Math.sin(Math.abs(alpha)); // F_GH = g * sin(a)
@@ -137,7 +139,7 @@ public class Main extends Application {
 
 					// Apply Forces
 					marble.setAcceleration("Downforce", slopeDirection.multiply(gravityPer));
-					marble.setAcceleration("Friction", slopeDirection.flip().multiply(friction));
+					marble.setAcceleration("Friction", velocityDirection.flip().multiply(friction));
 				}
 			}
 		}
