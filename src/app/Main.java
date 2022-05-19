@@ -130,12 +130,18 @@ public class Main extends Application {
 					double alpha = Math.atan2(marbleNormal.getY(), marbleNormal.getX()) + Math.toRadians(90);
 
 					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
-					Vector velocityDirection = velocity.normalize();
+					Vector velocityDirection = velocityPer.normalize();
+					if (Double.isNaN(velocityDirection.getX()) || Double.isNaN(velocityDirection.getY()))
+						break;
 
 					// Break gravity Vector into perpendicular and parallel Vectors
 					double gravityPer = gravity * Math.sin(Math.abs(alpha)); // F_GH = g * sin(a)
 					double gravityPar = gravity * Math.cos(Math.abs(alpha)); // F_N = g * cos(a)
 					double friction = frictionCoefficient * gravityPar; // F_R = µ * F_N
+
+					// Don't apply friction if marble isn't moving
+					if (velocity.getVectorLength() <= 0.001)
+						friction = 0;
 
 					// Apply Forces
 					marble.setAcceleration("Downforce", slopeDirection.multiply(gravityPer));
@@ -145,7 +151,7 @@ public class Main extends Application {
 		}
 
 		if (!marble.getRolling()) {
-			// Reset forces when marble is not rolling
+			// Reset forces when marble isn't rolling
 			marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
 			marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 		}
