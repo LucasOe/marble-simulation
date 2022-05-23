@@ -83,7 +83,7 @@ public class Main extends Application {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
-		double stopThreshold = 0.02; // hen perpendicular velocity is below this thresholh marble is stopping
+		double stopThreshold = 0.02; // When perpendicular velocity is below this thresholh marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
 
 		marble.setRolling(false);
