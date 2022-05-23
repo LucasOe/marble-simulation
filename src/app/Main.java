@@ -35,7 +35,7 @@ public class Main extends Application {
 		// Create Marble
 		marble = new Marble();
 		marble.setAcceleration("Gravity", new Vector(0.0, -9.81));
-		marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
+		marble.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 
 		gui.drawMarble(marble, this);
@@ -82,7 +82,8 @@ public class Main extends Application {
 	public void updateMarble(Marble marble) {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		double tolerance = 0.003; // Threshold distance for collision detection
-		double rollingThreshold = 0.5; // Threshold of perpendicular velocity
+		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
+		double stopThreshold = 0.02; // hen perpendicular velocity is below this thresholh marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
 
 		marble.setRolling(false);
@@ -114,14 +115,10 @@ public class Main extends Application {
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
 				// Set perpendicular velocity to zero when below threshold to avoid jitter
-				if (velocityPar.getVectorLength() <= rollingThreshold)
+				if (velocityPar.getVectorLength() <= rollThreshold)
 					velocityPar = new Vector(0, 0);
 
-				// Calculate energy loss
-				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
-				marble.setVelocity(newVelocity);
-
-				if (velocityPar.getVectorLength() <= rollingThreshold)
+				if (velocityPar.getVectorLength() <= rollThreshold)
 					marble.setRolling(true);
 
 				if (marble.getRolling()) {
@@ -139,16 +136,26 @@ public class Main extends Application {
 					double gravityPar = gravity * Math.cos(Math.abs(alpha)); // F_N = g * cos(a)
 					double friction = frictionCoefficient * gravityPar; // F_R = µ * F_N
 
+					// Set friction and velocity to zero when below threshold
+					if (velocityPer.getVectorLength() < stopThreshold) {
+						friction = 0;
+						velocityPer = new Vector(0.0, 0.0);
+					}
+
 					// Apply Forces
-					marble.setAcceleration("Downforce", slopeDirection.multiply(gravityPer));
+					marble.setAcceleration("Downhill Acceleration", slopeDirection.multiply(gravityPer));
 					marble.setAcceleration("Friction", velocityDirection.flip().multiply(friction));
 				}
+
+				// Calculate energy loss
+				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
+				marble.setVelocity(newVelocity);
 			}
 		}
 
 		if (!marble.getRolling()) {
 			// Reset forces when marble isn't rolling
-			marble.setAcceleration("Downforce", new Vector(0.0, 0.0));
+			marble.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 			marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 		}
 
