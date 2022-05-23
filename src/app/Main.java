@@ -127,7 +127,10 @@ public class Main extends Application {
 					double alpha = Math.atan2(marbleNormal.getY(), marbleNormal.getX()) + Math.toRadians(90);
 
 					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
-					Vector velocityDirection = velocityPer.normalize();
+					// When velocityPer is 0,0 use velocity instead to calculate direction
+					Vector velocityDirection = velocityPer.getVectorLength() != 0
+							? velocityPer.normalize()
+							: velocity.normalize();
 					if (Double.isNaN(velocityDirection.getX()) || Double.isNaN(velocityDirection.getY()))
 						break;
 
