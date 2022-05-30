@@ -124,7 +124,7 @@ public class Main extends Application {
 				if (marble.getRolling()) {
 					// Gravitational constant
 					double gravity = Math.abs(marble.getAcceleration("Gravity").getY());
-					double alpha = Math.atan2(marbleNormal.getY(), marbleNormal.getX()) + Math.toRadians(90);
+					double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
 
 					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
 					// When velocityPer is 0,0 use velocity instead to calculate direction
