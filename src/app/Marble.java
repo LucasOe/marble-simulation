@@ -7,7 +7,7 @@ import javafx.scene.shape.Circle;
 
 public class Marble {
 
-	private double size = 0.025;
+	private double size = 0.025; // Size as radius
 	private Circle circle;
 	private boolean isRolling = false;
 
@@ -15,6 +15,7 @@ public class Marble {
 	private Vector position = new Vector(0.1, 0.8);
 	private Vector velocity = new Vector(0.0, 0.0);
 	private HashMap<String, Vector> accelerations = new HashMap<String, Vector>();
+	private Vector velocityBuffer; // The velocity at the end of the frame
 
 	public Marble() {
 	}
@@ -60,6 +61,10 @@ public class Marble {
 		return isRolling;
 	}
 
+	public Vector getVelocityBuffer() {
+		return velocityBuffer;
+	}
+
 	public void setSize(double size) {
 		this.size = size;
 	}
@@ -84,7 +89,12 @@ public class Marble {
 		this.isRolling = isRolling;
 	}
 
+	public void setVelocityBuffer(Vector velocityBuffer) {
+		this.velocityBuffer = velocityBuffer;
+	}
+
 	public Vector calculateNewPos(double deltaTime) {
+		velocity = velocityBuffer;
 		Vector acceleration = sumAccelerations(accelerations);
 
 		// position = position + velocity * deltaTime + 0.5 * acceleration * deltaTime * deltaTime
@@ -95,6 +105,7 @@ public class Marble {
 	}
 
 	public Vector calculateNewVel(double deltaTime) {
+		velocity = velocityBuffer;
 		Vector acceleration = sumAccelerations(accelerations);
 
 		// velocity = velocity + acceleration * deltaTime

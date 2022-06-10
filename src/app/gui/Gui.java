@@ -44,7 +44,7 @@ public class Gui {
 	private Shape selectedShape;
 
 	private Button play;
-	List<AnimationTimer> timers = new ArrayList<>();
+	AnimationTimer timer;
 
 	public Gui(Stage stage) {
 		// Canvas
@@ -193,14 +193,12 @@ public class Gui {
 
 	public void toggleAnimationTimer() {
 		isPlaying = !isPlaying;
-		for (AnimationTimer timer : timers) {
-			if (isPlaying) {
-				play.setText("Stop");
-				timer.start();
-			} else {
-				play.setText("Start");
-				timer.stop();
-			}
+		if (isPlaying) {
+			play.setText("Stop");
+			timer.start();
+		} else {
+			play.setText("Start");
+			timer.stop();
 		}
 	}
 
@@ -222,20 +220,22 @@ public class Gui {
 			// Update position
 			moveMarble(marble);
 
-			// AnimationTimer
-			AnimationTimer timer = new AnimationTimer() {
-				// Gets called every frame and tries to target fps set with javafx.animation.pulse
-				@Override
-				public void handle(long now) {
-					if (isPlaying) {
-						main.updateMarble(marble);
-					}
-				}
-			};
-			timers.add(timer);
-
 			canvas.getChildren().add(circle);
 		}
+
+		// AnimationTimer
+		timer = new AnimationTimer() {
+			// Gets called every frame and tries to target fps set with javafx.animation.pulse
+			@Override
+			public void handle(long now) {
+				if (isPlaying) {
+					for (Marble marble : marbles) {
+						main.calculateMarble(marble);
+					}
+					main.updateMarbles();
+				}
+			}
+		};
 	}
 
 	public void moveMarble(Marble marble) {

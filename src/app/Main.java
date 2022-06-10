@@ -35,7 +35,7 @@ public class Main extends Application {
 
 		// Create Marble 1
 		Marble marble1 = new Marble();
-		marble1.setPosition(new Vector(0.10, 0.80));
+		marble1.setPosition(new Vector(0.100, 0.800));
 		marble1.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble1.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble1.setAcceleration("Friction", new Vector(0.0, 0.0));
@@ -43,7 +43,7 @@ public class Main extends Application {
 
 		// Create marble 2
 		Marble marble2 = new Marble();
-		marble2.setPosition(new Vector(1.25, 0.90));
+		marble2.setPosition(new Vector(1.800, 0.045));
 		marble2.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble2.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble2.setAcceleration("Friction", new Vector(0.0, 0.0));
@@ -88,17 +88,10 @@ public class Main extends Application {
 				new Vector(0.80, 0.30),
 				new Vector(0.50, 0.30),
 				0.04));
-
-		// Rectangle 3
-		gui.addRectangle(new Rectangle(
-				new Vector(1.20, 0.80),
-				new Vector(0.50, -0.20),
-				0.04));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
-	public void updateMarble(Marble marble) {
-		double deltaTime = (1.0 / framerate) * SLOWDOWN;
+	public void calculateMarble(Marble marble) {
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
 		double stopThreshold = 0.02; // When perpendicular velocity is below this thresholh marble is stopping
@@ -106,12 +99,15 @@ public class Main extends Application {
 
 		marble.setRolling(false);
 
+		Vector position = marble.getPosition();
+		Vector velocity = marble.getVelocity();
+
+		// The new velocity the marble has at the end of the frame
+		marble.setVelocityBuffer(velocity);
+
 		// Iterate over every rectangle in the scene
 		List<Rectangle> rectangles = gui.getRectangles();
 		for (Rectangle rectangle : rectangles) {
-			Vector position = marble.getPosition();
-			Vector velocity = marble.getVelocity();
-
 			Vector[] points = rectangle.getPoints();
 			Vector[] normals = rectangle.getNormals();
 
@@ -168,9 +164,41 @@ public class Main extends Application {
 					marble.setAcceleration("Friction", velocityDirection.flip().multiply(friction));
 				}
 
-				// Calculate energy loss
+				// Calculate new Velocity
 				Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(0.8));
-				marble.setVelocity(newVelocity);
+				marble.setVelocityBuffer(newVelocity);
+			}
+		}
+
+		// Iterate over every marble in the scene
+		for (Marble collidingMarble : marbles) {
+			// Marble shouldn't collide with itself
+			if (!collidingMarble.equals(marble)) {
+				// Distance between the marbles
+				Vector positionColliding = collidingMarble.getPosition();
+				Vector marblesVector = positionColliding.subtractVector(position); // Vector between the marbles
+
+				// Detect if marbles are colliding
+				double marblesDistance = marblesVector.getVectorLength();
+				if (marblesDistance <= marble.getSize() + collidingMarble.getSize() // Within radius
+						&& (/*   */(velocity.getX() >= 0 && collidingMarble.getVelocity().getX() <= 0)
+								|| (velocity.getX() <= 0 && collidingMarble.getVelocity().getX() >= 0)) // Different signs
+				) {
+					Vector marbleNormal = marblesVector.normalize();
+
+					// Break velocity Vector into perpendicular and parallel Vectors
+					Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
+					Vector velocityPar = velocity.subtractVector(velocityPer).normalize();
+
+					if (Double.isNaN(velocityPar.getX()) || Double.isNaN(velocityPar.getY()))
+						velocityPar = new Vector(0, 0);
+
+					// FIXME: Calculate new Velocity
+					// Marbles "trade" velocity if their mass is the same
+					double velocityCollidingMarble = collidingMarble.getVelocity().getVectorLength();
+					Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(velocityCollidingMarble));
+					marble.setVelocityBuffer(newVelocity);
+				}
 			}
 		}
 
@@ -179,18 +207,24 @@ public class Main extends Application {
 			marble.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 			marble.setAcceleration("Friction", new Vector(0.0, 0.0));
 		}
+	}
 
-		// Calculates and return new position and velocity
-		Vector position = marble.calculateNewPos(deltaTime);
-		Vector velocity = marble.calculateNewVel(deltaTime);
+	// update the new position and velocity of marbles after every calculateMarble call is done
+	public void updateMarbles() {
+		double deltaTime = (1.0 / framerate) * SLOWDOWN;
+		for (Marble marble : marbles) {
+			// Calculates and return new position and velocity
+			Vector newPosition = marble.calculateNewPos(deltaTime);
+			Vector newVelocity = marble.calculateNewVel(deltaTime);
 
-		// Display new values
-		gui.getPositionPane().setText(position);
-		gui.getVelocityPane().setText(velocity);
-		gui.updateAccelerationPanes(marble);
+			// Display new values
+			gui.getPositionPane().setText(newPosition);
+			gui.getVelocityPane().setText(newVelocity);
+			gui.updateAccelerationPanes(marble);
 
-		// Move position
-		gui.moveMarble(marble);
+			// Move position
+			gui.moveMarble(marble);
+		}
 	}
 
 	// Return the normal facing the direction the marble is hitting
