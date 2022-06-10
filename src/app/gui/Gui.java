@@ -204,36 +204,38 @@ public class Gui {
 		}
 	}
 
-	public void drawMarble(Marble marble, Main main) {
-		Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
-		circle.getStyleClass().addAll("marble", "shape");
+	public void drawMarbles(List<Marble> marbles, Main main) {
+		for (Marble marble : marbles) {
+			Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
+			circle.getStyleClass().addAll("marble", "shape");
 
-		circle.setOnMouseClicked(mouseEvent -> {
-			setSelectedShape(circle);
-			clearPane(infoPaneBox);
-			initializeInfoPanes(marble);
-		});
+			circle.setOnMouseClicked(mouseEvent -> {
+				setSelectedShape(circle);
+				clearPane(infoPaneBox);
+				initializeInfoPanes(marble);
+			});
 
-		marble.setCircle(circle);
+			marble.setCircle(circle);
 
-		// Flip y-axis so that 0,0 is in the bottom-left corner
-		circle.relocate(0 - marble.getSize() * scale, Main.CANVAS_HEIGHT - marble.getSize() * scale);
-		// Update position
-		moveMarble(marble);
+			// Flip y-axis so that 0,0 is in the bottom-left corner
+			circle.relocate(0 - marble.getSize() * scale, Main.CANVAS_HEIGHT - marble.getSize() * scale);
+			// Update position
+			moveMarble(marble);
 
-		// AnimationTimer
-		AnimationTimer timer = new AnimationTimer() {
-			// Gets called every frame and tries to target fps set with javafx.animation.pulse
-			@Override
-			public void handle(long now) {
-				if (isPlaying) {
-					main.updateMarble(marble);
+			// AnimationTimer
+			AnimationTimer timer = new AnimationTimer() {
+				// Gets called every frame and tries to target fps set with javafx.animation.pulse
+				@Override
+				public void handle(long now) {
+					if (isPlaying) {
+						main.updateMarble(marble);
+					}
 				}
-			}
-		};
-		timers.add(timer);
+			};
+			timers.add(timer);
 
-		canvas.getChildren().add(circle);
+			canvas.getChildren().add(circle);
+		}
 	}
 
 	public void moveMarble(Marble marble) {

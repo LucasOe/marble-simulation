@@ -1,5 +1,6 @@
 package app;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import app.gui.Gui;
@@ -20,6 +21,7 @@ public class Main extends Application {
 	static int framerate;
 
 	private Gui gui;
+	private List<Marble> marbles = new ArrayList<>();
 
 	public static void main(String[] args) throws Exception {
 		framerate = Integer.parseInt(System.getProperty("javafx.animation.pulse"));
@@ -37,8 +39,7 @@ public class Main extends Application {
 		marble1.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble1.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble1.setAcceleration("Friction", new Vector(0.0, 0.0));
-
-		gui.drawMarble(marble1, this);
+		marbles.add(marble1);
 
 		// Create marble 2
 		Marble marble2 = new Marble();
@@ -46,10 +47,10 @@ public class Main extends Application {
 		marble2.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble2.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble2.setAcceleration("Friction", new Vector(0.0, 0.0));
-
-		gui.drawMarble(marble2, this);
+		marbles.add(marble2);
 
 		// Initialize GUI
+		gui.drawMarbles(marbles, this);
 		gui.initializeInfoPanes(marble1);
 
 		// Floor
