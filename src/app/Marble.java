@@ -94,7 +94,7 @@ public class Marble {
 	}
 
 	public Vector calculateNewPos(double deltaTime) {
-		velocity = velocityBuffer;
+		setVelocity(velocityBuffer);
 		Vector acceleration = sumAccelerations(accelerations);
 
 		// position = position + velocity * deltaTime + 0.5 * acceleration * deltaTime * deltaTime
@@ -105,7 +105,7 @@ public class Marble {
 	}
 
 	public Vector calculateNewVel(double deltaTime) {
-		velocity = velocityBuffer;
+		setVelocity(velocityBuffer);
 		Vector acceleration = sumAccelerations(accelerations);
 
 		// velocity = velocity + acceleration * deltaTime
