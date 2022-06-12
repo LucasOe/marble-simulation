@@ -43,7 +43,7 @@ public class Main extends Application {
 
 		// Create marble 2
 		Marble marble2 = new Marble();
-		marble2.setPosition(new Vector(1.800, 0.045));
+		marble2.setPosition(new Vector(1.500, 0.045));
 		marble2.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble2.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble2.setAcceleration("Friction", new Vector(0.0, 0.0));
@@ -178,11 +178,16 @@ public class Main extends Application {
 				Vector positionColliding = collidingMarble.getPosition();
 				Vector marblesVector = positionColliding.subtractVector(position); // Vector between the marbles
 
-				// Detect if marbles are colliding
 				double marblesDistance = marblesVector.getVectorLength();
+				double v1 = velocity.getX();
+				double v2 = collidingMarble.getVelocity().getX();
+				double p1 = position.getX();
+				double p2 = collidingMarble.getPosition().getX();
+
+				// Detect if marbles are colliding
 				if (marblesDistance <= marble.getSize() + collidingMarble.getSize() // Within radius
-						&& (/*   */(velocity.getX() >= 0 && collidingMarble.getVelocity().getX() <= 0)
-								|| (velocity.getX() <= 0 && collidingMarble.getVelocity().getX() >= 0)) // Different signs
+						&& (/*   */(v1 >= 0 && v2 <= 0 && p1 <= p2) // Marble rolling towwards marble on its right
+								|| (v1 <= 0 && v2 >= 0 && p1 >= p2)) // Marble rolling towwards marble on its left
 				) {
 					Vector marbleNormal = marblesVector.normalize();
 
