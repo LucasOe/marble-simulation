@@ -208,7 +208,7 @@ public class Main extends Application {
 		}
 	}
 
-	// update the new position and velocity of marbles after every calculateMarble call is done
+	// Update the new position and velocity of marbles after every calculateMarble call is done
 	public void updateMarbles() {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 		for (Marble marble : marbles) {
