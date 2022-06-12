@@ -35,7 +35,7 @@ public class Main extends Application {
 
 		// Create Marble 1
 		Marble marble1 = new Marble();
-		marble1.setPosition(new Vector(1.000, 0.045));
+		marble1.setPosition(new Vector(0.100, 0.800));
 		marble1.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble1.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble1.setAcceleration("Friction", new Vector(0.0, 0.0));
