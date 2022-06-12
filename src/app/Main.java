@@ -35,7 +35,7 @@ public class Main extends Application {
 
 		// Create Marble 1
 		Marble marble1 = new Marble();
-		marble1.setPosition(new Vector(0.100, 0.800));
+		marble1.setPosition(new Vector(1.000, 0.045));
 		marble1.setAcceleration("Gravity", new Vector(0.0, -9.81));
 		marble1.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble1.setAcceleration("Friction", new Vector(0.0, 0.0));
@@ -145,8 +145,6 @@ public class Main extends Application {
 					Vector velocityDirection = velocityPer.getVectorLength() != 0
 							? velocityPer.normalize()
 							: velocity.normalize();
-					if (Double.isNaN(velocityDirection.getX()) || Double.isNaN(velocityDirection.getY()))
-						break;
 
 					// Break gravity Vector into perpendicular and parallel Vectors
 					double gravityPer = gravity * Math.sin(Math.abs(alpha)); // F_GH = g * sin(a)
@@ -192,16 +190,12 @@ public class Main extends Application {
 					Vector marbleNormal = marblesVector.normalize();
 
 					// Break velocity Vector into perpendicular and parallel Vectors
-					Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
-					Vector velocityPar = velocity.subtractVector(velocityPer).normalize();
+					Vector v1Per = orthogonalDecomposition(velocity, marbleNormal);
+					Vector v2Per = orthogonalDecomposition(collidingMarble.getVelocity(), marbleNormal.flip());
+					Vector v2Par = collidingMarble.getVelocity().subtractVector(v2Per);
 
-					if (Double.isNaN(velocityPar.getX()) || Double.isNaN(velocityPar.getY()))
-						velocityPar = new Vector(0, 0);
-
-					// FIXME: Calculate new Velocity
-					// Marbles "trade" velocity if their mass is the same
-					double velocityCollidingMarble = collidingMarble.getVelocity().getVectorLength();
-					Vector newVelocity = velocityPer.addVector(velocityPar.flip().multiply(velocityCollidingMarble));
+					// Marbles "trade" parallel velocity if their mass is the same
+					Vector newVelocity = v1Per.addVector(v2Par);
 					marble.setVelocityBuffer(newVelocity);
 				}
 			}
