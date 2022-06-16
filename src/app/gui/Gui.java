@@ -7,6 +7,7 @@ import java.util.Map;
 
 import app.Main;
 import app.Marble;
+import app.Pendulum;
 import app.Rectangle;
 import app.Vector;
 import app.gui.VectorPane.VectorPaneListener;
@@ -33,6 +34,7 @@ public class Gui {
 	private double scale = Main.CANVAS_WIDTH / Main.CANVAS_METERS;
 	private boolean isPlaying;
 	private List<Rectangle> rectangles = new ArrayList<>();
+	private List<Pendulum> pendulums = new ArrayList<>();
 
 	private Pane canvas;
 	private Pane controls;
@@ -336,4 +338,23 @@ public class Gui {
 		root.getChildren().add(rectangleLengthPane);
 	}
 
+	public void addPendulum(Pendulum pendulum) {
+		pendulums.add(pendulum);
+		Vector position = pendulum.getPosition();
+
+		double size = 0.02;
+		Circle circle = new Circle(size * scale, Color.BLACK);
+		circle.getStyleClass().addAll("pendulum", "shape");
+
+		// Flip y-axis so that 0,0 is in the bottom-left corner
+		circle.relocate(0 - size * scale, Main.CANVAS_HEIGHT - size * scale);
+		circle.setTranslateX(+position.getX() * scale);
+		circle.setTranslateY(-position.getY() * scale);
+
+		canvas.getChildren().add(circle);
+	}
+
+	public List<Pendulum> getPendulums() {
+		return pendulums;
+	}
 }

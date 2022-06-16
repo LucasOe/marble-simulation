@@ -88,13 +88,19 @@ public class Main extends Application {
 				new Vector(0.80, 0.30),
 				new Vector(0.50, 0.30),
 				0.04));
+
+		// Pendulum
+		gui.addPendulum(new Pendulum(
+				new Vector(1.0, 0.8),
+				1.0,
+				0.0));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void calculateMarble(Marble marble) {
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
-		double stopThreshold = 0.02; // When perpendicular velocity is below this thresholh marble is stopping
+		double stopThreshold = 0.01; // When perpendicular velocity is below this thresholh marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
 
 		marble.setRolling(false);
