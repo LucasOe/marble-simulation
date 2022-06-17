@@ -207,6 +207,13 @@ public class Main extends Application {
 			}
 		}
 
+		// Pendulum
+		List<Pendulum> pendulums = gui.getPendulums();
+		for (Pendulum pendulum : pendulums) {
+			double angleRadians = pendulum.getAngleRadians();
+			pendulum.setAngleRadians(angleRadians + 0.01);
+		}
+
 		if (!marble.getRolling()) {
 			// Reset forces when marble isn't rolling
 			marble.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
@@ -217,6 +224,8 @@ public class Main extends Application {
 	// Update the new position and velocity of marbles after every calculateMarble call is done
 	public void updateMarbles() {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
+
+		// Update marbles
 		for (Marble marble : marbles) {
 			// Calculates and return new position and velocity
 			Vector newPosition = marble.calculateNewPos(deltaTime);
@@ -227,8 +236,15 @@ public class Main extends Application {
 			gui.getVelocityPane().setText(newVelocity);
 			gui.updateAccelerationPanes(marble);
 
-			// Move position
+			// Move marbles position
 			gui.moveMarble(marble);
+		}
+
+		// Update pendulums
+		List<Pendulum> pendulums = gui.getPendulums();
+		for (Pendulum pendulum : pendulums) {
+			// Move pendulums position
+			gui.movePendulum(pendulum);
 		}
 	}
 
