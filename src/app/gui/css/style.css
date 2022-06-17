@@ -47,3 +47,14 @@
 .selected {
 	-fx-fill: rgb(49, 49, 112);
 }
+
+.pendulum {
+	-fx-fill: rgb(0, 0, 0);
+}
+
+.line {
+	-fx-stroke: rgb(0, 0, 0);
+	-fx-stroke-width: 5;
+	-fx-stroke-line-join: round;
+	-fx-stroke-line-cap: round;
+}
