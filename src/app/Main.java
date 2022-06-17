@@ -207,13 +207,14 @@ public class Main extends Application {
 			}
 		}
 
-		// Pendulum
+		// Iterate over every pendulum in the scene
 		List<Pendulum> pendulums = gui.getPendulums();
 		for (Pendulum pendulum : pendulums) {
 			double angleRadians = pendulum.getAngleRadians();
 			pendulum.setAngleRadians(angleRadians + 0.01);
 		}
 
+		// Reset accelerations when marble isn't rolling
 		if (!marble.getRolling()) {
 			// Reset forces when marble isn't rolling
 			marble.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
