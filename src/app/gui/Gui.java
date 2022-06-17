@@ -357,6 +357,8 @@ public class Gui {
 		Line line = new Line();
 		line.getStyleClass().addAll("line");
 
+		pendulum.setLine(line);
+
 		line.relocate(0, Main.CANVAS_HEIGHT);
 		line.setStartX(+position.getX() * scale);
 		line.setStartY(-position.getY() * scale);
@@ -369,5 +371,13 @@ public class Gui {
 
 	public List<Pendulum> getPendulums() {
 		return pendulums;
+	}
+
+	public void movePendulum(Pendulum pendulum) {
+		Line line = pendulum.getLine();
+		Vector endPoint = pendulum.getEndPoint();
+
+		line.setEndX(+endPoint.getX() * scale);
+		line.setEndY(-endPoint.getY() * scale);
 	}
 }
