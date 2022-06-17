@@ -25,6 +25,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
@@ -341,17 +342,33 @@ public class Gui {
 	public void addPendulum(Pendulum pendulum) {
 		pendulums.add(pendulum);
 		Vector position = pendulum.getPosition();
+		double length = pendulum.getLength();
+		double angle = -Math.toRadians(pendulum.getAngle());
 
-		double size = 0.02;
+		Vector endPoint = new Vector(
+				Math.sin(angle) * length,
+				Math.cos(angle) * length);
+
+		double size = 0.01;
 		Circle circle = new Circle(size * scale, Color.BLACK);
-		circle.getStyleClass().addAll("pendulum", "shape");
+		circle.getStyleClass().addAll("pendulum");
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
 		circle.relocate(0 - size * scale, Main.CANVAS_HEIGHT - size * scale);
 		circle.setTranslateX(+position.getX() * scale);
 		circle.setTranslateY(-position.getY() * scale);
 
+		Line line = new Line();
+		line.getStyleClass().addAll("line");
+
+		line.relocate(0, Main.CANVAS_HEIGHT);
+		line.setStartX(+position.getX() * scale);
+		line.setStartY(-position.getY() * scale);
+		line.setEndX((+position.getX() + endPoint.getX()) * scale);
+		line.setEndY((-position.getY() + endPoint.getY()) * scale);
+
 		canvas.getChildren().add(circle);
+		canvas.getChildren().add(line);
 	}
 
 	public List<Pendulum> getPendulums() {

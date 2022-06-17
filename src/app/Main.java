@@ -92,7 +92,7 @@ public class Main extends Application {
 		// Pendulum
 		gui.addPendulum(new Pendulum(
 				new Vector(1.0, 0.8),
-				1.0,
+				0.2,
 				0.0));
 	}
 
@@ -334,7 +334,6 @@ public class Main extends Application {
 		}
 
 		// Sometimes the marble doesn't move out of collision in a single frame
-		//System.out.println("Null");
 		return null;
 	}
 
