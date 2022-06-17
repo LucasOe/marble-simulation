@@ -4,12 +4,12 @@ public class Pendulum {
 
 	private Vector position;
 	private double length;
-	private double angle;
+	private double angleRadians;
 
 	public Pendulum(Vector position, double length, double angle) {
 		this.position = position;
 		this.length = length;
-		this.angle = angle;
+		this.angleRadians = Math.toRadians(angle);
 	}
 
 	public Vector getPosition() {
@@ -21,7 +21,11 @@ public class Pendulum {
 	}
 
 	public double getAngle() {
-		return angle;
+		return Math.toDegrees(angleRadians);
+	}
+
+	public double getAngleRadians() {
+		return angleRadians;
 	}
 
 	public void setPosition(Vector position) {
@@ -33,11 +37,14 @@ public class Pendulum {
 	}
 
 	public void setAngle(double angle) {
-		this.angle = angle;
+		this.angleRadians = Math.toRadians(angle);
+	}
+
+	public void setAngleRadians(double angleRadians) {
+		this.angleRadians = angleRadians;
 	}
 
 	public Vector getEndPoint() {
-		double angleRadians = Math.toRadians(angle);
 		return new Vector(
 				position.getX() + Math.sin(angleRadians) * length,
 				position.getY() - Math.cos(angleRadians) * length);
