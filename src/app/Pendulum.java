@@ -36,4 +36,11 @@ public class Pendulum {
 		this.angle = angle;
 	}
 
+	public Vector getEndPoint() {
+		double angleRadians = Math.toRadians(angle);
+		return new Vector(
+				position.getX() + Math.sin(angleRadians) * length,
+				position.getY() - Math.cos(angleRadians) * length);
+	}
+
 }
