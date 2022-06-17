@@ -342,12 +342,8 @@ public class Gui {
 	public void addPendulum(Pendulum pendulum) {
 		pendulums.add(pendulum);
 		Vector position = pendulum.getPosition();
-		double length = pendulum.getLength();
-		double angle = -Math.toRadians(pendulum.getAngle());
 
-		Vector endPoint = new Vector(
-				Math.sin(angle) * length,
-				Math.cos(angle) * length);
+		Vector endPoint = pendulum.getEndPoint();
 
 		double size = 0.01;
 		Circle circle = new Circle(size * scale, Color.BLACK);
@@ -364,8 +360,8 @@ public class Gui {
 		line.relocate(0, Main.CANVAS_HEIGHT);
 		line.setStartX(+position.getX() * scale);
 		line.setStartY(-position.getY() * scale);
-		line.setEndX((+position.getX() + endPoint.getX()) * scale);
-		line.setEndY((-position.getY() + endPoint.getY()) * scale);
+		line.setEndX(+endPoint.getX() * scale);
+		line.setEndY(-endPoint.getY() * scale);
 
 		canvas.getChildren().add(circle);
 		canvas.getChildren().add(line);
