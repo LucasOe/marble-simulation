@@ -128,6 +128,7 @@ public class Main extends Application {
 		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
 		double stopThreshold = 0.01; // When perpendicular velocity is below this thresholh marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
+		double magnetRange = 0.1;
 
 		marble.setRolling(false);
 
@@ -167,7 +168,7 @@ public class Main extends Application {
 				if (velocityPar.getVectorLength() <= rollThreshold)
 					marble.setRolling(true);
 
-				if (marble.getRolling()) {
+				if (marble.isRolling()) {
 					// Gravitational constant
 					double gravity = Math.abs(marble.getAcceleration(VectorType.GRAVITY).getY());
 					double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
@@ -237,12 +238,32 @@ public class Main extends Application {
 		// Iterate over every pendulum in the scene
 		List<Pendulum> pendulums = gui.getPendulums();
 		for (Pendulum pendulum : pendulums) {
-			//double angleRadians = pendulum.getAngleRadians();
-			//pendulum.setAngleRadians(angleRadians + 0.01);
+			Vector pendulumPosition = pendulum.getPosition();
+			Vector endPoint = pendulum.getEndPoint();
+
+			// Detect if marble is in range and pendulum is empty
+			double distance = Math.abs(endPoint.subtractVector(position).getVectorLength());
+			if (distance + marble.getSize() <= magnetRange
+					&& pendulum.getMarble() == null) {
+				pendulum.setMarble(marble);
+				marble.setMagnetized(true);
+			}
+
+			// While marble is magnetized
+			if (marble.isMagnetized()) {
+				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
+				Vector offset = pendulumLine.multiply(marble.getSize());
+				marble.setPosition(endPoint.addVector(offset));
+				marble.setVelocityBuffer(pendulumLine.rotateVector().flip().multiply(1));
+
+				double angleRadians = pendulum.getAngleRadians();
+				if (angleRadians <= Math.toRadians(0.0))
+					pendulum.setAngleRadians(angleRadians + 0.01);
+			}
 		}
 
 		// Reset accelerations when marble isn't rolling
-		if (!marble.getRolling()) {
+		if (!marble.isRolling()) {
 			// Reset forces when marble isn't rolling
 			marble.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 			marble.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
