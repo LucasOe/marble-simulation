@@ -3,6 +3,7 @@ package app;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.VectorUtil.VectorType;
 import app.gui.Gui;
 import app.models.Marble;
 import app.models.Pendulum;
@@ -39,18 +40,18 @@ public class Main extends Application {
 		// Create Marble 1
 		Marble marble1 = new Marble();
 		marble1.setPosition(new Vector(0.100, 0.800));
-		marble1.setAcceleration("Gravity", new Vector(0.0, -9.81));
-		marble1.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
-		marble1.setAcceleration("Friction", new Vector(0.0, 0.0));
+		marble1.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
+		marble1.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
+		marble1.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
 		marbles.add(marble1);
 		gui.drawMarble(marble1);
 
 		// Create marble 2
 		Marble marble2 = new Marble();
 		marble2.setPosition(new Vector(1.500, 0.045));
-		marble2.setAcceleration("Gravity", new Vector(0.0, -9.81));
-		marble2.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
-		marble2.setAcceleration("Friction", new Vector(0.0, 0.0));
+		marble2.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
+		marble2.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
+		marble2.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
 		marbles.add(marble2);
 		gui.drawMarble(marble2);
 
@@ -147,7 +148,7 @@ public class Main extends Application {
 
 				if (marble.getRolling()) {
 					// Gravitational constant
-					double gravity = Math.abs(marble.getAcceleration("Gravity").getY());
+					double gravity = Math.abs(marble.getAcceleration(VectorType.GRAVITY).getY());
 					double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
 
 					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
@@ -168,8 +169,8 @@ public class Main extends Application {
 					}
 
 					// Apply Forces
-					marble.setAcceleration("Downhill Acceleration", slopeDirection.multiply(gravityPer));
-					marble.setAcceleration("Friction", velocityDirection.flip().multiply(friction));
+					marble.setAcceleration(VectorType.DOWNHILL_ACCELERATION, slopeDirection.multiply(gravityPer));
+					marble.setAcceleration(VectorType.FRICTION, velocityDirection.flip().multiply(friction));
 				}
 
 				// Calculate new Velocity
@@ -221,8 +222,8 @@ public class Main extends Application {
 		// Reset accelerations when marble isn't rolling
 		if (!marble.getRolling()) {
 			// Reset forces when marble isn't rolling
-			marble.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
-			marble.setAcceleration("Friction", new Vector(0.0, 0.0));
+			marble.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
+			marble.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
 		}
 	}
 
