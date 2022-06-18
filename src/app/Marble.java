@@ -5,10 +5,9 @@ import java.util.Map;
 
 import javafx.scene.shape.Circle;
 
-public class Marble {
+public class Marble extends ShapeObject {
 
 	private double size = 0.025; // Size as radius
-	private Circle circle;
 	private boolean isRolling = false;
 
 	// Default values in m
@@ -37,10 +36,6 @@ public class Marble {
 		return size;
 	}
 
-	public Circle getCircle() {
-		return circle;
-	}
-
 	public Vector getPosition() {
 		return position;
 	}
@@ -67,10 +62,6 @@ public class Marble {
 
 	public void setSize(double size) {
 		this.size = size;
-	}
-
-	public void setCircle(Circle circle) {
-		this.circle = circle;
 	}
 
 	public void setPosition(Vector position) {
