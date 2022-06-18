@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.Vector;
+import app.VectorUtil.VectorType;
 
 public class Marble extends Model {
 
@@ -13,7 +14,7 @@ public class Marble extends Model {
 	// Default values in m
 	private Vector position = new Vector(0.1, 0.8);
 	private Vector velocity = new Vector(0.0, 0.0);
-	private HashMap<String, Vector> accelerations = new HashMap<String, Vector>();
+	private HashMap<VectorType, Vector> accelerations = new HashMap<VectorType, Vector>();
 	private Vector velocityBuffer; // The velocity at the end of the frame
 
 	public Marble() {
@@ -25,7 +26,7 @@ public class Marble extends Model {
 		this.velocity = velocity;
 	}
 
-	public Marble(int size, Vector position, Vector velocity, HashMap<String, Vector> accelerations) {
+	public Marble(int size, Vector position, Vector velocity, HashMap<VectorType, Vector> accelerations) {
 		this.size = size;
 		this.position = position;
 		this.velocity = velocity;
@@ -61,19 +62,19 @@ public class Marble extends Model {
 		this.velocity = velocity;
 	}
 
-	public HashMap<String, Vector> getAccelerations() {
+	public HashMap<VectorType, Vector> getAccelerations() {
 		return accelerations;
 	}
 
-	public void setAccelerations(HashMap<String, Vector> accelerations) {
+	public void setAccelerations(HashMap<VectorType, Vector> accelerations) {
 		this.accelerations = accelerations;
 	}
 
-	public Vector getAcceleration(String key) {
+	public Vector getAcceleration(VectorType key) {
 		return accelerations.get(key);
 	}
 
-	public void setAcceleration(String key, Vector vector) {
+	public void setAcceleration(VectorType key, Vector vector) {
 		accelerations.put(key, vector);
 	}
 
@@ -114,13 +115,13 @@ public class Marble extends Model {
 		return this.velocity;
 	}
 
-	private Vector sumAccelerations(HashMap<String, Vector> accelerations) {
+	private Vector sumAccelerations(HashMap<VectorType, Vector> accelerations) {
 		Vector sum = new Vector(0, 0);
-		for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
-			String key = entry.getKey();
+		for (Map.Entry<VectorType, Vector> entry : accelerations.entrySet()) {
+			VectorType key = entry.getKey();
 			Vector acceleration = entry.getValue();
 
-			if (isRolling && key.equals("Gravity")) {
+			if (isRolling && key.equals(VectorType.GRAVITY)) {
 				break;
 			}
 

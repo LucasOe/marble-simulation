@@ -7,6 +7,7 @@ import java.util.Map;
 
 import app.Main;
 import app.Vector;
+import app.VectorUtil.VectorType;
 import app.gui.VectorPane.Type;
 import app.gui.VectorPane.VectorPaneListener;
 import app.models.Marble;
@@ -48,7 +49,7 @@ public class Gui {
 
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
-	private HashMap<String, VectorPane> accelerationPanes = new HashMap<>();
+	private HashMap<VectorType, VectorPane> accelerationPanes = new HashMap<>();
 
 	public Gui(Stage stage) {
 		// Canvas
@@ -142,11 +143,11 @@ public class Gui {
 		this.velocityPane = velocityPane;
 	}
 
-	public HashMap<String, VectorPane> getAccelerationPanes() {
+	public HashMap<VectorType, VectorPane> getAccelerationPanes() {
 		return accelerationPanes;
 	}
 
-	public void setAccelerationPanes(HashMap<String, VectorPane> accelerationPanes) {
+	public void setAccelerationPanes(HashMap<VectorType, VectorPane> accelerationPanes) {
 		this.accelerationPanes = accelerationPanes;
 	}
 
@@ -163,7 +164,7 @@ public class Gui {
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
-		positionPane = new VectorPane(marble.getPosition(), "Position", Type.NORMAL);
+		positionPane = new VectorPane(marble.getPosition(), VectorType.POSITION, Type.NORMAL);
 		positionPane.setColor("#E2F0CB");
 		positionPane.addListener(new VectorPaneListener() {
 
@@ -179,7 +180,7 @@ public class Gui {
 	}
 
 	private void addVelocityPane(Pane root, Marble marble) {
-		velocityPane = new VectorPane(marble.getVelocity(), "Velocity", Type.ANGLE);
+		velocityPane = new VectorPane(marble.getVelocity(), VectorType.VELOCITY, Type.ANGLE);
 		velocityPane.setColor("#FFDAC1");
 		velocityPane.addListener(new VectorPaneListener() {
 
@@ -195,9 +196,9 @@ public class Gui {
 	}
 
 	private void addAccelerationPanes(Pane root, Marble marble) {
-		HashMap<String, Vector> accelerations = marble.getAccelerations();
-		for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
-			String key = entry.getKey();
+		HashMap<VectorType, Vector> accelerations = marble.getAccelerations();
+		for (Map.Entry<VectorType, Vector> entry : accelerations.entrySet()) {
+			VectorType key = entry.getKey();
 			Vector acceleration = entry.getValue();
 
 			VectorPane accelerationPane = new VectorPane(acceleration, key, Type.NORMAL);
@@ -218,7 +219,8 @@ public class Gui {
 	}
 
 	private void addRectanglePositionPane(Pane root, Rectangle rectangle) {
-		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), "Position", Type.NORMAL);
+		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), VectorType.POSITION,
+				Type.NORMAL);
 		rectanglePositionPane.setColor("#E2F0CB");
 		rectanglePositionPane.addListener(new VectorPaneListener() {
 
@@ -235,7 +237,7 @@ public class Gui {
 	}
 
 	private void addRectangleLengthPane(Pane root, Rectangle rectangle) {
-		VectorPane rectangleLengthPane = new VectorPane(rectangle.getLength(), "Length", Type.ANGLE);
+		VectorPane rectangleLengthPane = new VectorPane(rectangle.getLength(), VectorType.LENGTH, Type.ANGLE);
 		rectangleLengthPane.setColor("#FFDAC1");
 		rectangleLengthPane.addListener(new VectorPaneListener() {
 
@@ -275,9 +277,9 @@ public class Gui {
 				positionPane.setText(marble.getPosition());
 				velocityPane.setText(marble.getVelocity());
 
-				HashMap<String, Vector> accelerations = marble.getAccelerations();
-				for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
-					String key = entry.getKey();
+				HashMap<VectorType, Vector> accelerations = marble.getAccelerations();
+				for (Map.Entry<VectorType, Vector> entry : accelerations.entrySet()) {
+					VectorType key = entry.getKey();
 					Vector acceleration = entry.getValue();
 
 					if (accelerationPanes.containsKey(key))

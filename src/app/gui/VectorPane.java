@@ -3,7 +3,9 @@ package app.gui;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.VectorUtil;
 import app.Vector;
+import app.VectorUtil.VectorType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -27,14 +29,14 @@ public class VectorPane extends BorderPane {
 	private NumberTextField inputY;
 
 	protected Vector vector;
-	private String key;
+	private VectorType key;
 	private List<VectorPaneListener> listeners = new ArrayList<>();
 
 	// For Type ANGLE
 	private double length;
 	private double radians;
 
-	public VectorPane(Vector defaultValues, String key, Type type) {
+	public VectorPane(Vector defaultValues, VectorType key, Type type) {
 		super();
 		setType(type);
 		setVector(defaultValues);
@@ -43,7 +45,8 @@ public class VectorPane extends BorderPane {
 		this.length = vector.getVectorLength();
 		this.radians = vector.getVectorRadians();
 
-		initialze(key);
+		String name = VectorUtil.toString(key);
+		initialze(name);
 	}
 
 	public Type getType() {
@@ -62,11 +65,11 @@ public class VectorPane extends BorderPane {
 		this.vector = vector;
 	}
 
-	public String getKey() {
+	public VectorType getKey() {
 		return key;
 	}
 
-	public void setKey(String key) {
+	public void setKey(VectorType key) {
 		this.key = key;
 	}
 
