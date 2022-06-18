@@ -14,7 +14,6 @@ import app.models.Model;
 import app.models.Pendulum;
 import app.models.Rectangle;
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -284,44 +283,7 @@ public class Gui {
 		}
 	}
 
-	public void toggleAnimationTimer() {
-		isPlaying = !isPlaying;
-		if (isPlaying) {
-			play.setText("Stop");
-			timer.start();
-		} else {
-			play.setText("Start");
-			timer.stop();
-		}
-	}
-
-	public void stop() {
-		Platform.exit();
-		System.exit(0);
-	}
-
-	public void drawMarbles(List<Marble> marbles, Main main) {
-		for (Marble marble : marbles) {
-			Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
-			circle.getStyleClass().addAll("marble", "shape");
-
-			circle.setOnMouseClicked(mouseEvent -> {
-				clearPane(infoPaneBox);
-				setSelectedModel(marble);
-				selectedModel.getShape().getStyleClass().add("selected");
-				initializeInfoPanes(marble);
-			});
-
-			marble.setShape(circle);
-
-			// Flip y-axis so that 0,0 is in the bottom-left corner
-			circle.relocate(0 - marble.getSize() * scale, Main.CANVAS_HEIGHT - marble.getSize() * scale);
-			// Update position
-			moveMarble(marble);
-
-			canvas.getChildren().add(circle);
-		}
-
+	public void addAnimationTimer(List<Marble> marbles, Main main) {
 		// AnimationTimer
 		timer = new AnimationTimer() {
 			// Gets called every frame and tries to target fps set with javafx.animation.pulse
@@ -335,6 +297,38 @@ public class Gui {
 				}
 			}
 		};
+	}
+
+	public void toggleAnimationTimer() {
+		isPlaying = !isPlaying;
+		if (isPlaying) {
+			play.setText("Stop");
+			timer.start();
+		} else {
+			play.setText("Start");
+			timer.stop();
+		}
+	}
+
+	public void drawMarble(Marble marble) {
+		Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
+		circle.getStyleClass().addAll("marble", "shape");
+
+		circle.setOnMouseClicked(mouseEvent -> {
+			clearPane(infoPaneBox);
+			setSelectedModel(marble);
+			selectedModel.getShape().getStyleClass().add("selected");
+			initializeInfoPanes(marble);
+		});
+
+		marble.setShape(circle);
+
+		// Flip y-axis so that 0,0 is in the bottom-left corner
+		circle.relocate(0 - marble.getSize() * scale, Main.CANVAS_HEIGHT - marble.getSize() * scale);
+		// Update position
+		moveMarble(marble);
+
+		canvas.getChildren().add(circle);
 	}
 
 	public void moveMarble(Marble marble) {

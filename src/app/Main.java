@@ -43,6 +43,7 @@ public class Main extends Application {
 		marble1.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble1.setAcceleration("Friction", new Vector(0.0, 0.0));
 		marbles.add(marble1);
+		gui.drawMarble(marble1);
 
 		// Create marble 2
 		Marble marble2 = new Marble();
@@ -51,9 +52,10 @@ public class Main extends Application {
 		marble2.setAcceleration("Downhill Acceleration", new Vector(0.0, 0.0));
 		marble2.setAcceleration("Friction", new Vector(0.0, 0.0));
 		marbles.add(marble2);
+		gui.drawMarble(marble2);
 
-		// Initialize GUI
-		gui.drawMarbles(marbles, this);
+		// Initialize AnimationTimer
+		gui.addAnimationTimer(marbles, this);
 
 		// Floor
 		gui.drawRectangle(new Rectangle(
