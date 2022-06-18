@@ -265,6 +265,9 @@ public class Gui {
 	}
 
 	public void updatePanes() {
+		if (selectedModel == null)
+			return;
+
 		switch (selectedModel.getType()) {
 			case MARBLE:
 				Marble marble = (Marble) selectedModel;
