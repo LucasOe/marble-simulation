@@ -10,6 +10,7 @@ import app.Marble;
 import app.Pendulum;
 import app.Rectangle;
 import app.Vector;
+import app.gui.VectorPane.Type;
 import app.gui.VectorPane.VectorPaneListener;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
@@ -121,7 +122,7 @@ public class Gui {
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
-		positionPane = new VectorPane(marble.getPosition(), "Position");
+		positionPane = new VectorPane(marble.getPosition(), "Position", Type.NORMAL);
 		positionPane.setColor("#E2F0CB");
 		positionPane.addListener(new VectorPaneListener() {
 
@@ -138,7 +139,7 @@ public class Gui {
 	}
 
 	private void addVelocityPane(Pane root, Marble marble) {
-		velocityPane = new VectorAnglePane(marble.getVelocity(), "Velocity");
+		velocityPane = new VectorPane(marble.getVelocity(), "Velocity", Type.ANGLE);
 		velocityPane.setColor("#FFDAC1");
 		velocityPane.addListener(new VectorPaneListener() {
 
@@ -160,7 +161,7 @@ public class Gui {
 			String key = entry.getKey();
 			Vector acceleration = entry.getValue();
 
-			VectorPane accelerationPane = new VectorPane(acceleration, key);
+			VectorPane accelerationPane = new VectorPane(acceleration, key, Type.NORMAL);
 			accelerationPane.setColor("#B5EAD7");
 			accelerationPane.addListener(new VectorPaneListener() {
 
@@ -306,7 +307,7 @@ public class Gui {
 	}
 
 	private void addRectanglePositionPane(Pane root, Rectangle rectangle) {
-		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), "Position");
+		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), "Position", Type.NORMAL);
 		rectanglePositionPane.setColor("#E2F0CB");
 		rectanglePositionPane.addListener(new VectorPaneListener() {
 
@@ -323,7 +324,7 @@ public class Gui {
 	}
 
 	private void addRectangleLengthPane(Pane root, Rectangle rectangle) {
-		VectorPane rectangleLengthPane = new VectorAnglePane(rectangle.getLength(), "Length");
+		VectorPane rectangleLengthPane = new VectorPane(rectangle.getLength(), "Length", Type.ANGLE);
 		rectangleLengthPane.setColor("#FFDAC1");
 		rectangleLengthPane.addListener(new VectorPaneListener() {
 
