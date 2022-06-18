@@ -1,6 +1,8 @@
-package app;
+package app.models;
 
-public class Rectangle extends ShapeObject {
+import app.Vector;
+
+public class Rectangle extends Model {
 
 	private Vector position;
 	private Vector length;
@@ -16,20 +18,20 @@ public class Rectangle extends ShapeObject {
 		return position;
 	}
 
-	public Vector getLength() {
-		return length;
-	}
-
-	public double getHeight() {
-		return height;
-	}
-
 	public void setPosition(Vector position) {
 		this.position = position;
 	}
 
+	public Vector getLength() {
+		return length;
+	}
+
 	public void setLength(Vector length) {
 		this.length = length;
+	}
+
+	public double getHeight() {
+		return height;
 	}
 
 	public void setHeight(double height) {

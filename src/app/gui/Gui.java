@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import app.Main;
-import app.Marble;
-import app.Pendulum;
-import app.Rectangle;
-import app.ShapeObject;
 import app.Vector;
 import app.gui.VectorPane.Type;
 import app.gui.VectorPane.VectorPaneListener;
+import app.models.Marble;
+import app.models.Model;
+import app.models.Pendulum;
+import app.models.Rectangle;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -36,6 +36,10 @@ public class Gui {
 
 	private double scale = Main.CANVAS_WIDTH / Main.CANVAS_METERS;
 	private boolean isPlaying;
+	private Model selectedModel;
+	private Button play;
+	AnimationTimer timer;
+
 	private List<Rectangle> rectangles = new ArrayList<>();
 	private List<Pendulum> pendulums = new ArrayList<>();
 
@@ -43,13 +47,10 @@ public class Gui {
 	private Pane controls;
 	private BorderPane controlsPane;
 	private HBox infoPaneBox;
+
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
 	private HashMap<String, VectorPane> accelerationPanes = new HashMap<>();
-	private ShapeObject selectedShapeObject;
-
-	private Button play;
-	AnimationTimer timer;
 
 	public Gui(Stage stage) {
 		// Canvas
@@ -103,16 +104,40 @@ public class Gui {
 
 	}
 
+	public Model getSelectedModel() {
+		return selectedModel;
+	}
+
+	public void setSelectedModel(Model selectedModel) {
+		this.selectedModel = selectedModel;
+	}
+
+	public List<Rectangle> getRectangles() {
+		return rectangles;
+	}
+
+	public void setRectangles(List<Rectangle> rectangles) {
+		this.rectangles = rectangles;
+	}
+
+	public List<Pendulum> getPendulums() {
+		return pendulums;
+	}
+
+	public void setPendulums(List<Pendulum> pendulums) {
+		this.pendulums = pendulums;
+	}
+
 	public VectorPane getPositionPane() {
 		return positionPane;
 	}
 
-	public VectorPane getVelocityPane() {
-		return velocityPane;
-	}
-
 	public void setPositionPane(VectorPane positionPane) {
 		this.positionPane = positionPane;
+	}
+
+	public VectorPane getVelocityPane() {
+		return velocityPane;
 	}
 
 	public void setVelocityPane(VectorPane velocityPane) {
@@ -123,10 +148,20 @@ public class Gui {
 		return accelerationPanes;
 	}
 
+	public void setAccelerationPanes(HashMap<String, VectorPane> accelerationPanes) {
+		this.accelerationPanes = accelerationPanes;
+	}
+
 	public void initializeInfoPanes(Marble marble) {
 		addPositionPane(infoPaneBox, marble);
 		addVelocityPane(infoPaneBox, marble);
 		addAccelerationPanes(infoPaneBox, marble);
+	}
+
+	public void initializeRectangleInfoPanes(Rectangle rectangle) {
+		// VectorPanes
+		addRectanglePositionPane(infoPaneBox, rectangle);
+		addRectangleLengthPane(infoPaneBox, rectangle);
 	}
 
 	private void addPositionPane(Pane root, Marble marble) {
@@ -184,20 +219,69 @@ public class Gui {
 		}
 	}
 
-	public void updateAccelerationPanes(Marble marble) {
-		HashMap<String, Vector> accelerations = marble.getAccelerations();
-		for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
-			String key = entry.getKey();
-			Vector acceleration = entry.getValue();
+	private void addRectanglePositionPane(Pane root, Rectangle rectangle) {
+		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), "Position", Type.NORMAL);
+		rectanglePositionPane.setColor("#E2F0CB");
+		rectanglePositionPane.addListener(new VectorPaneListener() {
 
-			if (accelerationPanes.containsKey(key))
-				accelerationPanes.get(key).setText(acceleration);
-		}
+			@Override
+			public void onVectorChange(Vector vector) {
+				rectangle.setPosition(vector);
+
+				moveRectangle(rectangle);
+			}
+
+		});
+
+		root.getChildren().add(rectanglePositionPane);
 	}
 
-	public void stop() {
-		Platform.exit();
-		System.exit(0);
+	private void addRectangleLengthPane(Pane root, Rectangle rectangle) {
+		VectorPane rectangleLengthPane = new VectorPane(rectangle.getLength(), "Length", Type.ANGLE);
+		rectangleLengthPane.setColor("#FFDAC1");
+		rectangleLengthPane.addListener(new VectorPaneListener() {
+
+			@Override
+			public void onVectorChange(Vector vector) {
+				rectangle.setLength(vector);
+
+				moveRectangle(rectangle);
+			}
+
+		});
+
+		root.getChildren().add(rectangleLengthPane);
+	}
+
+	private void clearPane(Pane root) {
+		// Remove old selected style class
+		if (selectedModel != null)
+			selectedModel.getShape().getStyleClass().remove("selected");
+
+		// Set position and velocity Pane to null
+		setPositionPane(null);
+		setVelocityPane(null);
+
+		// Remove Panes
+		root.getChildren().clear();
+	}
+
+	public void updatePanes() {
+		if (selectedModel instanceof Marble) {
+			Marble marble = (Marble) selectedModel;
+
+			positionPane.setText(marble.getPosition());
+			velocityPane.setText(marble.getVelocity());
+
+			HashMap<String, Vector> accelerations = marble.getAccelerations();
+			for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
+				String key = entry.getKey();
+				Vector acceleration = entry.getValue();
+
+				if (accelerationPanes.containsKey(key))
+					accelerationPanes.get(key).setText(acceleration);
+			}
+		}
 	}
 
 	public void toggleAnimationTimer() {
@@ -211,14 +295,20 @@ public class Gui {
 		}
 	}
 
+	public void stop() {
+		Platform.exit();
+		System.exit(0);
+	}
+
 	public void drawMarbles(List<Marble> marbles, Main main) {
 		for (Marble marble : marbles) {
 			Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
 			circle.getStyleClass().addAll("marble", "shape");
 
 			circle.setOnMouseClicked(mouseEvent -> {
-				setSelectedShape(marble);
 				clearPane(infoPaneBox);
+				setSelectedModel(marble);
+				selectedModel.getShape().getStyleClass().add("selected");
 				initializeInfoPanes(marble);
 			});
 
@@ -259,6 +349,30 @@ public class Gui {
 		circle.setTranslateY(-position.getY() * scale);
 	}
 
+	public void drawRectangle(Rectangle rectangle) {
+		rectangles.add(rectangle);
+		Vector[] points = rectangle.getPoints();
+
+		Polygon polygon = new Polygon();
+		polygon.getPoints().addAll(new Double[] {
+				points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
+				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
+				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
+				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
+		polygon.getStyleClass().addAll("rectangle", "shape");
+
+		polygon.setOnMouseClicked(mouseEvent -> {
+			clearPane(infoPaneBox);
+			setSelectedModel(rectangle);
+			selectedModel.getShape().getStyleClass().add("selected");
+			initializeRectangleInfoPanes(rectangle);
+		});
+
+		rectangle.setShape(polygon);
+
+		canvas.getChildren().add(polygon);
+	}
+
 	public void moveRectangle(Rectangle rectangle) {
 		Shape shape = rectangle.getShape();
 		if (!(shape instanceof Polygon))
@@ -275,89 +389,7 @@ public class Gui {
 				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
 	}
 
-	public List<Rectangle> getRectangles() {
-		return rectangles;
-	}
-
-	public void addRectangle(Rectangle rectangle) {
-		rectangles.add(rectangle);
-		Vector[] points = rectangle.getPoints();
-
-		Polygon polygon = new Polygon();
-		polygon.getPoints().addAll(new Double[] {
-				points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
-				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
-				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
-				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
-		polygon.getStyleClass().addAll("rectangle", "shape");
-
-		polygon.setOnMouseClicked(mouseEvent -> {
-			setSelectedShape(rectangle);
-			clearPane(infoPaneBox);
-			initializeRectangleInfoPanes(rectangle);
-		});
-
-		rectangle.setShape(polygon);
-
-		canvas.getChildren().add(polygon);
-	}
-
-	private void clearPane(Pane root) {
-		setPositionPane(null);
-		setVelocityPane(null);
-		root.getChildren().clear();
-	}
-
-	private void setSelectedShape(ShapeObject shapeObject) {
-		// Clear old selection
-		if (selectedShapeObject != null)
-			selectedShapeObject.getShape().getStyleClass().remove("selected");
-
-		selectedShapeObject = shapeObject;
-		selectedShapeObject.getShape().getStyleClass().add("selected");
-	}
-
-	public void initializeRectangleInfoPanes(Rectangle rectangle) {
-		// VectorPanes
-		addRectanglePositionPane(infoPaneBox, rectangle);
-		addRectangleLengthPane(infoPaneBox, rectangle);
-	}
-
-	private void addRectanglePositionPane(Pane root, Rectangle rectangle) {
-		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), "Position", Type.NORMAL);
-		rectanglePositionPane.setColor("#E2F0CB");
-		rectanglePositionPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				rectangle.setPosition(vector);
-
-				moveRectangle(rectangle);
-			}
-
-		});
-
-		root.getChildren().add(rectanglePositionPane);
-	}
-
-	private void addRectangleLengthPane(Pane root, Rectangle rectangle) {
-		VectorPane rectangleLengthPane = new VectorPane(rectangle.getLength(), "Length", Type.ANGLE);
-		rectangleLengthPane.setColor("#FFDAC1");
-		rectangleLengthPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				rectangle.setLength(vector);
-
-				moveRectangle(rectangle);
-			}
-
-		});
-
-		root.getChildren().add(rectangleLengthPane);
-	}
-
-	public void addPendulum(Pendulum pendulum) {
+	public void drawPendulum(Pendulum pendulum) {
 		pendulums.add(pendulum);
 		Vector position = pendulum.getPosition();
 
@@ -387,10 +419,6 @@ public class Gui {
 		canvas.getChildren().add(line);
 	}
 
-	public List<Pendulum> getPendulums() {
-		return pendulums;
-	}
-
 	public void movePendulum(Pendulum pendulum) {
 		Shape shape = pendulum.getShape();
 		if (!(shape instanceof Line))
@@ -401,14 +429,5 @@ public class Gui {
 
 		line.setEndX(+endPoint.getX() * scale);
 		line.setEndY(-endPoint.getY() * scale);
-	}
-
-	public void updatePanes() {
-		if (selectedShapeObject instanceof Marble) {
-			Marble marble = (Marble) selectedShapeObject;
-			positionPane.setText(marble.getPosition());
-			velocityPane.setText(marble.getVelocity());
-			updateAccelerationPanes(marble);
-		}
 	}
 }

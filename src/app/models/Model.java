@@ -1,8 +1,8 @@
-package app;
+package app.models;
 
 import javafx.scene.shape.Shape;
 
-public class ShapeObject {
+public class Model {
 	private Shape shape;
 
 	public Shape getShape() {

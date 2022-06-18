@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.gui.Gui;
+import app.models.Marble;
+import app.models.Pendulum;
+import app.models.Rectangle;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -53,43 +56,43 @@ public class Main extends Application {
 		gui.drawMarbles(marbles, this);
 
 		// Floor
-		gui.addRectangle(new Rectangle(
+		gui.drawRectangle(new Rectangle(
 				new Vector(0.00, 0.00),
 				new Vector(2.00, 0.00),
 				0.02));
 
 		// Ceiling
-		gui.addRectangle(new Rectangle(
+		gui.drawRectangle(new Rectangle(
 				new Vector(0.00, 0.98),
 				new Vector(2.00, 0.00),
 				0.02));
 
 		// Left Wall
-		gui.addRectangle(new Rectangle(
+		gui.drawRectangle(new Rectangle(
 				new Vector(0.00, 0.00),
 				new Vector(0.02, 0.00),
 				2.0));
 
 		// Right Wall
-		gui.addRectangle(new Rectangle(
+		gui.drawRectangle(new Rectangle(
 				new Vector(1.98, 0.00),
 				new Vector(0.02, 0.00),
 				2.0));
 
 		// Rectangle 1
-		gui.addRectangle(new Rectangle(
+		gui.drawRectangle(new Rectangle(
 				new Vector(0.05, 0.73),
 				new Vector(0.60, -0.10),
 				0.04));
 
 		// Rectangle 2
-		gui.addRectangle(new Rectangle(
+		gui.drawRectangle(new Rectangle(
 				new Vector(0.80, 0.30),
 				new Vector(0.50, 0.30),
 				0.04));
 
 		// Pendulum
-		gui.addPendulum(new Pendulum(
+		gui.drawPendulum(new Pendulum(
 				new Vector(1.0, 0.8),
 				0.2,
 				0.0));

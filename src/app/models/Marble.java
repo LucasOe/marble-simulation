@@ -1,9 +1,11 @@
-package app;
+package app.models;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Marble extends ShapeObject {
+import app.Vector;
+
+public class Marble extends Model {
 
 	private double size = 0.025; // Size as radius
 	private boolean isRolling = false;
@@ -34,48 +36,52 @@ public class Marble extends ShapeObject {
 		return size;
 	}
 
-	public Vector getPosition() {
-		return position;
-	}
-
-	public Vector getVelocity() {
-		return velocity;
-	}
-
-	public HashMap<String, Vector> getAccelerations() {
-		return accelerations;
-	}
-
-	public Vector getAcceleration(String key) {
-		return accelerations.get(key);
-	}
-
-	public boolean getRolling() {
-		return isRolling;
-	}
-
-	public Vector getVelocityBuffer() {
-		return velocityBuffer;
-	}
-
 	public void setSize(double size) {
 		this.size = size;
+	}
+
+	public Vector getPosition() {
+		return position;
 	}
 
 	public void setPosition(Vector position) {
 		this.position = position;
 	}
 
+	public Vector getVelocity() {
+		return velocity;
+	}
+
 	public void setVelocity(Vector velocity) {
 		this.velocity = velocity;
+	}
+
+	public HashMap<String, Vector> getAccelerations() {
+		return accelerations;
+	}
+
+	public void setAccelerations(HashMap<String, Vector> accelerations) {
+		this.accelerations = accelerations;
+	}
+
+	public Vector getAcceleration(String key) {
+		return accelerations.get(key);
 	}
 
 	public void setAcceleration(String key, Vector vector) {
 		accelerations.put(key, vector);
 	}
 
+	public boolean getRolling() {
+		return isRolling;
+	}
+
 	public void setRolling(boolean isRolling) {
 		this.isRolling = isRolling;
+	}
+
+	public Vector getVelocityBuffer() {
+		return velocityBuffer;
 	}
 
 	public void setVelocityBuffer(Vector velocityBuffer) {
