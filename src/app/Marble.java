@@ -3,8 +3,6 @@ package app;
 import java.util.HashMap;
 import java.util.Map;
 
-import javafx.scene.shape.Circle;
-
 public class Marble extends ShapeObject {
 
 	private double size = 0.025; // Size as radius
