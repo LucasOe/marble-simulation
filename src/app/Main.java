@@ -26,6 +26,7 @@ public class Main extends Application {
 
 	private Gui gui;
 	private List<Marble> marbles = new ArrayList<>();
+	Marble marble1;
 
 	public static void main(String[] args) throws Exception {
 		framerate = Integer.parseInt(System.getProperty("javafx.animation.pulse"));
@@ -38,8 +39,8 @@ public class Main extends Application {
 		gui = new Gui(stage);
 
 		// Create Marble 1
-		Marble marble1 = new Marble();
-		marble1.setPosition(new Vector(0.100, 0.800));
+		marble1 = new Marble();
+		marble1.setPosition(new Vector(0.830, 0.920));
 		marble1.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble1.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble1.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
@@ -48,7 +49,7 @@ public class Main extends Application {
 
 		// Create marble 2
 		Marble marble2 = new Marble();
-		marble2.setPosition(new Vector(1.500, 0.045));
+		marble2.setPosition(new Vector(1.440, 0.245));
 		marble2.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble2.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble2.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
@@ -82,23 +83,43 @@ public class Main extends Application {
 				new Vector(0.02, 0.00),
 				2.0));
 
-		// Rectangle 1
+		// Rectangle
 		gui.drawRectangle(new Rectangle(
-				new Vector(0.05, 0.73),
-				new Vector(0.60, -0.10),
+				new Vector(0.30, 0.73),
+				new Vector(0.60, 0.10),
 				0.04));
 
-		// Rectangle 2
+		// Rectangle
 		gui.drawRectangle(new Rectangle(
-				new Vector(0.80, 0.30),
-				new Vector(0.50, 0.30),
+				new Vector(0.90, 0.83),
+				new Vector(0.00, 0.20),
 				0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.00, 0.60),
+				new Vector(0.50, -0.10), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.3, 0.75),
+				new Vector(0.0, -0.08), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.50, 0.50),
+				new Vector(0.50, 0.00), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(1.30, 0.18),
+				new Vector(0.50, 0.00), 0.04));
 
 		// Pendulum
 		gui.drawPendulum(new Pendulum(
-				new Vector(1.0, 0.8),
-				0.2,
-				0.0));
+				new Vector(1.4, 0.58),
+				0.3,
+				-90.0));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
@@ -150,8 +171,9 @@ public class Main extends Application {
 					// Gravitational constant
 					double gravity = Math.abs(marble.getAcceleration(VectorType.GRAVITY).getY());
 					double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
+					double sign = -Math.signum(Math.toDegrees(alpha));
 
-					Vector slopeDirection = new Vector(Math.cos(alpha), Math.sin(alpha));
+					Vector slopeDirection = new Vector(Math.cos(alpha) * sign, Math.sin(alpha) * sign);
 					// When velocityPer is 0,0 use velocity instead to calculate direction
 					Vector velocityDirection = velocityPer.getVectorLength() != 0
 							? velocityPer.normalize()
@@ -215,8 +237,8 @@ public class Main extends Application {
 		// Iterate over every pendulum in the scene
 		List<Pendulum> pendulums = gui.getPendulums();
 		for (Pendulum pendulum : pendulums) {
-			double angleRadians = pendulum.getAngleRadians();
-			pendulum.setAngleRadians(angleRadians + 0.01);
+			//double angleRadians = pendulum.getAngleRadians();
+			//pendulum.setAngleRadians(angleRadians + 0.01);
 		}
 
 		// Reset accelerations when marble isn't rolling
