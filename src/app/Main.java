@@ -23,7 +23,7 @@ public class Main extends Application {
 	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
-	double angleVelocity = 0;
+	double pendulumVelocity = 0;
 
 	private Gui gui;
 	private List<Marble> marbles = new ArrayList<>();
@@ -244,7 +244,7 @@ public class Main extends Application {
 					Vector newVelocity = v1Per.addVector(v2Par);
 					marble.setVelocityBuffer(newVelocity);
 
-					angleVelocity = 0;
+					pendulumVelocity = 0;
 				}
 			}
 		}
@@ -269,15 +269,15 @@ public class Main extends Application {
 				double length = pendulum.getLength();
 				// ω = g / l * sin(φ)
 				double omega = -(gravity / length) * Math.sin(angle);
-				angleVelocity += omega * deltaTime;
-				angle += angleVelocity * deltaTime;
+				pendulumVelocity += omega * deltaTime;
+				angle += pendulumVelocity * deltaTime;
 
 				pendulum.setAngleRadians(angle);
 
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
 				Vector offset = pendulumLine.multiply(marble.getSize());
 				marble.setPosition(endPoint.addVector(offset));
-				marble.setVelocityBuffer(pendulumLine.rotateVector().multiply(angleVelocity));
+				marble.setVelocityBuffer(pendulumLine.rotateVector().multiply(pendulumVelocity));
 			}
 		}
 
