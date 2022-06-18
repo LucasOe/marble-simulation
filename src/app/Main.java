@@ -56,6 +56,15 @@ public class Main extends Application {
 		marbles.add(marble2);
 		gui.drawMarble(marble2);
 
+		// Create marble 2
+		Marble marble3 = new Marble();
+		marble3.setPosition(new Vector(1.440, 0.045));
+		marble3.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
+		marble3.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
+		marble3.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
+		marbles.add(marble3);
+		gui.drawMarble(marble3);
+
 		// Initialize AnimationTimer
 		gui.addAnimationTimer(marbles, this);
 
