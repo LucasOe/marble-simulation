@@ -50,20 +50,20 @@ public class VectorPane extends BorderPane {
 		return type;
 	}
 
-	public Vector getVector() {
-		return vector;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
 	public void setType(Type type) {
 		this.type = type;
 	}
 
+	public Vector getVector() {
+		return vector;
+	}
+
 	public void setVector(Vector vector) {
 		this.vector = vector;
+	}
+
+	public String getKey() {
+		return key;
 	}
 
 	public void setKey(String key) {

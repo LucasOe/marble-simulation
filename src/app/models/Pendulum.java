@@ -1,6 +1,8 @@
-package app;
+package app.models;
 
-public class Pendulum extends ShapeObject {
+import app.Vector;
+
+public class Pendulum extends Model {
 
 	private Vector position;
 	private double length;
@@ -16,32 +18,32 @@ public class Pendulum extends ShapeObject {
 		return position;
 	}
 
-	public double getLength() {
-		return length;
-	}
-
-	public double getAngle() {
-		return Math.toDegrees(angleRadians);
-	}
-
-	public double getAngleRadians() {
-		return angleRadians;
-	}
-
 	public void setPosition(Vector position) {
 		this.position = position;
+	}
+
+	public double getLength() {
+		return length;
 	}
 
 	public void setLength(double length) {
 		this.length = length;
 	}
 
-	public void setAngle(double angle) {
-		this.angleRadians = Math.toRadians(angle);
+	public double getAngleRadians() {
+		return angleRadians;
 	}
 
 	public void setAngleRadians(double angleRadians) {
 		this.angleRadians = angleRadians;
+	}
+
+	public double getAngle() {
+		return Math.toDegrees(angleRadians);
+	}
+
+	public void setAngle(double angle) {
+		this.angleRadians = Math.toRadians(angle);
 	}
 
 	public Vector getEndPoint() {
