@@ -4,6 +4,8 @@ import app.Vector;
 
 public class Pendulum extends Model {
 
+	private Marble marble;
+
 	private Vector position;
 	private double length;
 	private double angleRadians;
@@ -17,6 +19,14 @@ public class Pendulum extends Model {
 	@Override
 	public ModelType getType() {
 		return ModelType.PENDULUM;
+	}
+
+	public Marble getMarble() {
+		return marble;
+	}
+
+	public void setMarble(Marble marble) {
+		this.marble = marble;
 	}
 
 	public Vector getPosition() {
