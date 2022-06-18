@@ -122,7 +122,7 @@ public class Marble extends Model {
 			Vector acceleration = entry.getValue();
 
 			if (isRolling && key.equals(VectorType.GRAVITY))
-				break;
+				continue;
 
 			sum = sum.addVector(acceleration);
 		}
