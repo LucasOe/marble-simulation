@@ -23,10 +23,10 @@ public class Main extends Application {
 	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
+	double angleVelocity = 0;
 
 	private Gui gui;
 	private List<Marble> marbles = new ArrayList<>();
-	Marble marble1;
 
 	public static void main(String[] args) throws Exception {
 		framerate = Integer.parseInt(System.getProperty("javafx.animation.pulse"));
@@ -39,7 +39,7 @@ public class Main extends Application {
 		gui = new Gui(stage);
 
 		// Create Marble 1
-		marble1 = new Marble();
+		Marble marble1 = new Marble();
 		marble1.setPosition(new Vector(0.830, 0.920));
 		marble1.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble1.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
@@ -133,11 +133,16 @@ public class Main extends Application {
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
 	public void calculateMarble(Marble marble) {
+		double deltaTime = (1.0 / framerate) * SLOWDOWN;
+
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
 		double stopThreshold = 0.01; // When perpendicular velocity is below this thresholh marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
 		double magnetRange = 0.1;
+
+		// Gravitational constant
+		double gravity = Math.abs(marble.getAcceleration(VectorType.GRAVITY).getY());
 
 		marble.setRolling(false);
 
@@ -178,8 +183,6 @@ public class Main extends Application {
 					marble.setRolling(true);
 
 				if (marble.isRolling()) {
-					// Gravitational constant
-					double gravity = Math.abs(marble.getAcceleration(VectorType.GRAVITY).getY());
 					double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
 					double sign = -Math.signum(Math.toDegrees(alpha));
 
@@ -252,22 +255,27 @@ public class Main extends Application {
 
 			// Detect if marble is in range and pendulum is empty
 			double distance = Math.abs(endPoint.subtractVector(position).getVectorLength());
-			if (distance + marble.getSize() <= magnetRange
-					&& pendulum.getMarble() == null) {
+			if (distance + marble.getSize() <= magnetRange && pendulum.getMarble() == null) {
 				pendulum.setMarble(marble);
-				marble.setMagnetized(true);
+				// Set setRolling to true to gravity isn't applied
+				marble.setRolling(true);
 			}
 
 			// While marble is magnetized
-			if (marble.isMagnetized()) {
+			if (isMagnetized(marble)) {
+				double angle = pendulum.getAngleRadians();
+				double length = pendulum.getLength();
+				// ω = g / l * sin(φ)
+				double omega = -(gravity / length) * Math.sin(angle);
+				angleVelocity += omega * deltaTime;
+				angle += angleVelocity * deltaTime;
+
+				pendulum.setAngleRadians(angle);
+
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
 				Vector offset = pendulumLine.multiply(marble.getSize());
 				marble.setPosition(endPoint.addVector(offset));
-				marble.setVelocityBuffer(pendulumLine.rotateVector().flip().multiply(1));
-
-				double angleRadians = pendulum.getAngleRadians();
-				if (angleRadians <= Math.toRadians(45.0))
-					pendulum.setAngleRadians(angleRadians + 0.01);
+				marble.setVelocityBuffer(pendulumLine.rotateVector().multiply(angleVelocity));
 			}
 		}
 
@@ -286,8 +294,11 @@ public class Main extends Application {
 		// Update marbles
 		for (Marble marble : marbles) {
 			// Calculates and return new position and velocity
-			marble.calculateNewPos(deltaTime);
-			marble.calculateNewVel(deltaTime);
+			// Ignore when marble is magnetized
+			if (!isMagnetized(marble)) {
+				marble.calculateNewPos(deltaTime);
+				marble.calculateNewVel(deltaTime);
+			}
 
 			// Move marbles position
 			gui.moveMarble(marble);
@@ -430,6 +441,14 @@ public class Main extends Application {
 	// Moves the marble out of collision so it doesn't collide again in the next frame
 	private void moveMarble(Marble marble, Vector projectionPoint, Vector normal, double tolerance) {
 		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize())));
+	}
+
+	private boolean isMagnetized(Marble marble) {
+		for (Pendulum pendulum : gui.getPendulums()) {
+			if (pendulum.getMarble() == marble)
+				return true;
+		}
+		return false;
 	}
 
 }

@@ -10,7 +10,6 @@ public class Marble extends Model {
 
 	private double size = 0.025; // Size as radius
 	private boolean isRolling = false;
-	private boolean isMagnetized = false;
 
 	// Default values in m
 	private Vector position = new Vector(0.1, 0.8);
@@ -87,14 +86,6 @@ public class Marble extends Model {
 		this.isRolling = isRolling;
 	}
 
-	public boolean isMagnetized() {
-		return isMagnetized;
-	}
-
-	public void setMagnetized(boolean isMagnetized) {
-		this.isMagnetized = isMagnetized;
-	}
-
 	public Vector getVelocityBuffer() {
 		return velocityBuffer;
 	}
@@ -130,10 +121,8 @@ public class Marble extends Model {
 			VectorType key = entry.getKey();
 			Vector acceleration = entry.getValue();
 
-			if (isRolling || isMagnetized
-					&& key.equals(VectorType.GRAVITY)) {
+			if (isRolling && key.equals(VectorType.GRAVITY))
 				break;
-			}
 
 			sum = sum.addVector(acceleration);
 		}
