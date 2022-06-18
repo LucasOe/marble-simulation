@@ -243,6 +243,8 @@ public class Main extends Application {
 					// Marbles "trade" parallel velocity if their mass is the same
 					Vector newVelocity = v1Per.addVector(v2Par);
 					marble.setVelocityBuffer(newVelocity);
+
+					angleVelocity = 0;
 				}
 			}
 		}
