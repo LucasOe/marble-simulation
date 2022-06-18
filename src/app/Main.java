@@ -51,7 +51,6 @@ public class Main extends Application {
 
 		// Initialize GUI
 		gui.drawMarbles(marbles, this);
-		gui.initializeInfoPanes(marble1);
 
 		// Floor
 		gui.addRectangle(new Rectangle(
@@ -229,13 +228,8 @@ public class Main extends Application {
 		// Update marbles
 		for (Marble marble : marbles) {
 			// Calculates and return new position and velocity
-			Vector newPosition = marble.calculateNewPos(deltaTime);
-			Vector newVelocity = marble.calculateNewVel(deltaTime);
-
-			// Display new values
-			gui.getPositionPane().setText(newPosition);
-			gui.getVelocityPane().setText(newVelocity);
-			gui.updateAccelerationPanes(marble);
+			marble.calculateNewPos(deltaTime);
+			marble.calculateNewVel(deltaTime);
 
 			// Move marbles position
 			gui.moveMarble(marble);
@@ -247,6 +241,9 @@ public class Main extends Application {
 			// Move pendulums position
 			gui.movePendulum(pendulum);
 		}
+
+		// Update Panes for currently selected ShapeObject
+		gui.updatePanes();
 	}
 
 	// Return the normal facing the direction the marble is hitting

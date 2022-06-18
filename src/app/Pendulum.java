@@ -1,10 +1,6 @@
 package app;
 
-import javafx.scene.shape.Line;
-
-public class Pendulum {
-
-	private Line line;
+public class Pendulum extends ShapeObject {
 
 	private Vector position;
 	private double length;
@@ -32,10 +28,6 @@ public class Pendulum {
 		return angleRadians;
 	}
 
-	public Line getLine() {
-		return line;
-	}
-
 	public void setPosition(Vector position) {
 		this.position = position;
 	}
@@ -50,10 +42,6 @@ public class Pendulum {
 
 	public void setAngleRadians(double angleRadians) {
 		this.angleRadians = angleRadians;
-	}
-
-	public void setLine(Line line) {
-		this.line = line;
 	}
 
 	public Vector getEndPoint() {
