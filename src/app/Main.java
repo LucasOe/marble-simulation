@@ -278,6 +278,7 @@ public class Main extends Application {
 				// ω = g / l * sin(φ)
 				double omega = -(gravity / length) * Math.sin(angle);
 				pendulumVelocity += omega * deltaTime;
+				pendulumVelocity *= 0.995; // Damping
 				angle += pendulumVelocity * deltaTime;
 
 				pendulum.setAngleRadians(angle);
