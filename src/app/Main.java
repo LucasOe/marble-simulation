@@ -3,7 +3,7 @@ package app;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.VectorUtil.VectorType;
+import app.Vector.VectorType;
 import app.gui.Gui;
 import app.models.Marble;
 import app.models.Pendulum;

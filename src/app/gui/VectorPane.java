@@ -3,9 +3,8 @@ package app.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.VectorUtil;
 import app.Vector;
-import app.VectorUtil.VectorType;
+import app.Vector.VectorType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -45,7 +44,7 @@ public class VectorPane extends BorderPane {
 		this.length = vector.getVectorLength();
 		this.radians = vector.getVectorRadians();
 
-		String name = VectorUtil.toString(key);
+		String name = Vector.getName(key);
 		initialze(name);
 	}
 

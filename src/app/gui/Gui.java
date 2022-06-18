@@ -7,7 +7,7 @@ import java.util.Map;
 
 import app.Main;
 import app.Vector;
-import app.VectorUtil.VectorType;
+import app.Vector.VectorType;
 import app.gui.VectorPane.Type;
 import app.gui.VectorPane.VectorPaneListener;
 import app.models.Marble;
