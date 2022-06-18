@@ -32,6 +32,11 @@ public class Marble extends Model {
 		this.accelerations = accelerations;
 	}
 
+	@Override
+	public ModelType getType() {
+		return ModelType.MARBLE;
+	}
+
 	public double getSize() {
 		return size;
 	}

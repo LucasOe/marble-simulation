@@ -28,7 +28,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class Gui {
@@ -266,20 +265,24 @@ public class Gui {
 	}
 
 	public void updatePanes() {
-		if (selectedModel instanceof Marble) {
-			Marble marble = (Marble) selectedModel;
+		switch (selectedModel.getType()) {
+			case MARBLE:
+				Marble marble = (Marble) selectedModel;
 
-			positionPane.setText(marble.getPosition());
-			velocityPane.setText(marble.getVelocity());
+				positionPane.setText(marble.getPosition());
+				velocityPane.setText(marble.getVelocity());
 
-			HashMap<String, Vector> accelerations = marble.getAccelerations();
-			for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
-				String key = entry.getKey();
-				Vector acceleration = entry.getValue();
+				HashMap<String, Vector> accelerations = marble.getAccelerations();
+				for (Map.Entry<String, Vector> entry : accelerations.entrySet()) {
+					String key = entry.getKey();
+					Vector acceleration = entry.getValue();
 
-				if (accelerationPanes.containsKey(key))
-					accelerationPanes.get(key).setText(acceleration);
-			}
+					if (accelerationPanes.containsKey(key))
+						accelerationPanes.get(key).setText(acceleration);
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -332,11 +335,7 @@ public class Gui {
 	}
 
 	public void moveMarble(Marble marble) {
-		Shape shape = marble.getShape();
-		if (!(shape instanceof Circle))
-			return;
-
-		Circle circle = (Circle) shape;
+		Circle circle = (Circle) marble.getShape();
 		Vector position = marble.getPosition();
 
 		circle.setTranslateX(+position.getX() * scale);
@@ -368,11 +367,7 @@ public class Gui {
 	}
 
 	public void moveRectangle(Rectangle rectangle) {
-		Shape shape = rectangle.getShape();
-		if (!(shape instanceof Polygon))
-			return;
-
-		Polygon polygon = (Polygon) shape;
+		Polygon polygon = (Polygon) rectangle.getShape();
 		Vector[] points = rectangle.getPoints();
 
 		polygon.getPoints().clear();
@@ -414,11 +409,7 @@ public class Gui {
 	}
 
 	public void movePendulum(Pendulum pendulum) {
-		Shape shape = pendulum.getShape();
-		if (!(shape instanceof Line))
-			return;
-
-		Line line = (Line) shape;
+		Line line = (Line) pendulum.getShape();
 		Vector endPoint = pendulum.getEndPoint();
 
 		line.setEndX(+endPoint.getX() * scale);
