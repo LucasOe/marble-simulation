@@ -58,7 +58,7 @@ public class Main extends Application {
 
 		// Create marble 3
 		Marble marble3 = new Marble();
-		marble3.setPosition(new Vector(1.300, 0.045));
+		marble3.setPosition(new Vector(1.200, 0.045));
 		marble3.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble3.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble3.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
@@ -123,6 +123,16 @@ public class Main extends Application {
 		gui.drawRectangle(new Rectangle(
 				new Vector(1.67, 0.30),
 				new Vector(0.20, 0.00), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(2.00, 0.25),
+				new Vector(-0.40, -0.15), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(1.65, 0.00),
+				new Vector(0.00, 0.10), 0.04));
 
 		// Pendulum
 		gui.drawPendulum(new Pendulum(
