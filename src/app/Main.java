@@ -49,14 +49,14 @@ public class Main extends Application {
 
 		// Create marble 2
 		Marble marble2 = new Marble();
-		marble2.setPosition(new Vector(1.440, 0.245));
+		marble2.setPosition(new Vector(1.677, 0.365));
 		marble2.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble2.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble2.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
 		marbles.add(marble2);
 		gui.drawMarble(marble2);
 
-		// Create marble 2
+		// Create marble 3
 		Marble marble3 = new Marble();
 		marble3.setPosition(new Vector(1.440, 0.045));
 		marble3.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
@@ -121,12 +121,12 @@ public class Main extends Application {
 
 		// Rectangle
 		gui.drawRectangle(new Rectangle(
-				new Vector(1.30, 0.18),
-				new Vector(0.50, 0.00), 0.04));
+				new Vector(1.67, 0.30),
+				new Vector(0.20, 0.00), 0.04));
 
 		// Pendulum
 		gui.drawPendulum(new Pendulum(
-				new Vector(1.4, 0.58),
+				new Vector(1.40, 0.58),
 				0.3,
 				-90.0));
 	}
@@ -266,7 +266,7 @@ public class Main extends Application {
 				marble.setVelocityBuffer(pendulumLine.rotateVector().flip().multiply(1));
 
 				double angleRadians = pendulum.getAngleRadians();
-				if (angleRadians <= Math.toRadians(0.0))
+				if (angleRadians <= Math.toRadians(45.0))
 					pendulum.setAngleRadians(angleRadians + 0.01);
 			}
 		}
