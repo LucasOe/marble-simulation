@@ -58,7 +58,7 @@ public class Main extends Application {
 
 		// Create marble 3
 		Marble marble3 = new Marble();
-		marble3.setPosition(new Vector(1.440, 0.045));
+		marble3.setPosition(new Vector(1.300, 0.045));
 		marble3.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble3.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble3.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
@@ -136,7 +136,7 @@ public class Main extends Application {
 		double deltaTime = (1.0 / framerate) * SLOWDOWN;
 
 		double tolerance = 0.003; // Threshold distance for collision detection
-		double rollThreshold = 0.5; // When parallel velocity is below this thresholh marble is rolling
+		double rollThreshold = 0.5; // When parallel velocity is below this threshold marble is rolling
 		double stopThreshold = 0.01; // When perpendicular velocity is below this thresholh marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
 		double magnetRange = 0.1;
@@ -244,7 +244,8 @@ public class Main extends Application {
 					Vector newVelocity = v1Per.addVector(v2Par);
 					marble.setVelocityBuffer(newVelocity);
 
-					pendulumVelocity = 0;
+					if (isMagnetized(marble))
+						pendulumVelocity = collidingMarble.getVelocity().getVectorLength();
 				}
 			}
 		}
@@ -257,11 +258,8 @@ public class Main extends Application {
 
 			// Detect if marble is in range and pendulum is empty
 			double distance = Math.abs(endPoint.subtractVector(position).getVectorLength());
-			if (distance + marble.getSize() <= magnetRange && pendulum.getMarble() == null) {
+			if (distance + marble.getSize() <= magnetRange && pendulum.getMarble() == null)
 				pendulum.setMarble(marble);
-				// Set setRolling to true to gravity isn't applied
-				marble.setRolling(true);
-			}
 
 			// While marble is magnetized
 			if (isMagnetized(marble)) {
