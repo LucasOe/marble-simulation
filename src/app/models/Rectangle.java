@@ -14,6 +14,11 @@ public class Rectangle extends Model {
 		this.height = height;
 	}
 
+	@Override
+	public ModelType getType() {
+		return ModelType.RECTANGLE;
+	}
+
 	public Vector getPosition() {
 		return position;
 	}

@@ -14,6 +14,11 @@ public class Pendulum extends Model {
 		this.angleRadians = Math.toRadians(angle);
 	}
 
+	@Override
+	public ModelType getType() {
+		return ModelType.PENDULUM;
+	}
+
 	public Vector getPosition() {
 		return position;
 	}
