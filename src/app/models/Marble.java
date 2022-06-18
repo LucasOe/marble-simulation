@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import app.Vector;
-import app.VectorUtil.VectorType;
+import app.Vector.VectorType;
 
 public class Marble extends Model {
 
