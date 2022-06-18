@@ -13,22 +13,41 @@ import javafx.scene.layout.ColumnConstraints;
 
 public class VectorPane extends BorderPane {
 
+	enum Type {
+		NORMAL,
+		ANGLE
+	}
+
 	public interface VectorPaneListener {
 		void onVectorChange(Vector vector);
 	}
 
-	NumberTextField inputX;
-	NumberTextField inputY;
+	private Type type;
+	private NumberTextField inputX;
+	private NumberTextField inputY;
 
-	Vector vector;
-	String key;
+	protected Vector vector;
+	private String key;
 	private List<VectorPaneListener> listeners = new ArrayList<>();
 
-	public VectorPane(Vector defaultValues, String key) {
+	// For Type ANGLE
+	private double length;
+	private double radians;
+
+	public VectorPane(Vector defaultValues, String key, Type type) {
 		super();
+		setType(type);
 		setVector(defaultValues);
 		setKey(key);
+
+		this.length = vector.getVectorLength();
+		this.radians = vector.getVectorRadians();
+
 		initialze(key);
+	}
+
+	public Type getType() {
+		return type;
 	}
 
 	public Vector getVector() {
@@ -37,6 +56,10 @@ public class VectorPane extends BorderPane {
 
 	public String getKey() {
 		return key;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
 	}
 
 	public void setVector(Vector vector) {
@@ -76,27 +99,62 @@ public class VectorPane extends BorderPane {
 		vectorInputs.setVgap(5);
 		vectorInputs.prefWidthProperty().bind(widthProperty());
 
-		inputX = new NumberTextField(vector.getX());
-		inputX.addListener(value -> {
-			vector.setX(value);
-			notifyListeners(new Vector(vector.getX(), vector.getY()));
-		});
-		vectorInputs.addRow(1, new Label("X:"), inputX);
+		switch (type) {
+			case NORMAL:
+				inputX = new NumberTextField(vector.getX());
+				inputX.addListener(value -> {
+					vector.setX(value);
+					notifyListeners(new Vector(vector.getX(), vector.getY()));
+				});
+				vectorInputs.addRow(1, new Label("X:"), inputX);
 
-		inputY = new NumberTextField(vector.getY());
-		inputY.addListener(value -> {
-			vector.setY(value);
-			notifyListeners(new Vector(vector.getX(), vector.getY()));
-		});
-		vectorInputs.addRow(2, new Label("Y:"), inputY);
+				inputY = new NumberTextField(vector.getY());
+				inputY.addListener(value -> {
+					vector.setY(value);
+					notifyListeners(new Vector(vector.getX(), vector.getY()));
+				});
+				vectorInputs.addRow(2, new Label("Y:"), inputY);
+				break;
+			case ANGLE:
+				inputX = new NumberTextField(length);
+				inputX.addListener(value -> {
+					this.length = value;
+					vector.setVector(length, radians);
+
+					notifyListeners(vector);
+				});
+				vectorInputs.addRow(1, new Label("l:"), inputX);
+
+				inputY = new NumberTextField(Math.toDegrees(radians));
+				inputY.addListener(value -> {
+					this.radians = Math.toRadians(value);
+					vector.setVector(length, radians);
+
+					notifyListeners(vector);
+				});
+				vectorInputs.addRow(2, new Label("α:"), inputY);
+				break;
+			default:
+				break;
+		}
 
 		setCenter(vectorInputs);
 		BorderPane.setAlignment(vectorInputs, Pos.CENTER);
 	}
 
 	public void setText(Vector vector) {
-		inputX.setNumber(vector.getX());
-		inputY.setNumber(vector.getY());
+		switch (type) {
+			case NORMAL:
+				inputX.setNumber(vector.getX());
+				inputY.setNumber(vector.getY());
+				break;
+			case ANGLE:
+				inputX.setNumber(vector.getVectorLength());
+				inputY.setNumber(Math.toDegrees(vector.getVectorRadians()));
+				break;
+			default:
+				break;
+		}
 	}
 
 	public void setColor(String hexColor) {
