@@ -285,6 +285,10 @@ public class Main extends Application {
 				pendulumVelocity *= 0.995; // Damping
 				angle += pendulumVelocity * deltaTime;
 
+				// Stop pendulum when velocity is below theshold
+				if (Math.abs(pendulumVelocity) <= stopThreshold)
+					pendulumVelocity = 0;
+
 				pendulum.setAngleRadians(angle);
 
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
