@@ -138,6 +138,9 @@ public class Main extends Application {
 				new Vector(1.40, 0.58),
 				0.3,
 				-90.0));
+
+		// Select marble1 by default
+		gui.selectModel(marble1);
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing

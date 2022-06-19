@@ -291,6 +291,22 @@ public class Gui {
 		}
 	}
 
+	public void selectModel(Model model) {
+		clearPane(infoPaneBox);
+		setSelectedModel(model);
+		selectedModel.getShape().getStyleClass().add("selected");
+		switch (model.getType()) {
+			case MARBLE:
+				initializeInfoPanes((Marble) model);
+				break;
+			case RECTANGLE:
+				initializeRectangleInfoPanes((Rectangle) model);
+				break;
+			default:
+				break;
+		}
+	}
+
 	public void addAnimationTimer(List<Marble> marbles, Main main) {
 		// AnimationTimer
 		timer = new AnimationTimer() {
@@ -323,10 +339,7 @@ public class Gui {
 		circle.getStyleClass().addAll("marble", "shape");
 
 		circle.setOnMouseClicked(mouseEvent -> {
-			clearPane(infoPaneBox);
-			setSelectedModel(marble);
-			selectedModel.getShape().getStyleClass().add("selected");
-			initializeInfoPanes(marble);
+			selectModel(marble);
 		});
 
 		marble.setShape(circle);
@@ -360,10 +373,7 @@ public class Gui {
 		polygon.getStyleClass().addAll("rectangle", "shape");
 
 		polygon.setOnMouseClicked(mouseEvent -> {
-			clearPane(infoPaneBox);
-			setSelectedModel(rectangle);
-			selectedModel.getShape().getStyleClass().add("selected");
-			initializeRectangleInfoPanes(rectangle);
+			selectModel(rectangle);
 		});
 
 		rectangle.setShape(polygon);
