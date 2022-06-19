@@ -66,6 +66,8 @@ public class Main extends Application {
 
 		// Initialize AnimationTimer
 		gui.addAnimationTimer(marbles, this);
+		// Select marble1 by default
+		gui.selectModel(marble1);
 
 		// Floor
 		gui.drawRectangle(new Rectangle(
@@ -158,9 +160,6 @@ public class Main extends Application {
 		gui.drawRectangle(new Rectangle(
 				new Vector(0.132, 0.20),
 				new Vector(0.00, -0.20), 0.04));
-
-		// Select marble1 by default
-		gui.selectModel(marble1);
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
