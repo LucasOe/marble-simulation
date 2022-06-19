@@ -192,8 +192,12 @@ public class Main extends Application {
 				if (velocityPar.getVectorLength() <= rollThreshold)
 					marble.setRolling(true);
 
+				// Marble shouldn't roll up walls
+				double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
+				if (Math.abs(alpha) == Math.toRadians(90.0))
+					velocityPer = new Vector(0, 0);
+
 				if (marble.isRolling()) {
-					double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
 					double sign = -Math.signum(Math.toDegrees(alpha));
 
 					Vector slopeDirection = new Vector(Math.cos(alpha) * sign, Math.sin(alpha) * sign);
