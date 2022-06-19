@@ -42,6 +42,7 @@
 
 .shape:hover {
 	-fx-fill: rgb(68, 68, 180);
+	-fx-stroke: rgb(68, 68, 180);
 }
 
 .selected {
