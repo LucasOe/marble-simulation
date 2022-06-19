@@ -48,7 +48,7 @@ public class Main extends Application {
 
 		// Create marble 2
 		Marble marble2 = new Marble();
-		marble2.setPosition(new Vector(1.677, 0.365));
+		marble2.setPosition(new Vector(1.755, 0.485));
 		marble2.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble2.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble2.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
@@ -57,7 +57,7 @@ public class Main extends Application {
 
 		// Create marble 3
 		Marble marble3 = new Marble();
-		marble3.setPosition(new Vector(1.200, 0.045));
+		marble3.setPosition(new Vector(1.000, 0.179));
 		marble3.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble3.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble3.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
@@ -120,24 +120,44 @@ public class Main extends Application {
 
 		// Rectangle
 		gui.drawRectangle(new Rectangle(
-				new Vector(1.67, 0.30),
-				new Vector(0.20, 0.00), 0.04));
+				new Vector(1.75, 0.42),
+				new Vector(0.15, 0.00), 0.04));
 
 		// Rectangle
 		gui.drawRectangle(new Rectangle(
-				new Vector(2.00, 0.25),
-				new Vector(-0.40, -0.15), 0.04));
+				new Vector(1.86, 0.43),
+				new Vector(0.00, -0.05), 0.04));
 
 		// Rectangle
 		gui.drawRectangle(new Rectangle(
-				new Vector(1.65, 0.00),
-				new Vector(0.00, 0.10), 0.04));
+				new Vector(2.00, 0.35),
+				new Vector(-0.40, -0.20), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.617, 0.114),
+				new Vector(1.00, 0.00), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.418, 0.194),
+				new Vector(0.20, -0.08), 0.04));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.432, 0.231),
+				new Vector(-0.30, 0.00), 0.04));
 
 		// Pendulum
 		gui.drawPendulum(new Pendulum(
 				new Vector(1.40, 0.58),
 				0.3,
 				-90.0));
+
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.132, 0.20),
+				new Vector(0.00, -0.20), 0.04));
 
 		// Select marble1 by default
 		gui.selectModel(marble1);
@@ -189,15 +209,16 @@ public class Main extends Application {
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
-				// Set perpendicular velocity to zero when below threshold to avoid jitter
-				if (velocityPar.getVectorLength() <= rollThreshold)
-					velocityPar = new Vector(0, 0);
-
-				if (velocityPar.getVectorLength() <= rollThreshold)
+				double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
+				if (velocityPar.getVectorLength() <= rollThreshold
+						&& Math.abs(alpha) != Math.toRadians(90.0))
 					marble.setRolling(true);
 
+				// Set perpendicular velocity to zero when below threshold to avoid jitter
+				if (velocityPar.getVectorLength() <= rollThreshold && marble.isRolling())
+					velocityPar = new Vector(0, 0);
+
 				// Marble shouldn't roll up walls
-				double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
 				if (Math.abs(alpha) == Math.toRadians(90.0))
 					velocityPer = new Vector(0, 0);
 
@@ -301,7 +322,7 @@ public class Main extends Application {
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
 				Vector offset = pendulumLine.multiply(marble.getSize());
 				marble.setPosition(endPoint.addVector(offset));
-				marble.setVelocityBuffer(pendulumLine.rotateVector().multiply(pendulumVelocity));
+				marble.setVelocity(pendulumLine.rotateVector().flip().multiply(pendulumVelocity));
 			}
 		}
 
