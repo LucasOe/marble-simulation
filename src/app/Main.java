@@ -23,7 +23,6 @@ public class Main extends Application {
 	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
-	double pendulumVelocity = 0;
 
 	private Gui gui;
 	private List<Marble> marbles = new ArrayList<>();
@@ -154,6 +153,9 @@ public class Main extends Application {
 		// Gravitational constant
 		double gravity = Math.abs(marble.getAcceleration(VectorType.GRAVITY).getY());
 
+		List<Rectangle> rectangles = gui.getRectangles();
+		List<Pendulum> pendulums = gui.getPendulums();
+
 		marble.setRolling(false);
 
 		Vector position = marble.getPosition();
@@ -163,7 +165,6 @@ public class Main extends Application {
 		marble.setVelocityBuffer(velocity);
 
 		// Iterate over every rectangle in the scene
-		List<Rectangle> rectangles = gui.getRectangles();
 		for (Rectangle rectangle : rectangles) {
 			Vector[] points = rectangle.getPoints();
 			Vector[] normals = rectangle.getNormals();
@@ -258,14 +259,15 @@ public class Main extends Application {
 					Vector newVelocity = v1Per.addVector(v2Par);
 					marble.setVelocityBuffer(newVelocity);
 
-					if (isMagnetized(marble))
-						pendulumVelocity = collidingMarble.getVelocity().getVectorLength();
+					for (Pendulum pendulum : pendulums) {
+						if (pendulum.getMarble() == marble)
+							pendulum.setVelocity(collidingMarble.getVelocity().getVectorLength());
+					}
 				}
 			}
 		}
 
 		// Iterate over every pendulum in the scene
-		List<Pendulum> pendulums = gui.getPendulums();
 		for (Pendulum pendulum : pendulums) {
 			Vector pendulumPosition = pendulum.getPosition();
 			Vector endPoint = pendulum.getEndPoint();
@@ -279,6 +281,7 @@ public class Main extends Application {
 			if (isMagnetized(marble)) {
 				double angle = pendulum.getAngleRadians();
 				double length = pendulum.getLength();
+				double pendulumVelocity = pendulum.getVelocity();
 				// ω = g / l * sin(φ)
 				double omega = -(gravity / length) * Math.sin(angle);
 				pendulumVelocity += omega * deltaTime;
@@ -289,6 +292,7 @@ public class Main extends Application {
 				if (Math.abs(pendulumVelocity) <= stopThreshold)
 					pendulumVelocity = 0;
 
+				pendulum.setVelocity(pendulumVelocity);
 				pendulum.setAngleRadians(angle);
 
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
