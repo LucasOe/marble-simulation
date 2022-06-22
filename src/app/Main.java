@@ -19,7 +19,7 @@ public class Main extends Application {
 	// Width of the canvas in meters
 	public static double CANVAS_METERS = 2.0;
 	// Slowdown factor should be one for realtime
-	// Simulation plays slighty different when slowed down becaue of Floating Point Precision
+	// Simulation plays slightly different when slowed down because of Floating Point Precision
 	public static double SLOWDOWN = 1.0;
 
 	static int framerate;
@@ -168,7 +168,7 @@ public class Main extends Application {
 
 		double tolerance = 0.003; // Threshold distance for collision detection
 		double rollThreshold = 0.5; // When parallel velocity is below this threshold marble is rolling
-		double stopThreshold = 0.01; // When perpendicular velocity is below this thresholh marble is stopping
+		double stopThreshold = 0.01; // When perpendicular velocity is below this threshold marble is stopping
 		double frictionCoefficient = 0.02; // Friction coefficient
 		double magnetRange = 0.1;
 
@@ -268,8 +268,8 @@ public class Main extends Application {
 
 				// Detect if marbles are colliding
 				if (marblesDistance <= marble.getSize() + collidingMarble.getSize() // Within radius
-						&& (/*   */(v1 >= 0 && v2 <= 0 && p1 <= p2) // Marble rolling towwards marble on its right
-								|| (v1 <= 0 && v2 >= 0 && p1 >= p2)) // Marble rolling towwards marble on its left
+						&& (/*   */(v1 >= 0 && v2 <= 0 && p1 <= p2) // Marble rolling towards marble on its right
+								|| (v1 <= 0 && v2 >= 0 && p1 >= p2)) // Marble rolling towards marble on its left
 				) {
 					Vector marbleNormal = marblesVector.normalize();
 
@@ -311,7 +311,7 @@ public class Main extends Application {
 				pendulumVelocity *= 0.995; // Damping
 				angle += pendulumVelocity * deltaTime;
 
-				// Stop pendulum when velocity is below theshold
+				// Stop pendulum when velocity is below threshold
 				if (Math.abs(pendulumVelocity) <= stopThreshold)
 					pendulumVelocity = 0;
 
@@ -366,7 +366,7 @@ public class Main extends Application {
 		Vector position = marble.getPosition();
 		Vector velocity = marble.getVelocity();
 		// Sometimes 0.0000 isn't smaller than 0 for some reason
-		double floatingPointTolerace = 0.0001;
+		double floatingPointTolerance = 0.0001;
 
 		// Vectors from corner points to marble position
 		Vector[] pointPositionVectors = {
@@ -387,7 +387,7 @@ public class Main extends Application {
 		// Return normal pointing towards the line
 
 		// Colliding with P0-P1
-		if (velocity.dotProduct(normals[0]) <= 0 + floatingPointTolerace // Moving towards P0-P1
+		if (velocity.dotProduct(normals[0]) <= 0 + floatingPointTolerance // Moving towards P0-P1
 				&& calculateDistance(position, normals[0], points[0]) >= 0 // Bottom of P0-P1
 				&& calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 // Right of P3-P0
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
@@ -397,7 +397,7 @@ public class Main extends Application {
 			return normals[2];
 		}
 		// Colliding with P1-P2
-		if (velocity.dotProduct(normals[1]) <= 0 + floatingPointTolerace // Moving towards P1-P2
+		if (velocity.dotProduct(normals[1]) <= 0 + floatingPointTolerance // Moving towards P1-P2
 				&& calculateDistance(position, normals[1], points[1]) >= 0 // Right of P1-P2
 				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
 				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
@@ -407,7 +407,7 @@ public class Main extends Application {
 			return normals[3];
 		}
 		// Colliding with P2-P3
-		if (velocity.dotProduct(normals[2]) <= 0 + floatingPointTolerace // Moving towards P2-P3
+		if (velocity.dotProduct(normals[2]) <= 0 + floatingPointTolerance // Moving towards P2-P3
 				&& calculateDistance(position, normals[2], points[2]) >= 0 // Top of P2-P3
 				&& calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 // Left of P1-P2
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
@@ -417,7 +417,7 @@ public class Main extends Application {
 			return normals[0];
 		}
 		// Colliding with P3-P0
-		if (velocity.dotProduct(normals[3]) <= 0 + floatingPointTolerace // Moving towards P3-P0
+		if (velocity.dotProduct(normals[3]) <= 0 + floatingPointTolerance // Moving towards P3-P0
 				&& calculateDistance(position, normals[3], points[3]) >= 0 // Left of P3-P0
 				&& calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 // Bottom of P2-P3
 				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
@@ -427,7 +427,7 @@ public class Main extends Application {
 			return normals[1];
 		}
 
-		// Retun normal pointing to the corner
+		// Return normal pointing to the corner
 
 		// Colliding with P0
 		if (/*   */velocity.dotProduct(normals[3].addVector(normals[0])) <= 0 // Moving towards P0
@@ -484,7 +484,7 @@ public class Main extends Application {
 		return v.subtractVector(n.multiply((n.dotProduct(v)) / (n.dotProduct(n))));
 	}
 
-	// Moves the marble out of collision so it doesn't collide again in the next frame
+	// Moves the marble out of collision, so it doesn't collide again in the next frame
 	private void moveMarble(Marble marble, Vector projectionPoint, Vector normal, double tolerance) {
 		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize())));
 	}
