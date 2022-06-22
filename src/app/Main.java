@@ -25,16 +25,16 @@ public class Main extends Application {
 	static int framerate;
 
 	private Gui gui;
-	private List<Marble> marbles = new ArrayList<>();
+	private final List<Marble> marbles = new ArrayList<>();
 
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) {
 		framerate = Integer.parseInt(System.getProperty("javafx.animation.pulse"));
 
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) {
 		gui = new Gui(stage);
 
 		// Create Marble 1
@@ -200,7 +200,7 @@ public class Main extends Application {
 					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() + tolerance // Bottom of P2-P3
 					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() + tolerance // Right of P3-P0
 			) {
-				Vector marbleNormal = getMarbleNormal(marble, points, normals, tolerance);
+				Vector marbleNormal = getMarbleNormal(marble, points, normals);
 				if (marbleNormal == null)
 					break;
 
@@ -362,7 +362,7 @@ public class Main extends Application {
 	}
 
 	// Return the normal facing the direction the marble is hitting
-	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals, double tolerance) {
+	private Vector getMarbleNormal(Marble marble, Vector[] points, Vector[] normals) {
 		Vector position = marble.getPosition();
 		Vector velocity = marble.getVelocity();
 		// Sometimes 0.0000 isn't smaller than 0 for some reason
@@ -392,7 +392,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 // Right of P3-P0
 				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
 		) {
-			moveMarble(marble, projectionPoints[0], normals[0], tolerance);
+			moveMarble(marble, projectionPoints[0], normals[0]);
 			//System.out.println("P0-P1");
 			return normals[2];
 		}
@@ -402,7 +402,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
 				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
 		) {
-			moveMarble(marble, projectionPoints[1], normals[1], tolerance);
+			moveMarble(marble, projectionPoints[1], normals[1]);
 			//System.out.println("P1-P2");
 			return normals[3];
 		}
@@ -412,7 +412,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 // Left of P1-P2
 				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
 		) {
-			moveMarble(marble, projectionPoints[2], normals[2], tolerance);
+			moveMarble(marble, projectionPoints[2], normals[2]);
 			//System.out.println("P2-P3");
 			return normals[0];
 		}
@@ -422,7 +422,7 @@ public class Main extends Application {
 				&& calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 // Bottom of P2-P3
 				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
 		) {
-			moveMarble(marble, projectionPoints[3], normals[3], tolerance);
+			moveMarble(marble, projectionPoints[3], normals[3]);
 			//System.out.println("P3-P0");
 			return normals[1];
 		}
@@ -485,7 +485,7 @@ public class Main extends Application {
 	}
 
 	// Moves the marble out of collision, so it doesn't collide again in the next frame
-	private void moveMarble(Marble marble, Vector projectionPoint, Vector normal, double tolerance) {
+	private void moveMarble(Marble marble, Vector projectionPoint, Vector normal) {
 		marble.setPosition(projectionPoint.addVector(normal.multiply(marble.getSize())));
 	}
 
