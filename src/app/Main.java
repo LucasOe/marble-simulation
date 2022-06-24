@@ -303,25 +303,29 @@ public class Main extends Application {
 
 			// While marble is magnetized
 			if (isMagnetized(marble)) {
-				double startAngle = pendulum.getStartAngleRadians();
+				double angle = pendulum.getAngle();
+				double pendulumVelocity = pendulum.getVelocity();
+
+				double startAngle = pendulum.getStartAngleRadians(); // ϕ0
 				double amplitude = Math.abs(startAngle); // s0
 				double angularVelocity = 2 * Math.PI / 1.2; // ω
 
 				// s = s0 * e^(-δt) * sin(ωt + ϕ0)
-				double angle = amplitude * Math.pow(Math.E, -0.2 * time)
+				angle = amplitude * Math.pow(Math.E, -0.2 * time)
 						* Math.sin(angularVelocity * time + startAngle);
-
 				// v(t) = s0 * ω  * e^(-δt) * cos(ωt + ϕ0)
-				double pendulumVelocity = Math.abs(amplitude * angularVelocity * Math.pow(Math.E, -0.2 * time)
+				pendulumVelocity = Math.abs(amplitude * angularVelocity * Math.pow(Math.E, -0.2 * time)
 						* Math.cos(angularVelocity * time + startAngle));
 
 				pendulum.setAngleRadians(angle);
+				pendulum.setVelocity(pendulumVelocity);
 
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
 				Vector offset = pendulumLine.multiply(marble.getSize());
 				Vector velocityVector = new Vector(
 						Math.cos(angle) * pendulumVelocity,
 						Math.sin(angle) * pendulumVelocity);
+
 				marble.setPosition(endPoint.addVector(offset));
 				marble.setVelocity(velocityVector);
 
