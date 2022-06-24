@@ -9,12 +9,14 @@ public class Pendulum extends Model {
 	private Vector position;
 	private double length;
 	private double angleRadians;
+	private double startAngleRadians;
 	private double velocity;
 
 	public Pendulum(Vector position, double length, double angle) {
 		this.position = position;
 		this.length = length;
 		this.angleRadians = Math.toRadians(angle);
+		this.startAngleRadians = Math.toRadians(angle);
 	}
 
 	@Override
@@ -60,6 +62,14 @@ public class Pendulum extends Model {
 
 	public void setAngle(double angle) {
 		this.angleRadians = Math.toRadians(angle);
+	}
+
+	public double getStartAngleRadians() {
+		return startAngleRadians;
+	}
+
+	public void setStartAngleRadians(double startAngleRadians) {
+		this.startAngleRadians = startAngleRadians;
 	}
 
 	public double getVelocity() {
