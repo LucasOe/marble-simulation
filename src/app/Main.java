@@ -22,7 +22,8 @@ public class Main extends Application {
 	// Simulation plays slightly different when slowed down because of Floating Point Precision
 	public static double SLOWDOWN = 1.0;
 
-	static int framerate;
+	static double time;
+	static double framerate;
 
 	private Gui gui;
 	private final List<Marble> marbles = new ArrayList<>();
@@ -150,16 +151,16 @@ public class Main extends Application {
 				new Vector(0.432, 0.231),
 				new Vector(-0.30, 0.00), 0.04));
 
+		// Rectangle
+		gui.drawRectangle(new Rectangle(
+				new Vector(0.132, 0.20),
+				new Vector(0.00, -0.20), 0.04));
+
 		// Pendulum
 		gui.drawPendulum(new Pendulum(
 				new Vector(1.40, 0.58),
 				0.3,
 				-90.0));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.132, 0.20),
-				new Vector(0.00, -0.20), 0.04));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
@@ -302,26 +303,29 @@ public class Main extends Application {
 
 			// While marble is magnetized
 			if (isMagnetized(marble)) {
-				double angle = pendulum.getAngleRadians();
-				double length = pendulum.getLength();
-				double pendulumVelocity = pendulum.getVelocity();
-				// ω = g / l * sin(φ)
-				double omega = -(gravity / length) * Math.sin(angle);
-				pendulumVelocity += omega * deltaTime;
-				pendulumVelocity *= 0.995; // Damping
-				angle += pendulumVelocity * deltaTime;
+				double startAngle = pendulum.getStartAngleRadians();
+				double amplitude = Math.abs(startAngle); // s0
+				double angularVelocity = 2 * Math.PI / 1.2; // ω
 
-				// Stop pendulum when velocity is below threshold
-				if (Math.abs(pendulumVelocity) <= stopThreshold)
-					pendulumVelocity = 0;
+				// s = s0 * e^(-δt) * sin(ωt + ϕ0)
+				double angle = amplitude * Math.pow(Math.E, -0.2 * time)
+						* Math.sin(angularVelocity * time + startAngle);
 
-				pendulum.setVelocity(pendulumVelocity);
+				// v(t) = s0 * ω  * e^(-δt) * cos(ωt + ϕ0)
+				double pendulumVelocity = Math.abs(amplitude * angularVelocity * Math.pow(Math.E, -0.2 * time)
+						* Math.cos(angularVelocity * time + startAngle));
+
 				pendulum.setAngleRadians(angle);
 
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
 				Vector offset = pendulumLine.multiply(marble.getSize());
+				Vector velocityVector = new Vector(
+						Math.cos(angle) * pendulumVelocity,
+						Math.sin(angle) * pendulumVelocity);
 				marble.setPosition(endPoint.addVector(offset));
-				marble.setVelocity(pendulumLine.rotateVector().flip().multiply(pendulumVelocity));
+				marble.setVelocity(velocityVector);
+
+				time += deltaTime;
 			}
 		}
 
