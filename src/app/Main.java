@@ -44,6 +44,7 @@ public class Main extends Application {
 		marble1.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble1.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble1.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
+		marble1.setMass(1.0);
 		marbles.add(marble1);
 		gui.drawMarble(marble1);
 
@@ -53,6 +54,7 @@ public class Main extends Application {
 		marble2.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble2.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble2.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
+		marble2.setMass(1.0);
 		marbles.add(marble2);
 		gui.drawMarble(marble2);
 
@@ -62,6 +64,7 @@ public class Main extends Application {
 		marble3.setAcceleration(VectorType.GRAVITY, new Vector(0.0, -9.81));
 		marble3.setAcceleration(VectorType.DOWNHILL_ACCELERATION, new Vector(0.0, 0.0));
 		marble3.setAcceleration(VectorType.FRICTION, new Vector(0.0, 0.0));
+		marble3.setMass(0.8);
 		marbles.add(marble3);
 		gui.drawMarble(marble3);
 
@@ -276,11 +279,17 @@ public class Main extends Application {
 
 					// Break velocity Vector into perpendicular and parallel Vectors
 					Vector v1Per = orthogonalDecomposition(velocity, marbleNormal);
+					Vector v1Par = marble.getVelocity().subtractVector(v1Per);
 					Vector v2Per = orthogonalDecomposition(collidingMarble.getVelocity(), marbleNormal.flip());
 					Vector v2Par = collidingMarble.getVelocity().subtractVector(v2Per);
+					double m1 = marble.getMass();
+					double m2 = collidingMarble.getMass();
 
+					// v1` = 2 * (m1 * v1 + m2 * v2) / (m1 + m2) - v1
+					Vector newParVelocity = v1Par.multiply(m1).addVector(v2Par.multiply(m2)).multiply(1 / (m1 + m2))
+							.multiply(2).subtractVector(v1Par);
 					// Marbles "trade" parallel velocity if their mass is the same
-					Vector newVelocity = v1Per.addVector(v2Par);
+					Vector newVelocity = v1Per.addVector(newParVelocity);
 					marble.setVelocityBuffer(newVelocity);
 
 					for (Pendulum pendulum : pendulums) {

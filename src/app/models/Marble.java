@@ -16,6 +16,7 @@ public class Marble extends Model {
 	private Vector velocity = new Vector(0.0, 0.0);
 	private HashMap<VectorType, Vector> accelerations = new HashMap<VectorType, Vector>();
 	private Vector velocityBuffer; // The velocity at the end of the frame
+	private double mass = 1;
 
 	public Marble() {
 	}
@@ -92,6 +93,14 @@ public class Marble extends Model {
 
 	public void setVelocityBuffer(Vector velocityBuffer) {
 		this.velocityBuffer = velocityBuffer;
+	}
+
+	public double getMass() {
+		return mass;
+	}
+
+	public void setMass(double mass) {
+		this.mass = mass;
 	}
 
 	public Vector calculateNewPos(double deltaTime) {
