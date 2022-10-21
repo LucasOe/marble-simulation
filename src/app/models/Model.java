@@ -1,7 +1,6 @@
 package app.models;
 
 import java.util.List;
-
 import javafx.scene.shape.Shape;
 
 public abstract class Model {
@@ -9,7 +8,7 @@ public abstract class Model {
 	public enum ModelType {
 		MARBLE,
 		RECTANGLE,
-		PENDULUM
+		PENDULUM,
 	}
 
 	private List<Shape> shapes;

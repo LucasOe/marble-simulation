@@ -1,10 +1,9 @@
 package app.models;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import app.Vector;
 import app.Vector.VectorType;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Marble extends Model {
 
@@ -18,8 +17,7 @@ public class Marble extends Model {
 	private Vector velocityBuffer; // The velocity at the end of the frame
 	private double mass = 1;
 
-	public Marble() {
-	}
+	public Marble() {}
 
 	public Marble(int size, Vector position, Vector velocity) {
 		this.size = size;
@@ -108,7 +106,9 @@ public class Marble extends Model {
 		Vector acceleration = sumAccelerations(accelerations);
 
 		// position = position + velocity * deltaTime + 0.5 * acceleration * deltaTime * deltaTime
-		this.position = position.addVector(velocity.multiply(deltaTime))
+		this.position =
+			position
+				.addVector(velocity.multiply(deltaTime))
 				.addVector(acceleration.multiply(0.5).multiply(deltaTime * deltaTime));
 
 		return this.position;
@@ -130,12 +130,10 @@ public class Marble extends Model {
 			VectorType key = entry.getKey();
 			Vector acceleration = entry.getValue();
 
-			if (isRolling && key.equals(VectorType.GRAVITY))
-				continue;
+			if (isRolling && key.equals(VectorType.GRAVITY)) continue;
 
 			sum = sum.addVector(acceleration);
 		}
 		return sum;
 	}
-
 }

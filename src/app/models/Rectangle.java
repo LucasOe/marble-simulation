@@ -50,10 +50,10 @@ public class Rectangle extends Model {
 
 		// Assuming length Vector points to the right:
 		Vector[] points = {
-				position, // bottom left
-				position.addVector(length), // bottom right
-				position.addVector(length).addVector(heightVector), // top right
-				position.addVector(heightVector) // top left
+			position, // bottom left
+			position.addVector(length), // bottom right
+			position.addVector(length).addVector(heightVector), // top right
+			position.addVector(heightVector), // top left
 		};
 
 		return points;
@@ -62,13 +62,12 @@ public class Rectangle extends Model {
 	public Vector[] getNormals() {
 		// Assuming length Vector points to the right:
 		Vector[] normals = {
-				length.rotateVector().normalize(), // down
-				length.normalize(), // right
-				length.rotateVector().flip().normalize(), // up
-				length.flip().normalize() // left
+			length.rotateVector().normalize(), // down
+			length.normalize(), // right
+			length.rotateVector().flip().normalize(), // up
+			length.flip().normalize(), // left
 		};
 
 		return normals;
 	}
-
 }
