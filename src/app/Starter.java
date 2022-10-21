@@ -10,5 +10,4 @@ public class Starter {
 
 		Main.main(args);
 	}
-
 }

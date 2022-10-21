@@ -1,5 +1,8 @@
 {
 	"java.project.sourcePaths": ["src"],
 	"java.project.outputPath": "bin",
-	"java.project.referencedLibraries": ["lib/**/*.jar", "C:/Program Files/OpenFX/javafx-sdk-18/lib/**/*.jar"]
+	"java.project.referencedLibraries": [
+		"lib/**/*.jar",
+		"C:/Users/lucas/scoop/apps/gluon-openjfx-sdk/current/lib/**/*.jar"
+	]
 }

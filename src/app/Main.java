@@ -1,13 +1,12 @@
 package app;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import app.Vector.VectorType;
 import app.gui.Gui;
 import app.models.Marble;
 import app.models.Pendulum;
 import app.models.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -73,97 +72,26 @@ public class Main extends Application {
 		// Select marble1 by default
 		gui.selectModel(marble1);
 
-		// Floor
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.00, 0.00),
-				new Vector(2.00, 0.00),
-				0.02));
-
-		// Ceiling
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.00, 0.98),
-				new Vector(2.00, 0.00),
-				0.02));
-
-		// Left Wall
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.00, 0.00),
-				new Vector(0.02, 0.00),
-				2.0));
-
-		// Right Wall
-		gui.drawRectangle(new Rectangle(
-				new Vector(1.98, 0.00),
-				new Vector(0.02, 0.00),
-				2.0));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.30, 0.73),
-				new Vector(0.60, 0.10),
-				0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.90, 0.83),
-				new Vector(0.00, 0.20),
-				0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.00, 0.60),
-				new Vector(0.50, -0.10), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.3, 0.75),
-				new Vector(0.0, -0.08), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.50, 0.50),
-				new Vector(0.50, 0.00), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(1.75, 0.42),
-				new Vector(0.15, 0.00), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(1.86, 0.43),
-				new Vector(0.00, -0.05), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(2.00, 0.35),
-				new Vector(-0.40, -0.20), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.617, 0.114),
-				new Vector(1.00, 0.00), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.418, 0.194),
-				new Vector(0.20, -0.08), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.432, 0.231),
-				new Vector(-0.30, 0.00), 0.04));
-
-		// Rectangle
-		gui.drawRectangle(new Rectangle(
-				new Vector(0.132, 0.20),
-				new Vector(0.00, -0.20), 0.04));
-
+		// Outer Walls
+		gui.drawRectangle(new Rectangle(new Vector(0.000, 0.000), new Vector(+2.00, +0.00), 0.02));
+		gui.drawRectangle(new Rectangle(new Vector(0.000, 0.980), new Vector(+2.00, +0.00), 0.02));
+		gui.drawRectangle(new Rectangle(new Vector(0.000, 0.000), new Vector(+0.02, +0.00), 2.00));
+		gui.drawRectangle(new Rectangle(new Vector(1.980, 0.000), new Vector(+0.02, +0.00), 2.00));
+		// Rectangles
+		gui.drawRectangle(new Rectangle(new Vector(0.300, 0.730), new Vector(+0.60, +0.10), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.900, 0.830), new Vector(+0.00, +0.20), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.000, 0.600), new Vector(+0.50, -0.10), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.300, 0.750), new Vector(+0.00, -0.08), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.500, 0.500), new Vector(+0.50, +0.00), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(1.750, 0.420), new Vector(+0.15, +0.00), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(1.860, 0.430), new Vector(+0.00, -0.05), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(2.000, 0.350), new Vector(-0.40, -0.20), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.617, 0.114), new Vector(+1.00, +0.00), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.418, 0.194), new Vector(+0.20, -0.08), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.432, 0.231), new Vector(-0.30, +0.00), 0.04));
+		gui.drawRectangle(new Rectangle(new Vector(0.132, 0.200), new Vector(+0.00, -0.20), 0.04));
 		// Pendulum
-		gui.drawPendulum(new Pendulum(
-				new Vector(1.40, 0.58),
-				0.3,
-				-90.0));
+		gui.drawPendulum(new Pendulum(new Vector(1.40, 0.58), 0.3, -90.0));
 	}
 
 	// Gets called every frame by the AnimationTimer while simulation is playing
@@ -199,31 +127,30 @@ public class Main extends Application {
 				Detect if Marble position is between all four points
 				Using marble radius as the max allowed distance
 			*/
-			if (/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() + tolerance // Top of P0-P1
-					&& calculateDistance(position, normals[1], points[1]) <= marble.getSize() + tolerance // Left of P1-P2
-					&& calculateDistance(position, normals[2], points[2]) <= marble.getSize() + tolerance // Bottom of P2-P3
-					&& calculateDistance(position, normals[3], points[3]) <= marble.getSize() + tolerance // Right of P3-P0
+			if (
+				/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() + tolerance && // Top of P0-P1
+				calculateDistance(position, normals[1], points[1]) <= marble.getSize() + tolerance && // Left of P1-P2
+				calculateDistance(position, normals[2], points[2]) <= marble.getSize() + tolerance && // Bottom of P2-P3
+				calculateDistance(position, normals[3], points[3]) <= marble.getSize() + tolerance // Right of P3-P0
 			) {
 				Vector marbleNormal = getMarbleNormal(marble, points, normals);
-				if (marbleNormal == null)
-					break;
+				if (marbleNormal == null) break;
 
 				// Break velocity Vector into perpendicular and parallel Vectors
 				Vector velocityPer = orthogonalDecomposition(velocity, marbleNormal);
 				Vector velocityPar = velocity.subtractVector(velocityPer);
 
 				double alpha = marbleNormal.getVectorRadians() + Math.toRadians(90);
-				if (velocityPar.getVectorLength() <= rollThreshold
-						&& Math.abs(alpha) != Math.toRadians(90.0))
-					marble.setRolling(true);
+				if (
+					velocityPar.getVectorLength() <= rollThreshold && Math.abs(alpha) != Math.toRadians(90.0)
+				) marble.setRolling(true);
 
 				// Set perpendicular velocity to zero when below threshold to avoid jitter
-				if (velocityPar.getVectorLength() <= rollThreshold && marble.isRolling())
-					velocityPar = new Vector(0, 0);
+				if (velocityPar.getVectorLength() <= rollThreshold && marble.isRolling()) velocityPar =
+					new Vector(0, 0);
 
 				// Marble shouldn't roll up walls
-				if (Math.abs(alpha) == Math.toRadians(90.0))
-					velocityPer = new Vector(0, 0);
+				if (Math.abs(alpha) == Math.toRadians(90.0)) velocityPer = new Vector(0, 0);
 
 				if (marble.isRolling()) {
 					double sign = -Math.signum(Math.toDegrees(alpha));
@@ -231,8 +158,8 @@ public class Main extends Application {
 					Vector slopeDirection = new Vector(Math.cos(alpha) * sign, Math.sin(alpha) * sign);
 					// When velocityPer is 0,0 use velocity instead to calculate direction
 					Vector velocityDirection = velocityPer.getVectorLength() != 0
-							? velocityPer.normalize()
-							: velocity.normalize();
+						? velocityPer.normalize()
+						: velocity.normalize();
 
 					// Break gravity Vector into perpendicular and parallel Vectors
 					double gravityPer = gravity * Math.sin(Math.abs(alpha)); // F_GH = g * sin(a)
@@ -271,9 +198,12 @@ public class Main extends Application {
 				double p2 = collidingMarble.getPosition().getX();
 
 				// Detect if marbles are colliding
-				if (marblesDistance <= marble.getSize() + collidingMarble.getSize() // Within radius
-						&& (/*   */(v1 >= 0 && v2 <= 0 && p1 <= p2) // Marble rolling towards marble on its right
-								|| (v1 <= 0 && v2 >= 0 && p1 >= p2)) // Marble rolling towards marble on its left
+				if (
+					marblesDistance <= marble.getSize() + collidingMarble.getSize() && // Within radius
+					(
+						(v1 >= 0 && v2 <= 0 && p1 <= p2) || // Marble rolling towards marble on its right
+						(v1 <= 0 && v2 >= 0 && p1 >= p2) // Marble rolling towards marble on its left
+					)
 				) {
 					Vector marbleNormal = marblesVector.normalize();
 
@@ -286,15 +216,20 @@ public class Main extends Application {
 					double m2 = collidingMarble.getMass();
 
 					// v1` = 2 * (m1 * v1 + m2 * v2) / (m1 + m2) - v1
-					Vector newParVelocity = v1Par.multiply(m1).addVector(v2Par.multiply(m2)).multiply(1 / (m1 + m2))
-							.multiply(2).subtractVector(v1Par);
+					Vector newParVelocity = v1Par
+						.multiply(m1)
+						.addVector(v2Par.multiply(m2))
+						.multiply(1 / (m1 + m2))
+						.multiply(2)
+						.subtractVector(v1Par);
 					// Marbles "trade" parallel velocity if their mass is the same
 					Vector newVelocity = v1Per.addVector(newParVelocity);
 					marble.setVelocityBuffer(newVelocity);
 
 					for (Pendulum pendulum : pendulums) {
-						if (pendulum.getMarble() == marble)
-							pendulum.setVelocity(collidingMarble.getVelocity().getVectorLength());
+						if (pendulum.getMarble() == marble) pendulum.setVelocity(
+							collidingMarble.getVelocity().getVectorLength()
+						);
 					}
 				}
 			}
@@ -307,8 +242,7 @@ public class Main extends Application {
 
 			// Detect if marble is in range and pendulum is empty
 			double distance = Math.abs(endPoint.subtractVector(position).getVectorLength());
-			if (distance + marble.getSize() <= magnetRange && pendulum.getMarble() == null)
-				pendulum.setMarble(marble);
+			if (distance + marble.getSize() <= magnetRange && pendulum.getMarble() == null) pendulum.setMarble(marble);
 
 			// While marble is magnetized
 			if (isMagnetized(marble)) {
@@ -320,11 +254,15 @@ public class Main extends Application {
 				double angularVelocity = 2 * Math.PI / 1.2; // ω
 
 				// s = s0 * e^(-δt) * sin(ωt + ϕ0)
-				angle = amplitude * Math.pow(Math.E, -0.2 * time)
-						* Math.sin(angularVelocity * time + startAngle);
+				angle = amplitude * Math.pow(Math.E, -0.2 * time) * Math.sin(angularVelocity * time + startAngle);
 				// v(t) = s0 * ω  * e^(-δt) * cos(ωt + ϕ0)
-				pendulumVelocity = Math.abs(amplitude * angularVelocity * Math.pow(Math.E, -0.2 * time)
-						* Math.cos(angularVelocity * time + startAngle));
+				pendulumVelocity =
+					Math.abs(
+						amplitude *
+						angularVelocity *
+						Math.pow(Math.E, -0.2 * time) *
+						Math.cos(angularVelocity * time + startAngle)
+					);
 
 				pendulum.setAngleRadians(angle);
 				pendulum.setVelocity(pendulumVelocity);
@@ -332,8 +270,9 @@ public class Main extends Application {
 				Vector pendulumLine = endPoint.subtractVector(pendulumPosition).normalize();
 				Vector offset = pendulumLine.multiply(marble.getSize());
 				Vector velocityVector = new Vector(
-						Math.cos(angle) * pendulumVelocity,
-						Math.sin(angle) * pendulumVelocity);
+					Math.cos(angle) * pendulumVelocity,
+					Math.sin(angle) * pendulumVelocity
+				);
 
 				marble.setPosition(endPoint.addVector(offset));
 				marble.setVelocity(velocityVector);
@@ -387,95 +326,95 @@ public class Main extends Application {
 
 		// Vectors from corner points to marble position
 		Vector[] pointPositionVectors = {
-				position.subtractVector(points[0]),
-				position.subtractVector(points[1]),
-				position.subtractVector(points[2]),
-				position.subtractVector(points[3]),
+			position.subtractVector(points[0]),
+			position.subtractVector(points[1]),
+			position.subtractVector(points[2]),
+			position.subtractVector(points[3]),
 		};
 
 		// Marble position projected onto lines
 		Vector[] projectionPoints = {
-				points[0].addVector(projectVector(pointPositionVectors[0], normals[1])), // P0-P1
-				points[1].addVector(projectVector(pointPositionVectors[1], normals[2])), // P1-P2
-				points[2].addVector(projectVector(pointPositionVectors[2], normals[3])), // P2-P3
-				points[3].addVector(projectVector(pointPositionVectors[3], normals[0])), // P3-P4
+			points[0].addVector(projectVector(pointPositionVectors[0], normals[1])), // P0-P1
+			points[1].addVector(projectVector(pointPositionVectors[1], normals[2])), // P1-P2
+			points[2].addVector(projectVector(pointPositionVectors[2], normals[3])), // P2-P3
+			points[3].addVector(projectVector(pointPositionVectors[3], normals[0])), // P3-P4
 		};
 
 		// Return normal pointing towards the line
 
 		// Colliding with P0-P1
-		if (velocity.dotProduct(normals[0]) <= 0 + floatingPointTolerance // Moving towards P0-P1
-				&& calculateDistance(position, normals[0], points[0]) >= 0 // Bottom of P0-P1
-				&& calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 // Right of P3-P0
-				&& calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
+		if (
+			velocity.dotProduct(normals[0]) <= 0 + floatingPointTolerance && // Moving towards P0-P1
+			calculateDistance(position, normals[0], points[0]) >= 0 && // Bottom of P0-P1
+			calculateDistance(projectionPoints[0], normals[3], points[3]) <= 0 && // Right of P3-P0
+			calculateDistance(projectionPoints[0], normals[1], points[1]) <= 0 // Left of P1-P2
 		) {
 			moveMarble(marble, projectionPoints[0], normals[0]);
-			//System.out.println("P0-P1");
 			return normals[2];
 		}
 		// Colliding with P1-P2
-		if (velocity.dotProduct(normals[1]) <= 0 + floatingPointTolerance // Moving towards P1-P2
-				&& calculateDistance(position, normals[1], points[1]) >= 0 // Right of P1-P2
-				&& calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 // Top of P0-P1
-				&& calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
+		if (
+			velocity.dotProduct(normals[1]) <= 0 + floatingPointTolerance && // Moving towards P1-P2
+			calculateDistance(position, normals[1], points[1]) >= 0 && // Right of P1-P2
+			calculateDistance(projectionPoints[1], normals[0], points[0]) <= 0 && // Top of P0-P1
+			calculateDistance(projectionPoints[1], normals[2], points[2]) <= 0 // Bottom of P2-P3
 		) {
 			moveMarble(marble, projectionPoints[1], normals[1]);
-			//System.out.println("P1-P2");
 			return normals[3];
 		}
 		// Colliding with P2-P3
-		if (velocity.dotProduct(normals[2]) <= 0 + floatingPointTolerance // Moving towards P2-P3
-				&& calculateDistance(position, normals[2], points[2]) >= 0 // Top of P2-P3
-				&& calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 // Left of P1-P2
-				&& calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
+		if (
+			velocity.dotProduct(normals[2]) <= 0 + floatingPointTolerance && // Moving towards P2-P3
+			calculateDistance(position, normals[2], points[2]) >= 0 && // Top of P2-P3
+			calculateDistance(projectionPoints[2], normals[1], points[1]) <= 0 && // Left of P1-P2
+			calculateDistance(projectionPoints[2], normals[3], points[3]) <= 0 // Right of P3-P0
 		) {
 			moveMarble(marble, projectionPoints[2], normals[2]);
-			//System.out.println("P2-P3");
 			return normals[0];
 		}
 		// Colliding with P3-P0
-		if (velocity.dotProduct(normals[3]) <= 0 + floatingPointTolerance // Moving towards P3-P0
-				&& calculateDistance(position, normals[3], points[3]) >= 0 // Left of P3-P0
-				&& calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 // Bottom of P2-P3
-				&& calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
+		if (
+			velocity.dotProduct(normals[3]) <= 0 + floatingPointTolerance && // Moving towards P3-P0
+			calculateDistance(position, normals[3], points[3]) >= 0 && // Left of P3-P0
+			calculateDistance(projectionPoints[3], normals[2], points[2]) <= 0 && // Bottom of P2-P3
+			calculateDistance(projectionPoints[3], normals[0], points[0]) <= 0 // Top of P0-P1
 		) {
 			moveMarble(marble, projectionPoints[3], normals[3]);
-			//System.out.println("P3-P0");
 			return normals[1];
 		}
 
 		// Return normal pointing to the corner
 
 		// Colliding with P0
-		if (/*   */velocity.dotProduct(normals[3].addVector(normals[0])) <= 0 // Moving towards P0
-				&& calculateDistance(projectionPoints[3], normals[0], points[0]) > 0 // Bottom of P0-P1
-				&& calculateDistance(projectionPoints[0], normals[3], points[3]) > 0 // Left of P3-P0
+		if (
+			velocity.dotProduct(normals[3].addVector(normals[0])) <= 0 && // Moving towards P0
+			calculateDistance(projectionPoints[3], normals[0], points[0]) > 0 && // Bottom of P0-P1
+			calculateDistance(projectionPoints[0], normals[3], points[3]) > 0 // Left of P3-P0
 		) {
-			//System.out.println("P0");
 			return position.subtractVector(points[0]).normalize();
 		}
 		// Colliding with P1
-		if (/*   */velocity.dotProduct(normals[0].addVector(normals[1])) <= 0 // Moving towards P1
-				&& calculateDistance(projectionPoints[1], normals[0], points[0]) > 0 // Bottom of P0-P1
-				&& calculateDistance(projectionPoints[0], normals[1], points[1]) > 0 // Right of P1-P2
+		if (
+			velocity.dotProduct(normals[0].addVector(normals[1])) <= 0 && // Moving towards P1
+			calculateDistance(projectionPoints[1], normals[0], points[0]) > 0 && // Bottom of P0-P1
+			calculateDistance(projectionPoints[0], normals[1], points[1]) > 0 // Right of P1-P2
 		) {
-			//System.out.println("P1");
 			return position.subtractVector(points[1]).normalize();
 		}
 		// Colliding with P2
-		if (/*   */velocity.dotProduct(normals[1].addVector(normals[2])) <= 0 // Moving towards P2
-				&& calculateDistance(projectionPoints[1], normals[2], points[2]) > 0 // Top of P2-P3
-				&& calculateDistance(projectionPoints[2], normals[1], points[1]) > 0 // Right of P1-P2
+		if (
+			velocity.dotProduct(normals[1].addVector(normals[2])) <= 0 && // Moving towards P2
+			calculateDistance(projectionPoints[1], normals[2], points[2]) > 0 && // Top of P2-P3
+			calculateDistance(projectionPoints[2], normals[1], points[1]) > 0 // Right of P1-P2
 		) {
-			//System.out.println("P2");
 			return position.subtractVector(points[2]).normalize();
 		}
 		// Colliding with P3
-		if (/*   */velocity.dotProduct(normals[2].addVector(normals[3])) <= 0 // Moving towards P3
-				&& calculateDistance(projectionPoints[3], normals[2], points[2]) > 0 // Top of P2-P3
-				&& calculateDistance(projectionPoints[2], normals[3], points[3]) > 0 // Left of P3-P0
+		if (
+			velocity.dotProduct(normals[2].addVector(normals[3])) <= 0 && // Moving towards P3
+			calculateDistance(projectionPoints[3], normals[2], points[2]) > 0 && // Top of P2-P3
+			calculateDistance(projectionPoints[2], normals[3], points[3]) > 0 // Left of P3-P0
 		) {
-			//System.out.println("P3");
 			return position.subtractVector(points[3]).normalize();
 		}
 
@@ -508,10 +447,8 @@ public class Main extends Application {
 
 	private boolean isMagnetized(Marble marble) {
 		for (Pendulum pendulum : gui.getPendulums()) {
-			if (pendulum.getMarble() == marble)
-				return true;
+			if (pendulum.getMarble() == marble) return true;
 		}
 		return false;
 	}
-
 }
