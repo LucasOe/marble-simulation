@@ -128,7 +128,7 @@ public class Main extends Application {
 				Using marble radius as the max allowed distance
 			*/
 			if (
-				/*   */calculateDistance(position, normals[0], points[0]) <= marble.getSize() + tolerance && // Top of P0-P1
+				calculateDistance(position, normals[0], points[0]) <= marble.getSize() + tolerance && // Top of P0-P1
 				calculateDistance(position, normals[1], points[1]) <= marble.getSize() + tolerance && // Left of P1-P2
 				calculateDistance(position, normals[2], points[2]) <= marble.getSize() + tolerance && // Bottom of P2-P3
 				calculateDistance(position, normals[3], points[3]) <= marble.getSize() + tolerance // Right of P3-P0
