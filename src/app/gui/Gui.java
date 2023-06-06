@@ -84,7 +84,6 @@ public class Gui {
 		stage.setResizable(false);
 		stage.setScene(scene);
 		stage.show();
-
 	}
 
 	public Model getSelectedModel() {

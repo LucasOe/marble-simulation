@@ -15,6 +15,7 @@ public class NumberTextField extends TextField {
 	private final List<Listener> listeners = new ArrayList<>();
 	private boolean isFocused;
 	private double number;
+
 	public NumberTextField(double defaultValue) {
 		super();
 		setNumber(defaultValue);
