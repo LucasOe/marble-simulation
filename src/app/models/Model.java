@@ -1,16 +1,10 @@
 package app.models;
 
-import java.util.List;
 import javafx.scene.shape.Shape;
 
+import java.util.List;
+
 public abstract class Model {
-
-	public enum ModelType {
-		MARBLE,
-		RECTANGLE,
-		PENDULUM,
-	}
-
 	private List<Shape> shapes;
 
 	public List<Shape> getShapes() {
@@ -22,4 +16,10 @@ public abstract class Model {
 	}
 
 	public abstract ModelType getType();
+
+	public enum ModelType {
+		MARBLE,
+		RECTANGLE,
+		PENDULUM,
+	}
 }

@@ -3,7 +3,6 @@ package app.models;
 import app.Vector;
 
 public class Pendulum extends Model {
-
 	private Marble marble;
 
 	private Vector position;

@@ -5,13 +5,13 @@ import app.gui.Gui;
 import app.models.Marble;
 import app.models.Pendulum;
 import app.models.Rectangle;
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Main extends Application {
 	public static double CANVAS_WIDTH = 1280;
 	public static double CANVAS_HEIGHT = 640;
 	public static double CONTROLS_HEIGHT = 150;
@@ -23,9 +23,8 @@ public class Main extends Application {
 
 	static double time;
 	static double framerate;
-
-	private Gui gui;
 	private final List<Marble> marbles = new ArrayList<>();
+	private Gui gui;
 
 	public static void main(String[] args) {
 		framerate = Integer.parseInt(System.getProperty("javafx.animation.pulse"));

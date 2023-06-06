@@ -1,23 +1,14 @@
 package app.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import app.Main;
 import app.Vector;
 import app.Vector.VectorType;
 import app.gui.VectorPane.Type;
-import app.gui.VectorPane.VectorPaneListener;
 import app.models.Marble;
 import app.models.Model;
 import app.models.Pendulum;
 import app.models.Rectangle;
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,22 +24,18 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
-public class Gui {
+import java.util.*;
 
-	private double scale = Main.CANVAS_WIDTH / Main.CANVAS_METERS;
+public class Gui {
+	private final double scale = Main.CANVAS_WIDTH / Main.CANVAS_METERS;
+	private final Button play;
+	private final Pane canvas;
+	private final HBox infoPaneBox;
+	private AnimationTimer timer;
 	private boolean isPlaying;
 	private Model selectedModel;
-	private Button play;
-	AnimationTimer timer;
-
 	private List<Rectangle> rectangles = new ArrayList<>();
 	private List<Pendulum> pendulums = new ArrayList<>();
-
-	private Pane canvas;
-	private Pane controls;
-	private BorderPane controlsPane;
-	private HBox infoPaneBox;
-
 	private VectorPane positionPane;
 	private VectorPane velocityPane;
 	private HashMap<VectorType, VectorPane> accelerationPanes = new HashMap<>();
@@ -60,12 +47,12 @@ public class Gui {
 		canvas.getStyleClass().add("canvas");
 
 		// Controls
-		controls = new Pane();
+		Pane controls = new Pane();
 		controls.setPrefSize(Main.CANVAS_WIDTH, Main.CONTROLS_HEIGHT);
 		controls.getStyleClass().add("controls");
 
 		// ControlsPane
-		controlsPane = new BorderPane();
+		BorderPane controlsPane = new BorderPane();
 		controlsPane.setPadding(new Insets(10, 10, 10, 10));
 		controlsPane.setPrefWidth(Main.CANVAS_WIDTH);
 		controlsPane.setPrefHeight(Main.CONTROLS_HEIGHT);
@@ -81,12 +68,7 @@ public class Gui {
 		play = new Button("Start");
 		controlsPane.setRight(play);
 		BorderPane.setAlignment(play, Pos.CENTER_RIGHT);
-		play.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				toggleAnimationTimer();
-			}
-		});
+		play.setOnAction(event -> toggleAnimationTimer());
 
 		// VBox containing canvas and controls
 		VBox vbox = new VBox();
@@ -172,14 +154,9 @@ public class Gui {
 	private void addMarblePositionPane(Pane root, Marble marble) {
 		positionPane = new VectorPane(marble.getPosition(), VectorType.POSITION, Type.NORMAL);
 		positionPane.setColor("#E2F0CB");
-		positionPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				marble.setPosition(vector);
-				moveMarble(marble);
-			}
-
+		positionPane.addListener(vector -> {
+			marble.setPosition(vector);
+			moveMarble(marble);
 		});
 
 		root.getChildren().add(positionPane);
@@ -188,14 +165,9 @@ public class Gui {
 	private void addMarbleVelocityPane(Pane root, Marble marble) {
 		velocityPane = new VectorPane(marble.getVelocity(), VectorType.VELOCITY, Type.ANGLE);
 		velocityPane.setColor("#FFDAC1");
-		velocityPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				marble.setVelocity(vector);
-				moveMarble(marble);
-			}
-
+		velocityPane.addListener(vector -> {
+			marble.setVelocity(vector);
+			moveMarble(marble);
 		});
 
 		root.getChildren().add(velocityPane);
@@ -209,14 +181,9 @@ public class Gui {
 
 			VectorPane accelerationPane = new VectorPane(acceleration, key, Type.NORMAL);
 			accelerationPane.setColor("#B5EAD7");
-			accelerationPane.addListener(new VectorPaneListener() {
-
-				@Override
-				public void onVectorChange(Vector vector) {
-					marble.setAcceleration(accelerationPane.getKey(), vector);
-					moveMarble(marble);
-				}
-
+			accelerationPane.addListener(vector -> {
+				marble.setAcceleration(accelerationPane.getKey(), vector);
+				moveMarble(marble);
 			});
 			accelerationPanes.put(key, accelerationPane);
 
@@ -228,15 +195,9 @@ public class Gui {
 		VectorPane rectanglePositionPane = new VectorPane(rectangle.getPosition(), VectorType.POSITION,
 				Type.NORMAL);
 		rectanglePositionPane.setColor("#E2F0CB");
-		rectanglePositionPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				rectangle.setPosition(vector);
-
-				moveRectangle(rectangle);
-			}
-
+		rectanglePositionPane.addListener(vector -> {
+			rectangle.setPosition(vector);
+			moveRectangle(rectangle);
 		});
 
 		root.getChildren().add(rectanglePositionPane);
@@ -245,15 +206,9 @@ public class Gui {
 	private void addRectangleLengthPane(Pane root, Rectangle rectangle) {
 		VectorPane rectangleLengthPane = new VectorPane(rectangle.getLength(), VectorType.LENGTH, Type.ANGLE);
 		rectangleLengthPane.setColor("#FFDAC1");
-		rectangleLengthPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				rectangle.setLength(vector);
-
-				moveRectangle(rectangle);
-			}
-
+		rectangleLengthPane.addListener(vector -> {
+			rectangle.setLength(vector);
+			moveRectangle(rectangle);
 		});
 
 		root.getChildren().add(rectangleLengthPane);
@@ -263,15 +218,9 @@ public class Gui {
 		VectorPane pendulumPositionPane = new VectorPane(pendulum.getPosition(), VectorType.POSITION,
 				Type.NORMAL);
 		pendulumPositionPane.setColor("#E2F0CB");
-		pendulumPositionPane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				pendulum.setPosition(vector);
-
-				movePendulum(pendulum);
-			}
-
+		pendulumPositionPane.addListener(vector -> {
+			pendulum.setPosition(vector);
+			movePendulum(pendulum);
 		});
 
 		root.getChildren().add(pendulumPositionPane);
@@ -281,15 +230,9 @@ public class Gui {
 		Vector pendulumLine = new Vector(pendulum.getLength(), 0.0);
 		VectorPane pendulumLinePane = new VectorPane(pendulumLine, VectorType.POSITION, Type.ANGLE);
 		pendulumLinePane.setColor("#FFDAC1");
-		pendulumLinePane.addListener(new VectorPaneListener() {
-
-			@Override
-			public void onVectorChange(Vector vector) {
-				pendulum.setLength(vector.getX());
-
-				movePendulum(pendulum);
-			}
-
+		pendulumLinePane.addListener(vector -> {
+			pendulum.setLength(vector.getX());
+			movePendulum(pendulum);
 		});
 
 		root.getChildren().add(pendulumLinePane);
@@ -313,24 +256,20 @@ public class Gui {
 		if (selectedModel == null)
 			return;
 
-		switch (selectedModel.getType()) {
-			case MARBLE:
-				Marble marble = (Marble) selectedModel;
+		if (Objects.requireNonNull(selectedModel.getType()) == Model.ModelType.MARBLE) {
+			Marble marble = (Marble) selectedModel;
 
-				positionPane.setText(marble.getPosition());
-				velocityPane.setText(marble.getVelocity());
+			positionPane.setText(marble.getPosition());
+			velocityPane.setText(marble.getVelocity());
 
-				HashMap<VectorType, Vector> accelerations = marble.getAccelerations();
-				for (Map.Entry<VectorType, Vector> entry : accelerations.entrySet()) {
-					VectorType key = entry.getKey();
-					Vector acceleration = entry.getValue();
+			HashMap<VectorType, Vector> accelerations = marble.getAccelerations();
+			for (Map.Entry<VectorType, Vector> entry : accelerations.entrySet()) {
+				VectorType key = entry.getKey();
+				Vector acceleration = entry.getValue();
 
-					if (accelerationPanes.containsKey(key))
-						accelerationPanes.get(key).setText(acceleration);
-				}
-				break;
-			default:
-				break;
+				if (accelerationPanes.containsKey(key))
+					accelerationPanes.get(key).setText(acceleration);
+			}
 		}
 	}
 
@@ -342,17 +281,9 @@ public class Gui {
 			shape.getStyleClass().add("selected");
 
 		switch (model.getType()) {
-			case MARBLE:
-				initializeMarbleInfoPanes((Marble) model);
-				break;
-			case RECTANGLE:
-				initializeRectangleInfoPanes((Rectangle) model);
-				break;
-			case PENDULUM:
-				initializePendulumInfoPanes((Pendulum) model);
-				break;
-			default:
-				break;
+			case MARBLE -> initializeMarbleInfoPanes((Marble) model);
+			case RECTANGLE -> initializeRectangleInfoPanes((Rectangle) model);
+			case PENDULUM -> initializePendulumInfoPanes((Pendulum) model);
 		}
 	}
 
@@ -387,11 +318,9 @@ public class Gui {
 		Circle circle = new Circle(marble.getSize() * scale, Color.BLACK);
 		circle.getStyleClass().addAll("marble", "shape");
 
-		circle.setOnMouseClicked(mouseEvent -> {
-			selectModel(marble);
-		});
+		circle.setOnMouseClicked(mouseEvent -> selectModel(marble));
 
-		marble.setShapes(Arrays.asList(circle));
+		marble.setShapes(List.of(circle));
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
 		circle.relocate(0 - marble.getSize() * scale, Main.CANVAS_HEIGHT - marble.getSize() * scale);
@@ -405,7 +334,7 @@ public class Gui {
 		Circle circle = (Circle) marble.getShapes().get(0);
 		Vector position = marble.getPosition();
 
-		circle.setTranslateX(+position.getX() * scale);
+		circle.setTranslateX(position.getX() * scale);
 		circle.setTranslateY(-position.getY() * scale);
 	}
 
@@ -414,18 +343,15 @@ public class Gui {
 		Vector[] points = rectangle.getPoints();
 
 		Polygon polygon = new Polygon();
-		polygon.getPoints().addAll(new Double[] {
-				points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
+		polygon.getPoints().addAll(points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
 				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
 				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
-				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
+				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale);
 		polygon.getStyleClass().addAll("rectangle", "shape");
 
-		polygon.setOnMouseClicked(mouseEvent -> {
-			selectModel(rectangle);
-		});
+		polygon.setOnMouseClicked(mouseEvent -> selectModel(rectangle));
 
-		rectangle.setShapes(Arrays.asList(polygon));
+		rectangle.setShapes(List.of(polygon));
 
 		canvas.getChildren().add(polygon);
 	}
@@ -435,11 +361,10 @@ public class Gui {
 		Vector[] points = rectangle.getPoints();
 
 		polygon.getPoints().clear();
-		polygon.getPoints().addAll(new Double[] {
-				points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
+		polygon.getPoints().addAll(points[0].getX() * scale, Main.CANVAS_HEIGHT - points[0].getY() * scale,
 				points[1].getX() * scale, Main.CANVAS_HEIGHT - points[1].getY() * scale,
 				points[2].getX() * scale, Main.CANVAS_HEIGHT - points[2].getY() * scale,
-				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale });
+				points[3].getX() * scale, Main.CANVAS_HEIGHT - points[3].getY() * scale);
 	}
 
 	public void drawPendulum(Pendulum pendulum) {
@@ -452,28 +377,24 @@ public class Gui {
 		Circle circle = new Circle(size * scale, Color.BLACK);
 		circle.getStyleClass().addAll("pendulum", "shape");
 
-		circle.setOnMouseClicked(mouseEvent -> {
-			selectModel(pendulum);
-		});
+		circle.setOnMouseClicked(mouseEvent -> selectModel(pendulum));
 
 		// Flip y-axis so that 0,0 is in the bottom-left corner
 		circle.relocate(0 - size * scale, Main.CANVAS_HEIGHT - size * scale);
-		circle.setTranslateX(+position.getX() * scale);
+		circle.setTranslateX(position.getX() * scale);
 		circle.setTranslateY(-position.getY() * scale);
 
 		Line line = new Line();
 		line.getStyleClass().addAll("line", "shape");
 
-		line.setOnMouseClicked(mouseEvent -> {
-			selectModel(pendulum);
-		});
+		line.setOnMouseClicked(mouseEvent -> selectModel(pendulum));
 
 		pendulum.setShapes(Arrays.asList(line, circle));
 
 		line.relocate(0, Main.CANVAS_HEIGHT);
-		line.setStartX(+position.getX() * scale);
+		line.setStartX(position.getX() * scale);
 		line.setStartY(-position.getY() * scale);
-		line.setEndX(+endPoint.getX() * scale);
+		line.setEndX(endPoint.getX() * scale);
 		line.setEndY(-endPoint.getY() * scale);
 
 		canvas.getChildren().add(circle);
@@ -487,11 +408,11 @@ public class Gui {
 		Vector position = pendulum.getPosition();
 		Vector endPoint = pendulum.getEndPoint();
 
-		circle.setTranslateX(+position.getX() * scale);
+		circle.setTranslateX(position.getX() * scale);
 		circle.setTranslateY(-position.getY() * scale);
-		line.setStartX(+position.getX() * scale);
+		line.setStartX(position.getX() * scale);
 		line.setStartY(-position.getY() * scale);
-		line.setEndX(+endPoint.getX() * scale);
+		line.setEndX(endPoint.getX() * scale);
 		line.setEndY(-endPoint.getY() * scale);
 	}
 }

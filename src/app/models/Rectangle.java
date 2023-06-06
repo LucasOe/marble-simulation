@@ -3,7 +3,6 @@ package app.models;
 import app.Vector;
 
 public class Rectangle extends Model {
-
 	private Vector position;
 	private Vector length;
 	private double height;
