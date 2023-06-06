@@ -61,7 +61,8 @@ public class Vector {
 	}
 
 	public Vector normalize() {
-		if (getVectorLength() == 0) return new Vector(0, 0);
+		if (getVectorLength() == 0)
+			return new Vector(0, 0);
 		return new Vector(x / getVectorLength(), y / getVectorLength());
 	}
 
