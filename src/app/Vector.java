@@ -7,28 +7,21 @@ import java.util.Locale;
 public class Vector {
 	double x;
 	double y;
+
 	public Vector(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
 	public static String getName(VectorType vectorType) {
-		switch (vectorType) {
-			case POSITION:
-				return "Position";
-			case VELOCITY:
-				return "Velocity";
-			case LENGTH:
-				return "Length";
-			case GRAVITY:
-				return "Gravity";
-			case DOWNHILL_ACCELERATION:
-				return "Downhill Acceleration";
-			case FRICTION:
-				return "Friction";
-			default:
-				return null;
-		}
+		return switch (vectorType) {
+			case POSITION -> "Position";
+			case VELOCITY -> "Velocity";
+			case LENGTH -> "Length";
+			case GRAVITY -> "Gravity";
+			case DOWNHILL_ACCELERATION -> "Downhill Acceleration";
+			case FRICTION -> "Friction";
+		};
 	}
 
 	public double getX() {

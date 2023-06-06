@@ -22,6 +22,7 @@ public class VectorPane extends BorderPane {
 	// For Type ANGLE
 	private double length;
 	private double radians;
+
 	public VectorPane(Vector defaultValues, VectorType key, Type type) {
 		super();
 		setType(type);
@@ -122,8 +123,6 @@ public class VectorPane extends BorderPane {
 					notifyListeners(vector);
 				});
 				vectorInputs.addRow(2, new Label("α:"), inputY);
-				break;
-			default:
 				break;
 		}
 
