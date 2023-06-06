@@ -1,40 +1,27 @@
 package app.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import app.Vector;
 import app.Vector.VectorType;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VectorPane extends BorderPane {
-
-	enum Type {
-		NORMAL,
-		ANGLE
-	}
-
-	public interface VectorPaneListener {
-		void onVectorChange(Vector vector);
-	}
-
+	private final List<VectorPaneListener> listeners = new ArrayList<>();
+	protected Vector vector;
 	private Type type;
 	private NumberTextField inputX;
 	private NumberTextField inputY;
-
-	protected Vector vector;
 	private VectorType key;
-	private List<VectorPaneListener> listeners = new ArrayList<>();
-
 	// For Type ANGLE
 	private double length;
 	private double radians;
-
 	public VectorPane(Vector defaultValues, VectorType key, Type type) {
 		super();
 		setType(type);
@@ -45,7 +32,7 @@ public class VectorPane extends BorderPane {
 		this.radians = vector.getVectorRadians();
 
 		String name = Vector.getName(key);
-		initialze(name);
+		initialize(name);
 	}
 
 	public Type getType() {
@@ -80,7 +67,7 @@ public class VectorPane extends BorderPane {
 		listeners.forEach(listener -> listener.onVectorChange(vector));
 	}
 
-	private void initialze(String name) {
+	private void initialize(String name) {
 		setPrefWidth(130);
 		getStyleClass().add("pane");
 
@@ -163,4 +150,12 @@ public class VectorPane extends BorderPane {
 		setStyle("-fx-background-color: " + hexColor);
 	}
 
+	enum Type {
+		NORMAL,
+		ANGLE
+	}
+
+	public interface VectorPaneListener {
+		void onVectorChange(Vector vector);
+	}
 }

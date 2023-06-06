@@ -2,11 +2,11 @@ package app.models;
 
 import app.Vector;
 import app.Vector.VectorType;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Marble extends Model {
-
 	private double size = 0.025; // Size as radius
 	private boolean isRolling = false;
 

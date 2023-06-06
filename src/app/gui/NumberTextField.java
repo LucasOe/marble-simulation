@@ -1,27 +1,20 @@
 package app.gui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.TextField;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.TextField;
-
 public class NumberTextField extends TextField {
-
-	private char[] allowedChars = new char[] { '.', '-' };
-
-	public interface Listener {
-		void onNumberChange(double value);
-	}
-
+	private final char[] allowedChars = new char[]{'.', '-'};
+	private final List<Listener> listeners = new ArrayList<>();
 	private boolean isFocused;
 	private double number;
-	private List<Listener> listeners = new ArrayList<>();
-
 	public NumberTextField(double defaultValue) {
 		super();
 		setNumber(defaultValue);
@@ -89,4 +82,7 @@ public class NumberTextField extends TextField {
 		return false;
 	}
 
+	public interface Listener {
+		void onNumberChange(double value);
+	}
 }

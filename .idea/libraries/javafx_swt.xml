@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="javafx-swt">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx-swt.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.base.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.controls.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.fxml.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.graphics.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.media.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.swing.jar!/" />
+      <root url="jar://$USER_HOME$/scoop/apps/gluon-openjfx-sdk/current/lib/javafx.web.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
