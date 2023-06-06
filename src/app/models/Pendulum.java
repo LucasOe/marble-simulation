@@ -82,8 +82,7 @@ public class Pendulum extends Model {
 
 	public Vector getEndPoint() {
 		return new Vector(
-			position.getX() + Math.sin(angleRadians) * length,
-			position.getY() - Math.cos(angleRadians) * length
-		);
+				position.getX() + Math.sin(angleRadians) * length,
+				position.getY() - Math.cos(angleRadians) * length);
 	}
 }
